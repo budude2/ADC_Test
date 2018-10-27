@@ -1,0 +1,32 @@
+{
+   ExpandedHierarchyInLayout: "",
+   guistr: "# # String gsaved with Nlview 6.8.5  2018-01-30 bk=1.4354 VDI=40 GEI=35 GUI=JA:1.6 non-TLS
+#  -string -flagsOSRD
+preplace port sysclk_n -pg 1 -y 80 -defaultsOSRD
+preplace port ADC_SDIO -pg 1 -y 150 -defaultsOSRD
+preplace port ADC_SCLK -pg 1 -y 90 -defaultsOSRD
+preplace port sysclk_p -pg 1 -y 100 -defaultsOSRD
+preplace port usb_uart -pg 1 -y 70 -defaultsOSRD
+preplace port cpu_resetn -pg 1 -y 120 -defaultsOSRD
+preplace portBus ADC_CSB1 -pg 1 -y 110 -defaultsOSRD
+preplace portBus ADC_CSB2 -pg 1 -y 130 -defaultsOSRD
+preplace inst control -pg 1 -lvl 2 -y 100 -defaultsOSRD
+preplace inst clk_wiz_1 -pg 1 -lvl 1 -y 90 -defaultsOSRD
+preplace netloc axi_quad_spi_0_ss_o 1 2 1 520
+preplace netloc sysclk_n_1 1 0 1 NJ
+preplace netloc cpu_resetn_1 1 0 2 20 180 250J
+preplace netloc microblaze_0_Clk 1 1 1 N
+preplace netloc clk_wiz_1_locked 1 1 1 240
+preplace netloc axi_uartlite_0_UART 1 2 1 NJ
+preplace netloc clk_wiz_1_clk_out2 1 1 1 N
+preplace netloc sysclk_p_1 1 0 1 NJ
+preplace netloc Net 1 2 1 510J
+preplace netloc SPI_3_wire_0_sclk 1 2 1 NJ
+levelinfo -pg 1 0 130 380 540 -top 0 -bot 190
+",
+}
+{
+   da_axi4_cnt: "1",
+   da_board_cnt: "1",
+   da_mb_cnt: "2",
+}
