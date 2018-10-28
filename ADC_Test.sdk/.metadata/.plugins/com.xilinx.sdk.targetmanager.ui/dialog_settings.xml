@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item value="Auto Detect" key="ADC_Control_wrapper_hw_platform_0-device"/>
+	<item value="false" key="ADC_Control_wrapper_hw_platform_0-partial_bit"/>
+	<item value="bootloop" key="ADC_Control_wrapper_hw_platform_0-microblaze_0-initElf"/>
+	<item value="ADC_Control_wrapper.bit" key="test-bitFile"/>
+	<item value="C:\Users\Jacob\Research\ADC_Design\ADC_Test.sdk\test0\Debug\test0.elf" key="test-microblaze_0-initElf"/>
+	<item value="false" key="test-partial_bit"/>
+	<item value="Local" key="ADC_Control_wrapper_hw_platform_0-target"/>
+	<item value="ADC_Control_wrapper.bit" key="ADC_Control_wrapper_hw_platform_0-bitFile"/>
+	<item value="ADC_Control_wrapper.mmi" key="test-bmmFile"/>
+	<item value="Auto Detect" key="test-device"/>
+	<item value="ADC_Control_wrapper_hw_platform_0" key="programfpga.hwplatform"/>
+	<item value="ADC_Control_wrapper.mmi" key="ADC_Control_wrapper_hw_platform_0-bmmFile"/>
+	<item value="Local" key="test-target"/>
+</section>
