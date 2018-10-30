@@ -8,5 +8,7 @@
 ################################################################################
 create_clock -name sysclk_n -period 5 [get_ports sysclk_n]
 create_clock -name sysclk_p -period 5 [get_ports sysclk_p]
+create_clock -name dco1_p -period 2 [get_ports dco1_p]
+create_clock -name dco1_n -period 2 [get_ports dco1_n]
 
 ################################################################################

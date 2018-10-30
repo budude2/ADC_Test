@@ -1,7 +1,7 @@
 //Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2018.2 (win64) Build 2258646 Thu Jun 14 20:03:12 MDT 2018
-//Date        : Thu Oct 25 11:36:15 2018
+//Date        : Mon Oct 29 23:56:21 2018
 //Host        : DESKTOP-S0CCCTL running 64-bit major release  (build 9200)
 //Command     : generate_target ADC_Control.bd
 //Design      : ADC_Control
@@ -9,13 +9,33 @@
 //--------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CORE_GENERATION_INFO = "ADC_Control,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=ADC_Control,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=21,numReposBlks=14,numNonXlnxBlks=0,numHierBlks=7,maxHierDepth=1,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=0,numPkgbdBlks=0,bdsource=USER,da_axi4_cnt=1,da_board_cnt=1,da_mb_cnt=2,synth_mode=Global}" *) (* HW_HANDOFF = "ADC_Control.hwdef" *) 
+(* CORE_GENERATION_INFO = "ADC_Control,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=ADC_Control,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=28,numReposBlks=21,numNonXlnxBlks=0,numHierBlks=7,maxHierDepth=1,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=1,numPkgbdBlks=0,bdsource=USER,da_axi4_cnt=1,da_board_cnt=1,da_clkrst_cnt=3,da_mb_cnt=2,synth_mode=Global}" *) (* HW_HANDOFF = "ADC_Control.hwdef" *) 
 module ADC_Control
    (ADC_CSB1,
     ADC_CSB2,
     ADC_SCLK,
     ADC_SDIO,
     cpu_resetn,
+    d0_a1_n,
+    d0_a1_p,
+    d0_b1_n,
+    d0_b1_p,
+    d0_c1_n,
+    d0_c1_p,
+    d0_d1_n,
+    d0_d1_p,
+    d1_a1_n,
+    d1_a1_p,
+    d1_b1_n,
+    d1_b1_p,
+    d1_c1_n,
+    d1_c1_p,
+    d1_d1_n,
+    d1_d1_p,
+    dco1_n,
+    dco1_p,
+    fco1_n,
+    fco1_p,
     sysclk_n,
     sysclk_p,
     usb_uart_rxd,
@@ -25,6 +45,26 @@ module ADC_Control
   output ADC_SCLK;
   (* X_INTERFACE_INFO = "xilinx.com:signal:data:1.0 DATA.ADC_SDIO DATA" *) (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME DATA.ADC_SDIO, LAYERED_METADATA undef" *) inout ADC_SDIO;
   (* X_INTERFACE_INFO = "xilinx.com:signal:reset:1.0 RST.CPU_RESETN RST" *) (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME RST.CPU_RESETN, POLARITY ACTIVE_LOW" *) input cpu_resetn;
+  input d0_a1_n;
+  input d0_a1_p;
+  input d0_b1_n;
+  input d0_b1_p;
+  input d0_c1_n;
+  input d0_c1_p;
+  input d0_d1_n;
+  input d0_d1_p;
+  input d1_a1_n;
+  input d1_a1_p;
+  input d1_b1_n;
+  input d1_b1_p;
+  input d1_c1_n;
+  input d1_c1_p;
+  input d1_d1_n;
+  input d1_d1_p;
+  (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 CLK.DCO1_N CLK" *) (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME CLK.DCO1_N, CLK_DOMAIN ADC_Control_dco1_n, FREQ_HZ 500000000, PHASE 0.000" *) input dco1_n;
+  (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 CLK.DCO1_P CLK" *) (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME CLK.DCO1_P, CLK_DOMAIN ADC_Control_dco1_p, FREQ_HZ 500000000, PHASE 0.000" *) input dco1_p;
+  input fco1_n;
+  input fco1_p;
   (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 CLK.SYSCLK_N CLK" *) (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME CLK.SYSCLK_N, CLK_DOMAIN ADC_Control_sysclk_n, FREQ_HZ 200000000, PHASE 0.000" *) input sysclk_n;
   (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 CLK.SYSCLK_P CLK" *) (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME CLK.SYSCLK_P, CLK_DOMAIN ADC_Control_sysclk_p, FREQ_HZ 200000000, PHASE 0.000" *) input sysclk_p;
   (* X_INTERFACE_INFO = "xilinx.com:interface:uart:1.0 usb_uart RxD" *) input usb_uart_rxd;
@@ -38,15 +78,61 @@ module ADC_Control
   wire clk_wiz_1_clk_out2;
   wire clk_wiz_1_locked;
   wire cpu_resetn_1;
+  wire dco1_n_1;
+  wire dco1_p_1;
+  wire din_a_n_0_1;
+  wire din_a_p_0_1;
+  wire din_b_n_0_1;
+  wire din_b_p_0_1;
+  wire din_c_n_0_1;
+  wire din_c_p_0_1;
+  wire din_d_n_0_1;
+  wire din_d_p_0_1;
+  wire din_e_n_0_1;
+  wire din_e_p_0_1;
+  wire din_f_n_0_1;
+  wire din_f_p_0_1;
+  wire din_fco_n_0_1;
+  wire din_fco_p_0_1;
+  wire din_g_n_0_1;
+  wire din_g_p_0_1;
+  wire din_h_n_0_1;
+  wire din_h_p_0_1;
+  (* DEBUG = "true" *) (* MARK_DEBUG *) wire fco_clk;
+  (* DEBUG = "true" *) (* MARK_DEBUG *) wire fco_clk_rdy;
+  (* DEBUG = "true" *) (* MARK_DEBUG *) wire [15:0]iser_chan_a;
   wire microblaze_0_Clk;
   wire sysclk_n_1;
   wire sysclk_p_1;
+  wire [0:0]util_ds_buf_0_IBUF_OUT;
+  wire [0:0]xlconstant_0_dout;
+  wire [0:0]xlconstant_1_dout;
 
   assign ADC_CSB1[0] = axi_quad_spi_0_ss_o;
   assign ADC_CSB2[0] = axi_quad_spi_0_ss_o;
   assign ADC_SCLK = SPI_3_wire_0_sclk;
   assign axi_uartlite_0_UART_RxD = usb_uart_rxd;
   assign cpu_resetn_1 = cpu_resetn;
+  assign dco1_n_1 = dco1_n;
+  assign dco1_p_1 = dco1_p;
+  assign din_a_n_0_1 = d0_a1_n;
+  assign din_a_p_0_1 = d0_a1_p;
+  assign din_b_n_0_1 = d1_a1_n;
+  assign din_b_p_0_1 = d1_a1_p;
+  assign din_c_n_0_1 = d0_b1_n;
+  assign din_c_p_0_1 = d0_b1_p;
+  assign din_d_n_0_1 = d1_b1_n;
+  assign din_d_p_0_1 = d1_b1_p;
+  assign din_e_n_0_1 = d0_c1_n;
+  assign din_e_p_0_1 = d0_c1_p;
+  assign din_f_n_0_1 = d1_c1_n;
+  assign din_f_p_0_1 = d1_c1_p;
+  assign din_fco_n_0_1 = fco1_n;
+  assign din_fco_p_0_1 = fco1_p;
+  assign din_g_n_0_1 = d0_d1_n;
+  assign din_g_p_0_1 = d0_d1_p;
+  assign din_h_n_0_1 = d1_d1_n;
+  assign din_h_p_0_1 = d1_d1_p;
   assign sysclk_n_1 = sysclk_n;
   assign sysclk_p_1 = sysclk_p;
   assign usb_uart_txd = axi_uartlite_0_UART_TxD;
@@ -67,6 +153,50 @@ module ADC_Control
         .spi_clk(clk_wiz_1_clk_out2),
         .usb_uart_rxd(axi_uartlite_0_UART_RxD),
         .usb_uart_txd(axi_uartlite_0_UART_TxD));
+  ADC_Control_iser_top_0_0 iser_top_0
+       (.data_clk(util_ds_buf_0_IBUF_OUT),
+        .data_clk_rdy(xlconstant_0_dout),
+        .din_a_n(din_a_n_0_1),
+        .din_a_p(din_a_p_0_1),
+        .din_b_n(din_b_n_0_1),
+        .din_b_p(din_b_p_0_1),
+        .din_c_n(din_c_n_0_1),
+        .din_c_p(din_c_p_0_1),
+        .din_d_n(din_d_n_0_1),
+        .din_d_p(din_d_p_0_1),
+        .din_e_n(din_e_n_0_1),
+        .din_e_p(din_e_p_0_1),
+        .din_f_n(din_f_n_0_1),
+        .din_f_p(din_f_p_0_1),
+        .din_fco_n(din_fco_n_0_1),
+        .din_fco_p(din_fco_p_0_1),
+        .din_g_n(din_g_n_0_1),
+        .din_g_p(din_g_p_0_1),
+        .din_h_n(din_h_n_0_1),
+        .din_h_p(din_h_p_0_1),
+        .din_rst_n(cpu_resetn_1),
+        .fco_clk(fco_clk),
+        .fco_clk_rdy(fco_clk_rdy),
+        .iser_chan_a(iser_chan_a),
+        .sel_2lane(xlconstant_0_dout),
+        .sel_num_bits(xlconstant_1_dout));
+  ADC_Control_system_ila_0_0 system_ila_0
+       (.clk(microblaze_0_Clk),
+        .probe0(fco_clk));
+  ADC_Control_system_ila_1_0 system_ila_1
+       (.clk(microblaze_0_Clk),
+        .probe0(fco_clk_rdy));
+  ADC_Control_system_ila_2_0 system_ila_2
+       (.clk(microblaze_0_Clk),
+        .probe0(iser_chan_a));
+  ADC_Control_util_ds_buf_0_0 util_ds_buf_0
+       (.IBUF_DS_N(dco1_n_1),
+        .IBUF_DS_P(dco1_p_1),
+        .IBUF_OUT(util_ds_buf_0_IBUF_OUT));
+  ADC_Control_xlconstant_0_0 xlconstant_0
+       (.dout(xlconstant_0_dout));
+  ADC_Control_xlconstant_1_0 xlconstant_1
+       (.dout(xlconstant_1_dout));
 endmodule
 
 module ADC_Control_microblaze_0_axi_periph_1

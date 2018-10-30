@@ -1,32 +1,86 @@
 {
    ExpandedHierarchyInLayout: "",
-   guistr: "# # String gsaved with Nlview 6.8.5  2018-01-30 bk=1.4354 VDI=40 GEI=35 GUI=JA:1.6 non-TLS
+   guistr: "# # String gsaved with Nlview 6.8.5  2018-01-30 bk=1.4354 VDI=40 GEI=35 GUI=JA:1.6 non-TLS-threadsafe
 #  -string -flagsOSRD
+preplace port d0_a1_n -pg 1 -y 440 -defaultsOSRD
+preplace port d0_d1_n -pg 1 -y 680 -defaultsOSRD
+preplace port d1_a1_n -pg 1 -y 480 -defaultsOSRD
+preplace port d0_a1_p -pg 1 -y 420 -defaultsOSRD
+preplace port d1_b1_n -pg 1 -y 560 -defaultsOSRD
+preplace port d1_a1_p -pg 1 -y 460 -defaultsOSRD
+preplace port d0_d1_p -pg 1 -y 660 -defaultsOSRD
 preplace port sysclk_n -pg 1 -y 80 -defaultsOSRD
-preplace port ADC_SDIO -pg 1 -y 150 -defaultsOSRD
-preplace port ADC_SCLK -pg 1 -y 90 -defaultsOSRD
-preplace port sysclk_p -pg 1 -y 100 -defaultsOSRD
-preplace port usb_uart -pg 1 -y 70 -defaultsOSRD
-preplace port cpu_resetn -pg 1 -y 120 -defaultsOSRD
-preplace portBus ADC_CSB1 -pg 1 -y 110 -defaultsOSRD
-preplace portBus ADC_CSB2 -pg 1 -y 130 -defaultsOSRD
-preplace inst control -pg 1 -lvl 2 -y 100 -defaultsOSRD
-preplace inst clk_wiz_1 -pg 1 -lvl 1 -y 90 -defaultsOSRD
-preplace netloc axi_quad_spi_0_ss_o 1 2 1 520
-preplace netloc sysclk_n_1 1 0 1 NJ
-preplace netloc cpu_resetn_1 1 0 2 20 180 250J
-preplace netloc microblaze_0_Clk 1 1 1 N
-preplace netloc clk_wiz_1_locked 1 1 1 240
-preplace netloc axi_uartlite_0_UART 1 2 1 NJ
-preplace netloc clk_wiz_1_clk_out2 1 1 1 N
-preplace netloc sysclk_p_1 1 0 1 NJ
-preplace netloc Net 1 2 1 510J
-preplace netloc SPI_3_wire_0_sclk 1 2 1 NJ
-levelinfo -pg 1 0 130 380 540 -top 0 -bot 190
+preplace port fco1_n -pg 1 -y 400 -defaultsOSRD
+preplace port d1_b1_p -pg 1 -y 540 -defaultsOSRD
+preplace port ADC_SDIO -pg 1 -y 220 -defaultsOSRD
+preplace port ADC_SCLK -pg 1 -y 160 -defaultsOSRD
+preplace port sysclk_p -pg 1 -y 260 -defaultsOSRD
+preplace port d1_d1_n -pg 1 -y 720 -defaultsOSRD
+preplace port fco1_p -pg 1 -y 380 -defaultsOSRD
+preplace port usb_uart -pg 1 -y 140 -defaultsOSRD
+preplace port dco1_n -pg 1 -y 180 -defaultsOSRD
+preplace port d0_b1_n -pg 1 -y 520 -defaultsOSRD
+preplace port d1_c1_n -pg 1 -y 640 -defaultsOSRD
+preplace port d1_d1_p -pg 1 -y 700 -defaultsOSRD
+preplace port d0_c1_n -pg 1 -y 600 -defaultsOSRD
+preplace port dco1_p -pg 1 -y 160 -defaultsOSRD
+preplace port d0_b1_p -pg 1 -y 500 -defaultsOSRD
+preplace port d1_c1_p -pg 1 -y 620 -defaultsOSRD
+preplace port d0_c1_p -pg 1 -y 580 -defaultsOSRD
+preplace port cpu_resetn -pg 1 -y 240 -defaultsOSRD
+preplace portBus ADC_CSB1 -pg 1 -y 180 -defaultsOSRD
+preplace portBus ADC_CSB2 -pg 1 -y 200 -defaultsOSRD
+preplace inst xlconstant_0 -pg 1 -lvl 1 -y 320 -defaultsOSRD
+preplace inst xlconstant_1 -pg 1 -lvl 1 -y 780 -defaultsOSRD
+preplace inst control -pg 1 -lvl 3 -y 170 -defaultsOSRD
+preplace inst iser_top_0 -pg 1 -lvl 2 -y 560 -defaultsOSRD
+preplace inst system_ila_0 -pg 1 -lvl 3 -y 580 -defaultsOSRD
+preplace inst system_ila_1 -pg 1 -lvl 3 -y 460 -defaultsOSRD
+preplace inst system_ila_2 -pg 1 -lvl 3 -y 340 -defaultsOSRD
+preplace inst clk_wiz_1 -pg 1 -lvl 2 -y 90 -defaultsOSRD
+preplace inst util_ds_buf_0 -pg 1 -lvl 1 -y 160 -defaultsOSRD
+preplace netloc fco_clk 1 2 1 N
+preplace netloc xlconstant_1_dout 1 1 1 NJ
+preplace netloc din_h_n_0_1 1 0 2 NJ 720 NJ
+preplace netloc din_fco_p_0_1 1 0 2 NJ 380 NJ
+preplace netloc din_g_p_0_1 1 0 2 NJ 660 NJ
+preplace netloc din_a_p_0_1 1 0 2 NJ 420 NJ
+preplace netloc din_e_n_0_1 1 0 2 NJ 600 NJ
+preplace netloc axi_quad_spi_0_ss_o 1 3 1 930
+preplace netloc sysclk_n_1 1 0 2 NJ 80 NJ
+preplace netloc din_g_n_0_1 1 0 2 NJ 680 NJ
+preplace netloc din_a_n_0_1 1 0 2 NJ 440 NJ
+preplace netloc cpu_resetn_1 1 0 3 NJ 240 340 180 NJ
+preplace netloc microblaze_0_Clk 1 2 1 650
+preplace netloc dco1_n_1 1 0 1 NJ
+preplace netloc dco1_p_1 1 0 1 NJ
+preplace netloc din_fco_n_0_1 1 0 2 NJ 400 NJ
+preplace netloc din_f_p_0_1 1 0 2 NJ 620 NJ
+preplace netloc util_ds_buf_0_IBUF_OUT 1 1 1 330
+preplace netloc fco_clk_rdy 1 2 1 660
+preplace netloc din_d_p_0_1 1 0 2 NJ 540 NJ
+preplace netloc din_h_p_0_1 1 0 2 NJ 700 NJ
+preplace netloc xlconstant_0_dout 1 1 1 320
+preplace netloc din_c_n_0_1 1 0 2 NJ 520 NJ
+preplace netloc din_f_n_0_1 1 0 2 NJ 640 NJ
+preplace netloc din_b_p_0_1 1 0 2 NJ 460 NJ
+preplace netloc din_b_n_0_1 1 0 2 NJ 480 NJ
+preplace netloc clk_wiz_1_locked 1 2 1 640
+preplace netloc axi_uartlite_0_UART 1 3 1 NJ
+preplace netloc iser_chan_a 1 2 1 640
+preplace netloc din_c_p_0_1 1 0 2 NJ 500 NJ
+preplace netloc clk_wiz_1_clk_out2 1 2 1 660
+preplace netloc sysclk_p_1 1 0 2 NJ 260 320J
+preplace netloc din_d_n_0_1 1 0 2 NJ 560 NJ
+preplace netloc Net 1 3 1 920J
+preplace netloc din_e_p_0_1 1 0 2 NJ 580 NJ
+preplace netloc SPI_3_wire_0_sclk 1 3 1 NJ
+levelinfo -pg 1 0 170 490 790 950 -top 0 -bot 840
 ",
 }
 {
    da_axi4_cnt: "1",
    da_board_cnt: "1",
+   da_clkrst_cnt: "3",
    da_mb_cnt: "2",
 }
