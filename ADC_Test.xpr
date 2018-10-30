@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="38" Path="C:/Users/Jacob/Research/ADC_Design/ADC_Test.xpr">
+<Project Version="7" Minor="38" Path="C:/Users/Jacob/adc_test/ADC_Test.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="b5ee939c79b343bd8a9e1da4952cc251"/>
@@ -18,7 +18,7 @@
     <Option Name="CompiledLibDirRiviera" Val="$PCACHEDIR/compile_simlib/riviera"/>
     <Option Name="CompiledLibDirActivehdl" Val="$PCACHEDIR/compile_simlib/activehdl"/>
     <Option Name="BoardPart" Val="digilentinc.com:genesys2:part0:1.1"/>
-    <Option Name="BoardPartRepoPaths" Val="$PPRDIR/../../Xilinx/vivado-boards/new/board_files"/>
+    <Option Name="BoardPartRepoPaths" Val="$PPRDIR/../Xilinx/vivado-boards/new/board_files"/>
     <Option Name="ActiveSimSet" Val="sim_1"/>
     <Option Name="DefaultLib" Val="xil_defaultlib"/>
     <Option Name="ProjectType" Val="Default"/>
@@ -63,6 +63,42 @@
   <FileSets Version="1" Minor="31">
     <FileSet Name="sources_1" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1">
       <Filter Type="Srcs"/>
+      <File Path="$PSRCDIR/sources_1/imports/AD9681_SAMPLE/iser_ddr.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Desktop/AD9681_SAMPLE/iser_ddr.v"/>
+          <Attr Name="ImportTime" Val="1540520239"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/AD9681_SAMPLE/iser_deframe_data.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Desktop/AD9681_SAMPLE/iser_deframe_data.v"/>
+          <Attr Name="ImportTime" Val="1540520239"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/AD9681_SAMPLE/iser_fco_strobe.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Desktop/AD9681_SAMPLE/iser_fco_strobe.v"/>
+          <Attr Name="ImportTime" Val="1540520239"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/AD9681_SAMPLE/iser_top.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Desktop/AD9681_SAMPLE/iser_top.v"/>
+          <Attr Name="ImportTime" Val="1540520239"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <File Path="$PSRCDIR/sources_1/bd/ADC_Control/ADC_Control.bd">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -87,8 +123,14 @@
       <Filter Type="Constrs"/>
       <File Path="$PSRCDIR/constrs_1/imports/Downloads/Genesys-2-Master.xdc">
         <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../Downloads/Genesys-2-Master.xdc"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Downloads/Genesys-2-Master.xdc"/>
           <Attr Name="ImportTime" Val="1539819609"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/constrs_1/new/ad9681.xdc">
+        <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
         </FileInfo>
