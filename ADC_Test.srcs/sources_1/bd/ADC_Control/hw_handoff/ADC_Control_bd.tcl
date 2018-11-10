@@ -40,7 +40,7 @@ if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
 
 # The design that will be created by this Tcl script contains the following 
 # module references:
-# iser_top
+# data_clock_ctrl, iser_top
 
 # Please add the sources of those modules before sourcing this Tcl script.
 
@@ -466,6 +466,17 @@ proc create_root_design { parentCell } {
   # Create instance: control
   create_hier_cell_control [current_bd_instance .] control
 
+  # Create instance: data_clock_ctrl_0, and set properties
+  set block_name data_clock_ctrl
+  set block_cell_name data_clock_ctrl_0
+  if { [catch {set data_clock_ctrl_0 [create_bd_cell -type module -reference $block_name $block_cell_name] } errmsg] } {
+     catch {common::send_msg_id "BD_TCL-105" "ERROR" "Unable to add referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   } elseif { $data_clock_ctrl_0 eq "" } {
+     catch {common::send_msg_id "BD_TCL-106" "ERROR" "Unable to referenced block <$block_name>. Please add the files for ${block_name}'s definition into the project."}
+     return 1
+   }
+  
   # Create instance: iser_top_0, and set properties
   set block_name iser_top
   set block_cell_name iser_top_0
@@ -501,12 +512,6 @@ proc create_root_design { parentCell } {
    CONFIG.C_PROBE0_TYPE {0} \
  ] $system_ila_2
 
-  # Create instance: util_ds_buf_0, and set properties
-  set util_ds_buf_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:util_ds_buf:2.1 util_ds_buf_0 ]
-  set_property -dict [ list \
-   CONFIG.C_BUF_TYPE {IBUFDS} \
- ] $util_ds_buf_0
-
   # Create instance: xlconstant_0, and set properties
   set xlconstant_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_0 ]
 
@@ -515,6 +520,9 @@ proc create_root_design { parentCell } {
   set_property -dict [ list \
    CONFIG.CONST_VAL {0} \
  ] $xlconstant_1
+
+  # Create instance: xlconstant_2, and set properties
+  set xlconstant_2 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_2 ]
 
   # Create interface connections
   connect_bd_intf_net -intf_net axi_uartlite_0_UART [get_bd_intf_ports usb_uart] [get_bd_intf_pins control/usb_uart]
@@ -525,9 +533,11 @@ proc create_root_design { parentCell } {
   connect_bd_net -net axi_quad_spi_0_ss_o [get_bd_ports ADC_CSB1] [get_bd_ports ADC_CSB2] [get_bd_pins control/ADC_CSB2]
   connect_bd_net -net clk_wiz_1_clk_out2 [get_bd_pins clk_wiz_1/clk_out2] [get_bd_pins control/spi_clk]
   connect_bd_net -net clk_wiz_1_locked [get_bd_pins clk_wiz_1/locked] [get_bd_pins control/dcm_locked]
-  connect_bd_net -net cpu_resetn_1 [get_bd_ports cpu_resetn] [get_bd_pins clk_wiz_1/resetn] [get_bd_pins control/cpu_resetn] [get_bd_pins iser_top_0/din_rst_n]
-  connect_bd_net -net dco1_n_1 [get_bd_ports dco1_n] [get_bd_pins util_ds_buf_0/IBUF_DS_N]
-  connect_bd_net -net dco1_p_1 [get_bd_ports dco1_p] [get_bd_pins util_ds_buf_0/IBUF_DS_P]
+  connect_bd_net -net cpu_resetn_1 [get_bd_ports cpu_resetn] [get_bd_pins clk_wiz_1/resetn] [get_bd_pins control/cpu_resetn] [get_bd_pins data_clock_ctrl_0/user_reset_n] [get_bd_pins iser_top_0/din_rst_n]
+  connect_bd_net -net data_clock_ctrl_0_data_clk [get_bd_pins data_clock_ctrl_0/data_clk] [get_bd_pins iser_top_0/data_clk]
+  connect_bd_net -net data_clock_ctrl_0_data_clk_rdy [get_bd_pins data_clock_ctrl_0/data_clk_rdy] [get_bd_pins iser_top_0/data_clk_rdy]
+  connect_bd_net -net dco1_n_1 [get_bd_ports dco1_n] [get_bd_pins data_clock_ctrl_0/dco_n]
+  connect_bd_net -net dco1_p_1 [get_bd_ports dco1_p] [get_bd_pins data_clock_ctrl_0/dco_p]
   connect_bd_net -net din_a_n_0_1 [get_bd_ports d0_a1_n] [get_bd_pins iser_top_0/din_a_n]
   connect_bd_net -net din_a_p_0_1 [get_bd_ports d0_a1_p] [get_bd_pins iser_top_0/din_a_p]
   connect_bd_net -net din_b_n_0_1 [get_bd_ports d1_a1_n] [get_bd_pins iser_top_0/din_b_n]
@@ -558,12 +568,12 @@ HDL_ATTRIBUTE.DEBUG {true} \
   set_property -dict [ list \
 HDL_ATTRIBUTE.DEBUG {true} \
  ] [get_bd_nets iser_chan_a]
-  connect_bd_net -net microblaze_0_Clk [get_bd_pins clk_wiz_1/clk_out1] [get_bd_pins control/Clk] [get_bd_pins system_ila_0/clk] [get_bd_pins system_ila_1/clk] [get_bd_pins system_ila_2/clk]
+  connect_bd_net -net microblaze_0_Clk [get_bd_pins clk_wiz_1/clk_out1] [get_bd_pins control/Clk] [get_bd_pins data_clock_ctrl_0/drp_ref_clk] [get_bd_pins system_ila_0/clk] [get_bd_pins system_ila_1/clk] [get_bd_pins system_ila_2/clk]
   connect_bd_net -net sysclk_n_1 [get_bd_ports sysclk_n] [get_bd_pins clk_wiz_1/clk_in1_n]
   connect_bd_net -net sysclk_p_1 [get_bd_ports sysclk_p] [get_bd_pins clk_wiz_1/clk_in1_p]
-  connect_bd_net -net util_ds_buf_0_IBUF_OUT [get_bd_pins iser_top_0/data_clk] [get_bd_pins util_ds_buf_0/IBUF_OUT]
-  connect_bd_net -net xlconstant_0_dout [get_bd_pins iser_top_0/data_clk_rdy] [get_bd_pins iser_top_0/sel_2lane] [get_bd_pins xlconstant_0/dout]
+  connect_bd_net -net xlconstant_0_dout [get_bd_pins iser_top_0/sel_2lane] [get_bd_pins xlconstant_0/dout]
   connect_bd_net -net xlconstant_1_dout [get_bd_pins iser_top_0/sel_num_bits] [get_bd_pins xlconstant_1/dout]
+  connect_bd_net -net xlconstant_2_dout [get_bd_pins data_clock_ctrl_0/dut_sync_rdy] [get_bd_pins xlconstant_2/dout]
 
   # Create address segments
   create_bd_addr_seg -range 0x00010000 -offset 0x44A00000 [get_bd_addr_spaces control/microblaze_0/Data] [get_bd_addr_segs control/SPI_3_wire_0/S00_AXI/S00_AXI_reg] SEG_SPI_3_wire_0_S00_AXI_reg

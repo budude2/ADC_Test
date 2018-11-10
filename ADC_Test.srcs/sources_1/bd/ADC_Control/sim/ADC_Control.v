@@ -1,7 +1,7 @@
 //Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2018.2 (win64) Build 2258646 Thu Jun 14 20:03:12 MDT 2018
-//Date        : Mon Oct 29 23:56:21 2018
+//Date        : Wed Oct 31 12:00:58 2018
 //Host        : DESKTOP-S0CCCTL running 64-bit major release  (build 9200)
 //Command     : generate_target ADC_Control.bd
 //Design      : ADC_Control
@@ -9,7 +9,7 @@
 //--------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CORE_GENERATION_INFO = "ADC_Control,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=ADC_Control,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=28,numReposBlks=21,numNonXlnxBlks=0,numHierBlks=7,maxHierDepth=1,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=1,numPkgbdBlks=0,bdsource=USER,da_axi4_cnt=1,da_board_cnt=1,da_clkrst_cnt=3,da_mb_cnt=2,synth_mode=Global}" *) (* HW_HANDOFF = "ADC_Control.hwdef" *) 
+(* CORE_GENERATION_INFO = "ADC_Control,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=ADC_Control,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=29,numReposBlks=22,numNonXlnxBlks=0,numHierBlks=7,maxHierDepth=1,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=2,numPkgbdBlks=0,bdsource=USER,da_axi4_cnt=1,da_board_cnt=1,da_clkrst_cnt=3,da_mb_cnt=2,synth_mode=Global}" *) (* HW_HANDOFF = "ADC_Control.hwdef" *) 
 module ADC_Control
    (ADC_CSB1,
     ADC_CSB2,
@@ -78,6 +78,8 @@ module ADC_Control
   wire clk_wiz_1_clk_out2;
   wire clk_wiz_1_locked;
   wire cpu_resetn_1;
+  wire data_clock_ctrl_0_data_clk;
+  wire data_clock_ctrl_0_data_clk_rdy;
   wire dco1_n_1;
   wire dco1_p_1;
   wire din_a_n_0_1;
@@ -104,9 +106,9 @@ module ADC_Control
   wire microblaze_0_Clk;
   wire sysclk_n_1;
   wire sysclk_p_1;
-  wire [0:0]util_ds_buf_0_IBUF_OUT;
   wire [0:0]xlconstant_0_dout;
   wire [0:0]xlconstant_1_dout;
+  wire [0:0]xlconstant_2_dout;
 
   assign ADC_CSB1[0] = axi_quad_spi_0_ss_o;
   assign ADC_CSB2[0] = axi_quad_spi_0_ss_o;
@@ -153,9 +155,17 @@ module ADC_Control
         .spi_clk(clk_wiz_1_clk_out2),
         .usb_uart_rxd(axi_uartlite_0_UART_RxD),
         .usb_uart_txd(axi_uartlite_0_UART_TxD));
+  ADC_Control_data_clock_ctrl_0_0 data_clock_ctrl_0
+       (.data_clk(data_clock_ctrl_0_data_clk),
+        .data_clk_rdy(data_clock_ctrl_0_data_clk_rdy),
+        .dco_n(dco1_n_1),
+        .dco_p(dco1_p_1),
+        .drp_ref_clk(microblaze_0_Clk),
+        .dut_sync_rdy(xlconstant_2_dout),
+        .user_reset_n(cpu_resetn_1));
   ADC_Control_iser_top_0_0 iser_top_0
-       (.data_clk(util_ds_buf_0_IBUF_OUT),
-        .data_clk_rdy(xlconstant_0_dout),
+       (.data_clk(data_clock_ctrl_0_data_clk),
+        .data_clk_rdy(data_clock_ctrl_0_data_clk_rdy),
         .din_a_n(din_a_n_0_1),
         .din_a_p(din_a_p_0_1),
         .din_b_n(din_b_n_0_1),
@@ -189,14 +199,12 @@ module ADC_Control
   ADC_Control_system_ila_2_0 system_ila_2
        (.clk(microblaze_0_Clk),
         .probe0(iser_chan_a));
-  ADC_Control_util_ds_buf_0_0 util_ds_buf_0
-       (.IBUF_DS_N(dco1_n_1),
-        .IBUF_DS_P(dco1_p_1),
-        .IBUF_OUT(util_ds_buf_0_IBUF_OUT));
   ADC_Control_xlconstant_0_0 xlconstant_0
        (.dout(xlconstant_0_dout));
   ADC_Control_xlconstant_1_0 xlconstant_1
        (.dout(xlconstant_1_dout));
+  ADC_Control_xlconstant_0_1 xlconstant_2
+       (.dout(xlconstant_2_dout));
 endmodule
 
 module ADC_Control_microblaze_0_axi_periph_1
