@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Mon Oct 29 23:56:26 2018" VIVADOVERSION="2018.2">
+<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Wed Oct 31 12:01:04 2018" VIVADOVERSION="2018.2">
 
   <SYSTEMINFO ARCH="kintex7" BOARD="digilentinc.com:genesys2:part0:1.1" DEVICE="7k325t" NAME="ADC_Control" PACKAGE="ffg900" SPEEDGRADE="-2"/>
 
@@ -17,16 +17,17 @@
     <PORT DIR="I" NAME="cpu_resetn" SIGIS="rst" SIGNAME="External_Ports_cpu_resetn">
       <CONNECTIONS>
         <CONNECTION INSTANCE="clk_wiz_1" PORT="resetn"/>
-        <CONNECTION INSTANCE="control_rst_clk_wiz_1_100M" PORT="ext_reset_in"/>
         <CONNECTION INSTANCE="iser_top_0" PORT="din_rst_n"/>
+        <CONNECTION INSTANCE="control_rst_clk_wiz_1_100M" PORT="ext_reset_in"/>
+        <CONNECTION INSTANCE="data_clock_ctrl_0" PORT="user_reset_n"/>
       </CONNECTIONS>
     </PORT>
-    <PORT DIR="O" LEFT="0" NAME="ADC_CSB1" RIGHT="0" SIGIS="undef" SIGNAME="control_SPI_3_wire_0_ss_n">
+    <PORT DIR="O" LEFT="0" NAME="ADC_CSB2" RIGHT="0" SIGIS="undef" SIGNAME="control_SPI_3_wire_0_ss_n">
       <CONNECTIONS>
         <CONNECTION INSTANCE="control_SPI_3_wire_0" PORT="ss_n"/>
       </CONNECTIONS>
     </PORT>
-    <PORT DIR="O" LEFT="0" NAME="ADC_CSB2" RIGHT="0" SIGIS="undef" SIGNAME="control_SPI_3_wire_0_ss_n">
+    <PORT DIR="O" LEFT="0" NAME="ADC_CSB1" RIGHT="0" SIGIS="undef" SIGNAME="control_SPI_3_wire_0_ss_n">
       <CONNECTIONS>
         <CONNECTION INSTANCE="control_SPI_3_wire_0" PORT="ss_n"/>
       </CONNECTIONS>
@@ -41,8 +42,6 @@
         <CONNECTION INSTANCE="control_SPI_3_wire_0" PORT="sdio"/>
       </CONNECTIONS>
     </PORT>
-    <PORT DIR="I" NAME="usb_uart_rxd" SIGIS="undef"/>
-    <PORT DIR="O" NAME="usb_uart_txd" SIGIS="undef"/>
     <PORT DIR="I" NAME="d0_d1_p" SIGIS="undef" SIGNAME="External_Ports_d0_d1_p">
       <CONNECTIONS>
         <CONNECTION INSTANCE="iser_top_0" PORT="din_g_p"/>
@@ -135,14 +134,16 @@
     </PORT>
     <PORT CLKFREQUENCY="500000000" DIR="I" NAME="dco1_p" SIGIS="clk" SIGNAME="External_Ports_dco1_p">
       <CONNECTIONS>
-        <CONNECTION INSTANCE="util_ds_buf_0" PORT="IBUF_DS_P"/>
+        <CONNECTION INSTANCE="data_clock_ctrl_0" PORT="dco_p"/>
       </CONNECTIONS>
     </PORT>
     <PORT CLKFREQUENCY="500000000" DIR="I" NAME="dco1_n" SIGIS="clk" SIGNAME="External_Ports_dco1_n">
       <CONNECTIONS>
-        <CONNECTION INSTANCE="util_ds_buf_0" PORT="IBUF_DS_N"/>
+        <CONNECTION INSTANCE="data_clock_ctrl_0" PORT="dco_n"/>
       </CONNECTIONS>
     </PORT>
+    <PORT DIR="I" NAME="usb_uart_rxd" SIGIS="undef"/>
+    <PORT DIR="O" NAME="usb_uart_txd" SIGIS="undef"/>
   </EXTERNALPORTS>
 
   <EXTERNALINTERFACES>
@@ -742,6 +743,9 @@
         </PORT>
         <PORT CLKFREQUENCY="100000000" DIR="O" NAME="clk_out1" SIGIS="clk" SIGNAME="clk_wiz_1_clk_out1">
           <CONNECTIONS>
+            <CONNECTION INSTANCE="system_ila_0" PORT="clk"/>
+            <CONNECTION INSTANCE="system_ila_1" PORT="clk"/>
+            <CONNECTION INSTANCE="system_ila_2" PORT="clk"/>
             <CONNECTION INSTANCE="control_microblaze_0" PORT="Clk"/>
             <CONNECTION INSTANCE="control_microblaze_0_axi_intc" PORT="processor_clk"/>
             <CONNECTION INSTANCE="control_rst_clk_wiz_1_100M" PORT="slowest_sync_clk"/>
@@ -757,9 +761,7 @@
             <CONNECTION INSTANCE="control_microblaze_0_local_memory_ilmb_v10" PORT="LMB_Clk"/>
             <CONNECTION INSTANCE="control_microblaze_0_local_memory_ilmb_bram_if_cntlr" PORT="LMB_Clk"/>
             <CONNECTION INSTANCE="control_microblaze_0_axi_periph" PORT="M02_ACLK"/>
-            <CONNECTION INSTANCE="system_ila_0" PORT="clk"/>
-            <CONNECTION INSTANCE="system_ila_1" PORT="clk"/>
-            <CONNECTION INSTANCE="system_ila_2" PORT="clk"/>
+            <CONNECTION INSTANCE="data_clock_ctrl_0" PORT="drp_ref_clk"/>
           </CONNECTIONS>
         </PORT>
         <PORT CLKFREQUENCY="50000000" DIR="O" NAME="clk_out2" SIGIS="clk" SIGNAME="clk_wiz_1_clk_out2">
@@ -815,8 +817,8 @@
         </PORT>
         <PORT DIR="O" LEFT="0" NAME="ss_n" RIGHT="0" SIGIS="undef" SIGNAME="control_SPI_3_wire_0_ss_n">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="External_Ports" PORT="ADC_CSB2"/>
             <CONNECTION INSTANCE="External_Ports" PORT="ADC_CSB1"/>
+            <CONNECTION INSTANCE="External_Ports" PORT="ADC_CSB2"/>
           </CONNECTIONS>
         </PORT>
         <PORT DIR="IO" NAME="sdio" SIGIS="undef" SIGNAME="External_Ports_ADC_SDIO">
@@ -5067,6 +5069,92 @@
       </PORTS>
       <BUSINTERFACES/>
     </MODULE>
+    <MODULE FULLNAME="/data_clock_ctrl_0" HWVERSION="1.0" INSTANCE="data_clock_ctrl_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="data_clock_ctrl" VLNV="xilinx.com:module_ref:data_clock_ctrl:1.0">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="R4_MAX" VALUE="330000000"/>
+        <PARAMETER NAME="R3_MAX" VALUE="155000000"/>
+        <PARAMETER NAME="R2_MAX" VALUE="70000000"/>
+        <PARAMETER NAME="R1_MAX" VALUE="35000000"/>
+        <PARAMETER NAME="CLKFBOUT_MULT_F" VALUE="30"/>
+        <PARAMETER NAME="DIVCLK_DIVIDE" VALUE="15"/>
+        <PARAMETER NAME="CLKOUT1_DIVIDE" VALUE="2"/>
+        <PARAMETER NAME="CLKOUT1_PHASE" VALUE="0"/>
+        <PARAMETER NAME="CLKOUT2_DIVIDE" VALUE="2"/>
+        <PARAMETER NAME="CLKOUT2_PHASE" VALUE="0"/>
+        <PARAMETER NAME="S1_CLKFBOUT_MULT" VALUE="30"/>
+        <PARAMETER NAME="S1_DIVCLK_DIVIDE" VALUE="15"/>
+        <PARAMETER NAME="S1_CLKOUT1_DIVIDE" VALUE="2"/>
+        <PARAMETER NAME="S1_CLKOUT1_PHASE" VALUE="0"/>
+        <PARAMETER NAME="S1_CLKOUT2_DIVIDE" VALUE="2"/>
+        <PARAMETER NAME="S1_CLKOUT2_PHASE" VALUE="0"/>
+        <PARAMETER NAME="S2_CLKFBOUT_MULT" VALUE="30"/>
+        <PARAMETER NAME="S2_DIVCLK_DIVIDE" VALUE="15"/>
+        <PARAMETER NAME="S2_CLKOUT1_DIVIDE" VALUE="2"/>
+        <PARAMETER NAME="S2_CLKOUT1_PHASE" VALUE="0"/>
+        <PARAMETER NAME="S2_CLKOUT2_DIVIDE" VALUE="2"/>
+        <PARAMETER NAME="S2_CLKOUT2_PHASE" VALUE="0"/>
+        <PARAMETER NAME="S3_CLKFBOUT_MULT" VALUE="30"/>
+        <PARAMETER NAME="S3_DIVCLK_DIVIDE" VALUE="15"/>
+        <PARAMETER NAME="S3_CLKOUT1_DIVIDE" VALUE="2"/>
+        <PARAMETER NAME="S3_CLKOUT1_PHASE" VALUE="0"/>
+        <PARAMETER NAME="S3_CLKOUT2_DIVIDE" VALUE="2"/>
+        <PARAMETER NAME="S3_CLKOUT2_PHASE" VALUE="0"/>
+        <PARAMETER NAME="S4_CLKFBOUT_MULT" VALUE="30"/>
+        <PARAMETER NAME="S4_DIVCLK_DIVIDE" VALUE="15"/>
+        <PARAMETER NAME="S4_CLKOUT1_DIVIDE" VALUE="2"/>
+        <PARAMETER NAME="S4_CLKOUT1_PHASE" VALUE="0"/>
+        <PARAMETER NAME="S4_CLKOUT2_DIVIDE" VALUE="2"/>
+        <PARAMETER NAME="S4_CLKOUT2_PHASE" VALUE="0"/>
+        <PARAMETER NAME="S5_CLKFBOUT_MULT" VALUE="30"/>
+        <PARAMETER NAME="S5_DIVCLK_DIVIDE" VALUE="15"/>
+        <PARAMETER NAME="S5_CLKOUT1_DIVIDE" VALUE="2"/>
+        <PARAMETER NAME="S5_CLKOUT1_PHASE" VALUE="0"/>
+        <PARAMETER NAME="S5_CLKOUT2_DIVIDE" VALUE="2"/>
+        <PARAMETER NAME="S5_CLKOUT2_PHASE" VALUE="0"/>
+        <PARAMETER NAME="Component_Name" VALUE="ADC_Control_data_clock_ctrl_0_0"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT CLKFREQUENCY="100000000" DIR="O" NAME="data_clk" SIGIS="clk" SIGNAME="data_clock_ctrl_0_data_clk">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="iser_top_0" PORT="data_clk"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="data_clk_dv" SIGIS="undef"/>
+        <PORT DIR="O" NAME="data_clk_rdy" SIGIS="undef" SIGNAME="data_clock_ctrl_0_data_clk_rdy">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="iser_top_0" PORT="data_clk_rdy"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="user_reset_n" SIGIS="undef" SIGNAME="External_Ports_cpu_resetn">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="External_Ports" PORT="cpu_resetn"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="dut_sync_rdy" SIGIS="undef" SIGNAME="xlconstant_2_dout">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="xlconstant_2" PORT="dout"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT CLKFREQUENCY="100000000" DIR="I" NAME="drp_ref_clk" SIGIS="clk" SIGNAME="clk_wiz_1_clk_out1">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="clk_wiz_1" PORT="clk_out1"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="dco_p" SIGIS="undef" SIGNAME="External_Ports_dco1_p">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="External_Ports" PORT="dco1_p"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="dco_n" SIGIS="undef" SIGNAME="External_Ports_dco1_n">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="External_Ports" PORT="dco1_n"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
     <MODULE FULLNAME="/iser_top_0" HWVERSION="1.0" INSTANCE="iser_top_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="iser_top" VLNV="xilinx.com:module_ref:iser_top:1.0">
       <DOCUMENTS/>
       <PARAMETERS>
@@ -5092,14 +5180,14 @@
             <CONNECTION INSTANCE="system_ila_1" PORT="probe0"/>
           </CONNECTIONS>
         </PORT>
-        <PORT CLKFREQUENCY="500000000" DIR="I" NAME="data_clk" SIGIS="clk" SIGNAME="util_ds_buf_0_IBUF_OUT">
+        <PORT CLKFREQUENCY="100000000" DIR="I" NAME="data_clk" SIGIS="clk" SIGNAME="data_clock_ctrl_0_data_clk">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="util_ds_buf_0" PORT="IBUF_OUT"/>
+            <CONNECTION INSTANCE="data_clock_ctrl_0" PORT="data_clk"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="data_clk_rdy" SIGIS="undef" SIGNAME="xlconstant_0_dout">
+        <PORT DIR="I" NAME="data_clk_rdy" SIGIS="undef" SIGNAME="data_clock_ctrl_0_data_clk_rdy">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="xlconstant_0" PORT="dout"/>
+            <CONNECTION INSTANCE="data_clock_ctrl_0" PORT="data_clk_rdy"/>
           </CONNECTIONS>
         </PORT>
         <PORT DIR="I" NAME="din_fco_p" SIGIS="undef" SIGNAME="External_Ports_fco1_p">
@@ -16760,44 +16848,6 @@
       </PORTS>
       <BUSINTERFACES/>
     </MODULE>
-    <MODULE FULLNAME="/util_ds_buf_0" HWVERSION="2.1" INSTANCE="util_ds_buf_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="util_ds_buf" VLNV="xilinx.com:ip:util_ds_buf:2.1">
-      <DOCUMENTS/>
-      <PARAMETERS>
-        <PARAMETER NAME="C_BUF_TYPE" VALUE="IBUFDS"/>
-        <PARAMETER NAME="C_SIZE" VALUE="1"/>
-        <PARAMETER NAME="Component_Name" VALUE="ADC_Control_util_ds_buf_0_0"/>
-        <PARAMETER NAME="USE_BOARD_FLOW" VALUE="false"/>
-        <PARAMETER NAME="DIFF_CLK_IN_BOARD_INTERFACE" VALUE="Custom"/>
-        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
-      </PARAMETERS>
-      <PORTS>
-        <PORT CLKFREQUENCY="500000000" DIR="I" LEFT="0" NAME="IBUF_DS_P" RIGHT="0" SIGIS="clk" SIGNAME="External_Ports_dco1_p">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="External_Ports" PORT="dco1_p"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT CLKFREQUENCY="500000000" DIR="I" LEFT="0" NAME="IBUF_DS_N" RIGHT="0" SIGIS="clk" SIGNAME="External_Ports_dco1_n">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="External_Ports" PORT="dco1_n"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT CLKFREQUENCY="500000000" DIR="O" LEFT="0" NAME="IBUF_OUT" RIGHT="0" SIGIS="clk" SIGNAME="util_ds_buf_0_IBUF_OUT">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="iser_top_0" PORT="data_clk"/>
-          </CONNECTIONS>
-        </PORT>
-      </PORTS>
-      <BUSINTERFACES>
-        <BUSINTERFACE BUSNAME="__NOC__" NAME="CLK_IN_D" TYPE="TARGET" VLNV="xilinx.com:interface:diff_clock:1.0">
-          <PARAMETER NAME="CAN_DEBUG" VALUE="false"/>
-          <PARAMETER NAME="FREQ_HZ" VALUE="100000000"/>
-          <PORTMAPS>
-            <PORTMAP LOGICAL="CLK_P" PHYSICAL="IBUF_DS_P"/>
-            <PORTMAP LOGICAL="CLK_N" PHYSICAL="IBUF_DS_N"/>
-          </PORTMAPS>
-        </BUSINTERFACE>
-      </BUSINTERFACES>
-    </MODULE>
     <MODULE FULLNAME="/xlconstant_0" HWVERSION="1.1" INSTANCE="xlconstant_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="xlconstant" VLNV="xilinx.com:ip:xlconstant:1.1">
       <DOCUMENTS/>
       <PARAMETERS>
@@ -16809,7 +16859,6 @@
       <PORTS>
         <PORT DIR="O" LEFT="0" NAME="dout" RIGHT="0" SIGIS="undef" SIGNAME="xlconstant_0_dout">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="iser_top_0" PORT="data_clk_rdy"/>
             <CONNECTION INSTANCE="iser_top_0" PORT="sel_2lane"/>
           </CONNECTIONS>
         </PORT>
@@ -16828,6 +16877,23 @@
         <PORT DIR="O" LEFT="0" NAME="dout" RIGHT="0" SIGIS="undef" SIGNAME="xlconstant_1_dout">
           <CONNECTIONS>
             <CONNECTION INSTANCE="iser_top_0" PORT="sel_num_bits"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES/>
+    </MODULE>
+    <MODULE FULLNAME="/xlconstant_2" HWVERSION="1.1" INSTANCE="xlconstant_2" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="xlconstant" VLNV="xilinx.com:ip:xlconstant:1.1">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="CONST_WIDTH" VALUE="1"/>
+        <PARAMETER NAME="CONST_VAL" VALUE="0x1"/>
+        <PARAMETER NAME="Component_Name" VALUE="ADC_Control_xlconstant_0_1"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT DIR="O" LEFT="0" NAME="dout" RIGHT="0" SIGIS="undef" SIGNAME="xlconstant_2_dout">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="data_clock_ctrl_0" PORT="dut_sync_rdy"/>
           </CONNECTIONS>
         </PORT>
       </PORTS>

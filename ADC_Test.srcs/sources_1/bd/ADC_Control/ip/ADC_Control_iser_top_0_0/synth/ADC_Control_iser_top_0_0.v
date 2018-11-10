@@ -95,7 +95,7 @@ output wire [15 : 0] iser_chan_g;
 (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 fco_clk CLK" *)
 output wire fco_clk;
 output wire fco_clk_rdy;
-(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME data_clk, FREQ_HZ 500000000, PHASE 0.000, CLK_DOMAIN ADC_Control_dco1_n" *)
+(* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME data_clk, FREQ_HZ 100000000, PHASE 0.000, CLK_DOMAIN ADC_Control_data_clock_ctrl_0_0_data_clk" *)
 (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 data_clk CLK" *)
 input wire data_clk;
 input wire data_clk_rdy;
