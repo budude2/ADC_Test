@@ -93,60 +93,69 @@ int main()
     data = Xil_In32(0x44a00010);
     xil_printf("0x%x\n\r", data);
 
-    print("Reading ADC register 0x08: ");
-    Xil_Out32(0x44a00000, 0x03);
-    Xil_Out32(0x44a00008, 0x8008);
-    Xil_Out32(0x44a00004, 0x01);
-    Xil_Out32(0x44a00004, 0x00);
+//    print("Reading ADC register 0x08: ");
+//    Xil_Out32(0x44a00000, 0x03);
+//    Xil_Out32(0x44a00008, 0x8008);
+//    Xil_Out32(0x44a00004, 0x01);
+//    Xil_Out32(0x44a00004, 0x00);
+//
+//    usleep(200);
+//
+//    data = Xil_In32(0x44a00010);
+//    xil_printf("0x%x\n\r", data);
+//
+//    print("Writing ADC register 0x08\r\n");
+//	Xil_Out32(0x44a00000, 0x03);
+//	Xil_Out32(0x44a00008, 0x0008);
+//	Xil_Out32(0x44a0000C, 0x03);
+//	Xil_Out32(0x44a00004, 0x03);
+//	Xil_Out32(0x44a00004, 0x00);
+//
+//    usleep(200);
+//
+//    print("Reading ADC register 0x08: ");
+//    Xil_Out32(0x44a00000, 0x03);
+//    Xil_Out32(0x44a00008, 0x8008);
+//    Xil_Out32(0x44a00004, 0x01);
+//    Xil_Out32(0x44a00004, 0x00);
+//
+//    usleep(200);
+//
+//    data = Xil_In32(0x44a00010);
+//    xil_printf("0x%x\n\r", data);
+//
+//    print("Writing ADC register 0x08\r\n");
+//	Xil_Out32(0x44a00000, 0x03);
+//	Xil_Out32(0x44a00008, 0x0008);
+//	Xil_Out32(0x44a0000C, 0x00);
+//	Xil_Out32(0x44a00004, 0x03);
+//	Xil_Out32(0x44a00004, 0x00);
+//
+//    usleep(200);
+//
+//    print("Reading ADC register 0x08: ");
+//    Xil_Out32(0x44a00000, 0x03);
+//    Xil_Out32(0x44a00008, 0x8008);
+//    Xil_Out32(0x44a00004, 0x01);
+//    Xil_Out32(0x44a00004, 0x00);
+//
+//    usleep(200);
 
-    usleep(200);
-
-    data = Xil_In32(0x44a00010);
-    xil_printf("0x%x\n\r", data);
-
-    print("Writing ADC register 0x08\r\n");
-	Xil_Out32(0x44a00000, 0x03);
-	Xil_Out32(0x44a00008, 0x0008);
-	Xil_Out32(0x44a0000C, 0x03);
-	Xil_Out32(0x44a00004, 0x03);
-	Xil_Out32(0x44a00004, 0x00);
-
-    usleep(200);
-
-    print("Reading ADC register 0x08: ");
-    Xil_Out32(0x44a00000, 0x03);
-    Xil_Out32(0x44a00008, 0x8008);
-    Xil_Out32(0x44a00004, 0x01);
-    Xil_Out32(0x44a00004, 0x00);
-
-    usleep(200);
-
-    data = Xil_In32(0x44a00010);
-    xil_printf("0x%x\n\r", data);
-
-    print("Writing ADC register 0x08\r\n");
-	Xil_Out32(0x44a00000, 0x03);
-	Xil_Out32(0x44a00008, 0x0008);
-	Xil_Out32(0x44a0000C, 0x00);
-	Xil_Out32(0x44a00004, 0x03);
-	Xil_Out32(0x44a00004, 0x00);
-
-    usleep(200);
-
-    print("Reading ADC register 0x08: ");
-    Xil_Out32(0x44a00000, 0x03);
-    Xil_Out32(0x44a00008, 0x8008);
-    Xil_Out32(0x44a00004, 0x01);
-    Xil_Out32(0x44a00004, 0x00);
-
-    usleep(200);
-
-    data = Xil_In32(0x44a00010);
-    xil_printf("0x%x\n\r", data);
+//    data = Xil_In32(0x44a00010);
+//    xil_printf("0x%x\n\r", data);
 
     print("Enable \"Chop Mode\"\r\n");
 	Xil_Out32(0x44a00000, 0x03);
 	Xil_Out32(0x44a00008, 0x000C);
+	Xil_Out32(0x44a0000C, 0x04);
+	Xil_Out32(0x44a00004, 0x03);
+	Xil_Out32(0x44a00004, 0x00);
+
+	usleep(200);
+
+    print("Enable Test Output\r\n");
+	Xil_Out32(0x44a00000, 0x03);
+	Xil_Out32(0x44a00008, 0x000D);
 	Xil_Out32(0x44a0000C, 0x04);
 	Xil_Out32(0x44a00004, 0x03);
 	Xil_Out32(0x44a00004, 0x00);

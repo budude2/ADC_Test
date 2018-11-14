@@ -94,6 +94,8 @@ set_false_path -from [get_clocks AdcBitClkDiv] -to [get_clocks AdcBitClk]
 set_false_path -from [get_clocks AdcBitClk] -to [get_clocks AdcBitClk]
 set_false_path -from [get_clocks clk_125m_clk_wiz_0] -to [get_clocks AdcBitClkDiv]
 set_false_path -from [get_clocks AdcBitClkDiv] -to [get_clocks clk_125m_clk_wiz_0]
+set_false_path -from [get_clocks clk_200m_clk_wiz_0] -to [get_clocks AdcBitClkDiv]
+set_false_path -from [get_clocks AdcBitClkDiv] -to [get_clocks clk_200m_clk_wiz_0]
 #
 #-------------------------------------------------------------------------------------------
 # Create and area for the out_of_context design block.
