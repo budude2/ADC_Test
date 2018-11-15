@@ -4,3 +4,5 @@ ADC_Test\.hw/
 ADC_Test\.ip_user_files/
 
 ADC_Test\.runs/
+
+*.jou

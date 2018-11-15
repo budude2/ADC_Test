@@ -21,7 +21,7 @@ module top
 );
 
     logic AdcFrmSyncWrn, AdcBitClkAlgnWrn, AdcBitClkInvrtd, AdcBitClkDone, AdcIdlyCtrlRdy, dcm_locked;
-    logic clk_100m, clk_50m, clk_200m, clk_125m, rst_200m, rst_125m;
+    logic clk_100m, clk_50m, clk_200m, clk_125m, rst_200m, rst_125m, debug_bitslip_p, debug_bitslip_n;
     logic [63:0] data;
     logic [15:0] AdcFrmDataOut, AdcMemFlags;
     logic [3:0] AdcMemFull, AdcMemEmpty;
@@ -94,10 +94,13 @@ module top
         .AdcMemDataOut(data),
         .AdcMemFlags(AdcMemFlags),
         .AdcMemFull(AdcMemFull),
-        .AdcMemEmpty(AdcMemEmpty)
+        .AdcMemEmpty(AdcMemEmpty),
+
+        .debug_bitslip_p(debug_bitslip_p),
+        .debug_bitslip_n(debug_bitslip_n)
     );
 
-    ila_0 ILA
+      ila_0 ILA
     (
         .clk(clk_125m),
         .probe0(data[15:0]),
@@ -112,7 +115,9 @@ module top
         .probe9(AdcFrmDataOut),
         .probe10(AdcMemFull),
         .probe11(AdcMemFlags),
-        .probe12(AdcMemEmpty) 
+        .probe12(AdcMemEmpty),
+        .probe13(debug_bitslip_p), // input wire [0:0]  probe13 
+        .probe14(debug_bitslip_n) // input wire [0:0]  probe14
     );
 
     ADC_Control_wrapper MB

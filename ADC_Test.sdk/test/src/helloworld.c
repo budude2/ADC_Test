@@ -156,7 +156,7 @@ int main()
     print("Enable Test Output\r\n");
 	Xil_Out32(0x44a00000, 0x03);
 	Xil_Out32(0x44a00008, 0x000D);
-	Xil_Out32(0x44a0000C, 0x04);
+	Xil_Out32(0x44a0000C, 0x00);
 	Xil_Out32(0x44a00004, 0x03);
 	Xil_Out32(0x44a00004, 0x00);
 

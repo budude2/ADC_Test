@@ -124,7 +124,9 @@ entity AdcToplevel_Toplevel is
         AdcMemDataOut           : out std_logic_vector(((32/C_AdcWireInt)*((C_AdcChnls/2)*C_AdcWireInt))-1 downto 0);
         AdcMemFlags             : out std_logic_vector((4*((C_AdcChnls/2)*C_AdcWireInt))-1 downto 0);
         AdcMemFull              : out std_logic_vector(((C_AdcChnls/2)*C_AdcWireInt)-1 downto 0);
-        AdcMemEmpty             : out std_logic_vector(((C_AdcChnls/2)*C_AdcWireInt)-1 downto 0)
+        AdcMemEmpty             : out std_logic_vector(((C_AdcChnls/2)*C_AdcWireInt)-1 downto 0);
+        debug_bitslip_p         : out std_logic;
+        debug_bitslip_n         : out std_logic
 	);
 end AdcToplevel_Toplevel;
 ---------------------------------------------------------------------------------------------
@@ -213,7 +215,9 @@ AdcToplevel_Toplevel_I_AdcToplevel : entity xil_defaultlib.AdcToplevel
         AdcMemDataOut      => AdcMemDataOut, -- out
         AdcMemFlags        => AdcMemFlags, -- out
         AdcMemFull         => AdcMemFull, -- out
-        AdcMemEmpty        => AdcMemEmpty -- out
+        AdcMemEmpty        => AdcMemEmpty, -- out
+        debug_bitslip_n    => debug_bitslip_n,
+        debug_bitslip_p    => debug_bitslip_p
     );
 ---------------------------------------------------------------------------------------------
 --

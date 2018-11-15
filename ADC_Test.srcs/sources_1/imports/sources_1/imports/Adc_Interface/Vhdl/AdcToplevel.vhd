@@ -169,7 +169,9 @@ entity AdcToplevel is
         AdcMemDataOut      : out std_logic_vector(((32/C_AdcWireInt)*((C_AdcChnls/2)*C_AdcWireInt))-1 downto 0);
         AdcMemFlags        : out std_logic_vector((4*(C_AdcChnls/2)*C_AdcWireInt)-1 downto 0);
         AdcMemFull         : out std_logic_vector(((C_AdcChnls/2)*C_AdcWireInt)-1 downto 0);
-        AdcMemEmpty        : out std_logic_vector(((C_AdcChnls/2)*C_AdcWireInt)-1 downto 0)
+        AdcMemEmpty        : out std_logic_vector(((C_AdcChnls/2)*C_AdcWireInt)-1 downto 0);
+        debug_bitslip_p	   : out std_logic;
+        debug_bitslip_n    : out std_logic
     );
 end AdcToplevel;
 -----------------------------------------------------------------------------------------------
@@ -296,6 +298,8 @@ attribute KEEP_HIERARCHY : string;
 -----------------------------------------------------------------------------------------------
 --
 begin
+	debug_bitslip_n <= IntClkBitSlip_n;
+	debug_bitslip_p <= IntClkBitSlip_p;
 -----------------------------------------------------------------------------------------------
 -- IDELAYCTRL
 -- An IDELAYCTRL component must be used per IO-bank. Normally a ADC port fits a whole
