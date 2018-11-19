@@ -51,47 +51,19 @@ module top
         .clk_in1_n(SysRefClk_n)  // input clk_in1_n
     );
 
-    async_input_sync #
-    (
-        .SYNC_STAGES(3),
-        .PIPELINE_STAGES(1),
-        .INIT(1'b0)
-    )
-    reset_sync_200m
+    async_input_sync reset_sync_200m
     (
         .clk(clk_200m),
         .async_in(~cpu_resetn | ~dcm_locked),
         .sync_out(rst_200m)
     );
 
-    async_input_sync #
-    (
-        .SYNC_STAGES(3),
-        .PIPELINE_STAGES(1),
-        .INIT(1'b0)
-    )
-    reset_sync_125m
+    async_input_sync reset_sync_125m
     (
         .clk(clk_125m),
         .async_in(~cpu_resetn | ~dcm_locked),
         .sync_out(rst_125m)
     );
-
-    // LocalRstEna #
-    // (
-    //     .C_LocalUseRstDly(1),
-    //     .C_LocalRstDly(6),
-    //     .C_LocalEnaDly(6)
-    // )
-    // reset_contrl_200m
-    // (
-    //     .ClkIn(clk_200m),
-    //     .Ena(dcm_locked),
-    //     .Rst(0),
-    //     .RstOut(rst_200m),
-    //     .EnaOut(ena_200m)
-    // );
-
 
     AdcToplevel_Toplevel ADC
     (
@@ -129,7 +101,7 @@ module top
       ila_0 ILA
     (
         .clk(clk_125m),
-        .probe0({data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15], data[7:0]}),
+        .probe0(data[15:0]),
         .probe1(data[31:16]),
         .probe2(data[47:32]),
         .probe3(data[63:48]),

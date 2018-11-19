@@ -162,7 +162,7 @@ int main()
 	Xil_Out32(0x44a00004, 0x03);
 	Xil_Out32(0x44a00004, 0x00);
 
-	usleep(1000);
+	usleep(5000);
 
 	print("Digital Reset De-assertion\r\n");
 	Xil_Out32(0x44a00000, 0x03);
@@ -178,7 +178,7 @@ int main()
 //	Xil_Out32(0x44a00004, 0x03);
 //	Xil_Out32(0x44a00004, 0x00);
 
-	usleep(10000000);
+	usleep(2000000);
 
 	print("Enabling interface\r\n");
 

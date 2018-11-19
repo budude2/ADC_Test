@@ -280,6 +280,7 @@ constant High : std_logic := '1';
 -- Signals
 signal IntIdlyCtrlRdy		: std_logic;
 signal IntRst				: std_logic;
+signal IntRst_d     		: std_logic;
 signal IntEna_d				: std_logic;
 signal IntEna				: std_logic;
 --
@@ -323,9 +324,12 @@ begin
 end generate Gen_1;
 -- IntRst and IntEna are the reset and enable signals to be used in the interface.
 -- they are generated from the incoming system enable and reset.
-AdcToplevel_I_Fdpe_Rst : FDPE
+AdcToplevel_I_Fdpe_Rst0 : FDPE
 	generic map (INIT => '1')
-	port map (C => IntClkDiv, CE => High, PRE => AdcIntrfcRst, D => Low, Q => IntRst);
+	port map (C => IntClkDiv, CE => High, PRE => AdcIntrfcRst, D => Low, Q => IntRst_d);
+AdcToplevel_I_Fdpe_Rst1 : FDPE
+	generic map (INIT => '1')
+	port map (C => IntClkDiv, CE => High, PRE => AdcIntrfcRst, D => IntRst_d, Q => IntRst);
 AdcToplevel_I_Fdce_Ena_0 : FDCE
 	generic map (INIT => '0')
 	port map (C => IntClkDiv, CE => AdcIntrfcEna, CLR => IntRst, D => High, Q => IntEna_d);
