@@ -63,7 +63,7 @@
 #-------------------------------------------------------------------------------------------
 # ADC Bit clock input is as sample taken at the FPGA pin as 750MHz.
 # 700MHz = 1.333ns = ISERDES.CLK and ISERDES.CLKDIV = 5.333ns = 4xCLK
-# For the test application only 2-channels are implemented -- > Reason = Loopback hardware 
+# For the test application only 2-channels are implemented -- > Reason = Loopback hardware
 # testing on Xilinx development board .
 # Bit clock input passed though a BUFIO ==> direct/dedicated routing to ISERDES.CLK inputs.
 # This path from the package pin to the ISERDES.CLK inputs is routed through an IDELAY,
@@ -73,22 +73,17 @@
 # This path must be under timing control because the clock is not only used for ISERDES.CLKDIV
 # but also for normal clocked logic.
 #
-create_clock -period 2 -name AdcBitClk -waveform {0.000 1} [get_ports DCLK_p_pin]
+create_clock -period 2.000 -name AdcBitClk -waveform {0.000 1.000} [get_ports DCLK_p_pin]
 #
 # Create a clock path for all that has to do with timing of IDELAY updating.
 #create_clock -period 5.000 -name SysRefClk -waveform {0.000 2.500} [get_ports SysRefClk_p]
 #
 # Remove the path from the ADC forwarded clock package pin to all ISERDES.CLK pins from the timing
 # engine and timing checking for place&route.
-set_false_path  -from [get_ports DCLK_p_pin] \
-                -through [get_cells ADC/AdcToplevel_Toplevel_I_AdcToplevel/AdcToplevel_I_AdcClock/AdcClock_I_Isrds_Master] \
-                -through [get_cells ADC/AdcToplevel_Toplevel_I_AdcToplevel/AdcToplevel_I_AdcClock/AdcClock_I_Bufio] \
-                -to [get_cells -hierarchical "*Isrds*"]
+set_false_path -from [get_ports DCLK_p_pin] -through [get_cells ADC/AdcToplevel_Toplevel_I_AdcToplevel/AdcToplevel_I_AdcClock/AdcClock_I_Isrds_Master] -through [get_cells ADC/AdcToplevel_Toplevel_I_AdcToplevel/AdcToplevel_I_AdcClock/AdcClock_I_Bufio] -to [get_cells -hierarchical *Isrds*]
 #
 # Create a clock path for the timing engine from the BUFR output to all elements using this clock.
-create_generated_clock -name AdcBitClkDiv \
-                        -source [get_pins ADC/AdcToplevel_Toplevel_I_AdcToplevel/AdcToplevel_I_AdcClock/AdcClock_I_Isrds_Master/DDLY] \
-                        -divide_by 4 [get_nets -hierarchical "*IntClkDiv*"]
+create_generated_clock -name AdcBitClkDiv -source [get_pins ADC/AdcToplevel_Toplevel_I_AdcToplevel/AdcToplevel_I_AdcClock/AdcClock_I_Isrds_Master/DDLY] -divide_by 4 [get_nets -hierarchical *IntClkDiv*]
 #
 set_false_path -from [get_clocks AdcBitClkDiv] -to [get_clocks AdcBitClk]
 set_false_path -from [get_clocks AdcBitClk] -to [get_clocks AdcBitClk]
@@ -103,8 +98,8 @@ set_false_path -from [get_clocks AdcBitClkDiv] -to [get_clocks clk_200m_clk_wiz_
 # Command for logic placed with IO_Bank
 #
 create_pblock Apps_AdcToplevel
+add_cells_to_pblock [get_pblocks Apps_AdcToplevel] [get_cells -quiet [list ADC/AdcToplevel_Toplevel_I_AdcToplevel]]
 resize_pblock [get_pblocks Apps_AdcToplevel] -add {SLICE_X0Y200:SLICE_X7Y249}
-    add_cells_to_pblock [get_pblocks Apps_AdcToplevel] [get_cells -quiet [list ADC/AdcToplevel_Toplevel_I_AdcToplevel]]
 #
 #-------------------------------------------------------------------------------------------
 # Pin LOC constraints
@@ -116,28 +111,28 @@ resize_pblock [get_pblocks Apps_AdcToplevel] -add {SLICE_X0Y200:SLICE_X7Y249}
 # FMC_LPC_LA27_N   IOSTANDARD=LVCMOS25  VCCO - VADJ_FPGA - IO_L17N_T2_13
 
 #A2
-set_property -dict {PACKAGE_pin D29 IOSTANDARD LVDS_25} [get_ports DATA_p_pin[0]]
-set_property -dict {PACKAGE_pin C30 IOSTANDARD LVDS_25} [get_ports DATA_n_pin[0]]
-set_property -dict {PACKAGE_pin H30 IOSTANDARD LVDS_25} [get_ports DATA_p_pin[1]]
-set_property -dict {PACKAGE_pin G30 IOSTANDARD LVDS_25} [get_ports DATA_n_pin[1]]
+set_property -dict {PACKAGE_pin D29 IOSTANDARD LVDS_25} [get_ports {DATA_p_pin[0]}]
+set_property -dict {PACKAGE_pin C30 IOSTANDARD LVDS_25} [get_ports {DATA_n_pin[0]}]
+set_property -dict {PACKAGE_pin H30 IOSTANDARD LVDS_25} [get_ports {DATA_p_pin[1]}]
+set_property -dict {PACKAGE_pin G30 IOSTANDARD LVDS_25} [get_ports {DATA_n_pin[1]}]
 
 #B2
-set_property -dict {PACKAGE_pin F26 IOSTANDARD LVDS_25} [get_ports DATA_p_pin[2]]
-set_property -dict {PACKAGE_pin E26 IOSTANDARD LVDS_25} [get_ports DATA_n_pin[2]]
-set_property -dict {PACKAGE_pin A25 IOSTANDARD LVDS_25} [get_ports DATA_p_pin[3]]
-set_property -dict {PACKAGE_pin A26 IOSTANDARD LVDS_25} [get_ports DATA_n_pin[3]]
+set_property -dict {PACKAGE_pin F26 IOSTANDARD LVDS_25} [get_ports {DATA_p_pin[2]}]
+set_property -dict {PACKAGE_pin E26 IOSTANDARD LVDS_25} [get_ports {DATA_n_pin[2]}]
+set_property -dict {PACKAGE_pin A25 IOSTANDARD LVDS_25} [get_ports {DATA_p_pin[3]}]
+set_property -dict {PACKAGE_pin A26 IOSTANDARD LVDS_25} [get_ports {DATA_n_pin[3]}]
 
 #D2
-set_property -dict {PACKAGE_pin B28 IOSTANDARD LVDS_25} [get_ports DATA_p_pin[4]]
-set_property -dict {PACKAGE_pin A28 IOSTANDARD LVDS_25} [get_ports DATA_n_pin[4]]
-set_property -dict {PACKAGE_pin B23 IOSTANDARD LVDS_25} [get_ports DATA_p_pin[5]]
-set_property -dict {PACKAGE_pin A23 IOSTANDARD LVDS_25} [get_ports DATA_n_pin[5]]
+set_property -dict {PACKAGE_pin B28 IOSTANDARD LVDS_25} [get_ports {DATA_p_pin[4]}]
+set_property -dict {PACKAGE_pin A28 IOSTANDARD LVDS_25} [get_ports {DATA_n_pin[4]}]
+set_property -dict {PACKAGE_pin B23 IOSTANDARD LVDS_25} [get_ports {DATA_p_pin[5]}]
+set_property -dict {PACKAGE_pin A23 IOSTANDARD LVDS_25} [get_ports {DATA_n_pin[5]}]
 
 #A1
-set_property -dict {PACKAGE_pin D26 IOSTANDARD LVDS_25} [get_ports DATA_p_pin[6]]
-set_property -dict {PACKAGE_pin C26 IOSTANDARD LVDS_25} [get_ports DATA_n_pin[6]]
-set_property -dict {PACKAGE_pin E29 IOSTANDARD LVDS_25} [get_ports DATA_p_pin[7]]
-set_property -dict {PACKAGE_pin E30 IOSTANDARD LVDS_25} [get_ports DATA_n_pin[7]]
+set_property -dict {PACKAGE_pin D26 IOSTANDARD LVDS_25} [get_ports {DATA_p_pin[6]}]
+set_property -dict {PACKAGE_pin C26 IOSTANDARD LVDS_25} [get_ports {DATA_n_pin[6]}]
+set_property -dict {PACKAGE_pin E29 IOSTANDARD LVDS_25} [get_ports {DATA_p_pin[7]}]
+set_property -dict {PACKAGE_pin E30 IOSTANDARD LVDS_25} [get_ports {DATA_n_pin[7]}]
 
 #
 # FMC_LPC_LA18_CC_P   IOSTANDARD=LVCMOS25  VCCO - VADJ_FPGA - IO_L11P_T1_SRCC_13
@@ -147,6 +142,9 @@ set_property -dict {PACKAGE_pin E30 IOSTANDARD LVDS_25} [get_ports DATA_n_pin[7]
 set_property -dict {PACKAGE_pin B30 IOSTANDARD LVDS_25} [get_ports FCLK_p_pin]
 set_property -dict {PACKAGE_pin A30 IOSTANDARD LVDS_25} [get_ports FCLK_n_pin]
 set_property -dict {PACKAGE_pin D27 IOSTANDARD LVDS_25} [get_ports DCLK_p_pin]
+set_property LOC BUFIO_X0Y17 [get_cells ADC/AdcToplevel_Toplevel_I_AdcToplevel/AdcToplevel_I_AdcClock/AdcClock_I_Bufio]
+set_property LOC ILOGIC_X0Y224 [get_cells ADC/AdcToplevel_Toplevel_I_AdcToplevel/AdcToplevel_I_AdcClock/AdcClock_I_Isrds_Master]
+set_property LOC IDELAY_X0Y224 [get_cells ADC/AdcToplevel_Toplevel_I_AdcToplevel/AdcToplevel_I_AdcClock/AdcClock_I_Iodly]
 set_property -dict {PACKAGE_pin C27 IOSTANDARD LVDS_25} [get_ports DCLK_n_pin]
 
 ## Clock Signal
@@ -155,3 +153,5 @@ set_property -dict {PACKAGE_PIN AD12 IOSTANDARD LVDS} [get_ports SysRefClk_p]
 #
 #-------------------------------------------------------------------------------------------
 # The end
+
+

@@ -49,13 +49,26 @@
 #include "platform.h"
 #include "xil_printf.h"
 #include "xil_io.h"
+#include "xgpio.h"
 #include "sleep.h"
 
+#define AdcIntrfcEna 0x01
+#define AdcMemEna 0x02
+
+XGpio Gpio; /* The Instance of the GPIO Driver */
 
 int main()
 {
 	int data;
+	int Status;
     init_platform();
+
+	/* Initialize the GPIO driver */
+	Status = XGpio_Initialize(&Gpio, XPAR_GPIO_0_DEVICE_ID);
+	if (Status != XST_SUCCESS) {
+		xil_printf("Gpio Initialization Failed\r\n");
+		return XST_FAILURE;
+	}
 
     print("Hello World\n\r");
 
@@ -65,7 +78,7 @@ int main()
     Xil_Out32(0x44a00004, 0x01);
     Xil_Out32(0x44a00004, 0x00);
 
-    usleep(200);
+    usleep(1000);
 
     data = Xil_In32(0x44a00010);
     xil_printf("0x%x\n\r", data);
@@ -76,7 +89,7 @@ int main()
     Xil_Out32(0x44a00004, 0x01);
     Xil_Out32(0x44a00004, 0x00);
 
-    usleep(200);
+    usleep(1000);
 
     data = Xil_In32(0x44a00010);
     xil_printf("0x%x\n\r", data);
@@ -88,79 +101,90 @@ int main()
     Xil_Out32(0x44a00004, 0x01);
     Xil_Out32(0x44a00004, 0x00);
 
-    usleep(200);
+    usleep(1000);
 
     data = Xil_In32(0x44a00010);
     xil_printf("0x%x\n\r", data);
 
-//    print("Reading ADC register 0x08: ");
-//    Xil_Out32(0x44a00000, 0x03);
-//    Xil_Out32(0x44a00008, 0x8008);
-//    Xil_Out32(0x44a00004, 0x01);
-//    Xil_Out32(0x44a00004, 0x00);
-//
-//    usleep(200);
-//
-//    data = Xil_In32(0x44a00010);
-//    xil_printf("0x%x\n\r", data);
-//
-//    print("Writing ADC register 0x08\r\n");
-//	Xil_Out32(0x44a00000, 0x03);
-//	Xil_Out32(0x44a00008, 0x0008);
-//	Xil_Out32(0x44a0000C, 0x03);
-//	Xil_Out32(0x44a00004, 0x03);
-//	Xil_Out32(0x44a00004, 0x00);
-//
-//    usleep(200);
-//
-//    print("Reading ADC register 0x08: ");
-//    Xil_Out32(0x44a00000, 0x03);
-//    Xil_Out32(0x44a00008, 0x8008);
-//    Xil_Out32(0x44a00004, 0x01);
-//    Xil_Out32(0x44a00004, 0x00);
-//
-//    usleep(200);
-//
-//    data = Xil_In32(0x44a00010);
-//    xil_printf("0x%x\n\r", data);
-//
-//    print("Writing ADC register 0x08\r\n");
-//	Xil_Out32(0x44a00000, 0x03);
-//	Xil_Out32(0x44a00008, 0x0008);
-//	Xil_Out32(0x44a0000C, 0x00);
-//	Xil_Out32(0x44a00004, 0x03);
-//	Xil_Out32(0x44a00004, 0x00);
-//
-//    usleep(200);
-//
-//    print("Reading ADC register 0x08: ");
-//    Xil_Out32(0x44a00000, 0x03);
-//    Xil_Out32(0x44a00008, 0x8008);
-//    Xil_Out32(0x44a00004, 0x01);
-//    Xil_Out32(0x44a00004, 0x00);
-//
-//    usleep(200);
-
-//    data = Xil_In32(0x44a00010);
-//    xil_printf("0x%x\n\r", data);
-
     print("Enable \"Chop Mode\"\r\n");
 	Xil_Out32(0x44a00000, 0x03);
 	Xil_Out32(0x44a00008, 0x000C);
-	Xil_Out32(0x44a0000C, 0x04);
-	Xil_Out32(0x44a00004, 0x03);
-	Xil_Out32(0x44a00004, 0x00);
-
-	usleep(200);
-
-    print("Enable Test Output\r\n");
-	Xil_Out32(0x44a00000, 0x03);
-	Xil_Out32(0x44a00008, 0x000D);
 	Xil_Out32(0x44a0000C, 0x00);
 	Xil_Out32(0x44a00004, 0x03);
 	Xil_Out32(0x44a00004, 0x00);
 
-	usleep(200);
+	usleep(1000);
+
+    print("Enable 2x drive\r\n");
+	Xil_Out32(0x44a00000, 0x03);
+	Xil_Out32(0x44a00008, 0x0015);
+	Xil_Out32(0x44a0000C, 0x31);
+	Xil_Out32(0x44a00004, 0x03);
+	Xil_Out32(0x44a00004, 0x00);
+
+	usleep(1000);
+
+	print("Reading ADC register 0x15: ");
+	Xil_Out32(0x44a00000, 0x03);
+	Xil_Out32(0x44a00008, 0x8015);
+	Xil_Out32(0x44a00004, 0x01);
+	Xil_Out32(0x44a00004, 0x00);
+
+	usleep(1000);
+
+	data = Xil_In32(0x44a00010);
+	xil_printf("0x%x\n\r", data);
+
+	usleep(1000);
+
+	print("Set to bitwise\r\n");
+	Xil_Out32(0x44a00000, 0x03);
+	Xil_Out32(0x44a00008, 0x0021);
+	Xil_Out32(0x44a0000C, 0x20);
+	Xil_Out32(0x44a00004, 0x03);
+	Xil_Out32(0x44a00004, 0x00);
+
+	usleep(1000);
+
+//	print("Invert output\r\n");
+//	Xil_Out32(0x44a00000, 0x03);
+//	Xil_Out32(0x44a00008, 0x0014);
+//	Xil_Out32(0x44a0000C, 0x05);
+//	Xil_Out32(0x44a00004, 0x03);
+//	Xil_Out32(0x44a00004, 0x00);
+//
+//	usleep(200);
+
+	print("Digital Reset Assertion\r\n");
+	Xil_Out32(0x44a00000, 0x03);
+	Xil_Out32(0x44a00008, 0x0008);
+	Xil_Out32(0x44a0000C, 0x03);
+	Xil_Out32(0x44a00004, 0x03);
+	Xil_Out32(0x44a00004, 0x00);
+
+	usleep(1000);
+
+	print("Digital Reset De-assertion\r\n");
+	Xil_Out32(0x44a00000, 0x03);
+	Xil_Out32(0x44a00008, 0x0008);
+	Xil_Out32(0x44a0000C, 0x00);
+	Xil_Out32(0x44a00004, 0x03);
+	Xil_Out32(0x44a00004, 0x00);
+
+//	print("Enable Checkerboard\r\n");
+//	Xil_Out32(0x44a00000, 0x03);
+//	Xil_Out32(0x44a00008, 0x000D);
+//	Xil_Out32(0x44a0000C, 0x04);
+//	Xil_Out32(0x44a00004, 0x03);
+//	Xil_Out32(0x44a00004, 0x00);
+
+	usleep(10000000);
+
+	print("Enabling interface\r\n");
+
+	XGpio_DiscreteWrite(&Gpio, 1, AdcIntrfcEna | AdcMemEna);
+
+	//XGpio_DiscreteWrite(&Gpio, 1, AdcMemEna);
 
     cleanup_platform();
     return 0;

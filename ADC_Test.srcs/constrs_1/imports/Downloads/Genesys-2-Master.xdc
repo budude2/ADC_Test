@@ -16,10 +16,10 @@ set_property -dict {PACKAGE_PIN E18 IOSTANDARD LVCMOS18} [get_ports btnc]
 set_property -dict {PACKAGE_PIN R19 IOSTANDARD LVCMOS33} [get_ports cpu_resetn]
 
 ## LEDs
-#set_property -dict { PACKAGE_PIN T28   IOSTANDARD LVCMOS33 } [get_ports { led[0] }]; #IO_L11N_T1_SRCC_14 Sch=led[0]
-#set_property -dict { PACKAGE_PIN V19   IOSTANDARD LVCMOS33 } [get_ports { led[1] }]; #IO_L19P_T3_A10_D26_14 Sch=led[1]
-#set_property -dict { PACKAGE_PIN U30   IOSTANDARD LVCMOS33 } [get_ports { led[2] }]; #IO_L15N_T2_DQS_DOUT_CSO_B_14 Sch=led[2]
-#set_property -dict { PACKAGE_PIN U29   IOSTANDARD LVCMOS33 } [get_ports { led[3] }]; #IO_L15P_T2_DQS_RDWR_B_14 Sch=led[3]
+set_property -dict {PACKAGE_PIN T28 IOSTANDARD LVCMOS33} [get_ports led0]
+set_property -dict {PACKAGE_PIN V19 IOSTANDARD LVCMOS33} [get_ports led1]
+set_property -dict {PACKAGE_PIN U30 IOSTANDARD LVCMOS33} [get_ports led2]
+set_property -dict {PACKAGE_PIN U29 IOSTANDARD LVCMOS33} [get_ports led3]
 #set_property -dict { PACKAGE_PIN V20   IOSTANDARD LVCMOS33 } [get_ports { led[4] }]; #IO_L19N_T3_A09_D25_VREF_14 Sch=led[4]
 #set_property -dict { PACKAGE_PIN V26   IOSTANDARD LVCMOS33 } [get_ports { led[5] }]; #IO_L16P_T2_CSI_B_14 Sch=led[5]
 #set_property -dict { PACKAGE_PIN W24   IOSTANDARD LVCMOS33 } [get_ports { led[6] }]; #IO_L20N_T3_A07_D23_14 Sch=led[6]
@@ -439,6 +439,9 @@ set_property -dict {PACKAGE_PIN L17 IOSTANDARD LVCMOS18} [get_ports SDIO]
 
 set_property CFGBVS VCCO [current_design]
 set_property CONFIG_VOLTAGE 3.3 [current_design]
+
+
+set_false_path -from [get_pins {MB/ADC_Control_i/axi_gpio_0/U0/gpio_core_1/Not_Dual.gpio_Data_Out_reg[31]/C}] -to [get_pins ADC/AdcToplevel_Toplevel_I_AdcToplevel/AdcToplevel_I_Fdce_Ena_0/CE]
 set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
 set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
 set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]

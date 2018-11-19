@@ -141,7 +141,9 @@ entity AdcToplevel is
         C_StatTaps          : integer := 16;
 		C_AdcUseIdlyCtrl	: integer := 1;	     -- 0 = No, 1 = Yes
 		C_AdcIdlyCtrlLoc	: string  := "IDELAYCTRL_X0Y1";
-		C_FrmPattern        : string  := "0000000011110000"  -- Read above text!
+		C_FrmPattern        : string  := "0000000011110000";  -- Read above text!
+        C_AdcBytOrBitMode   : integer := 0; -- 1 = BIT mode, 0 = BYTE mode,
+        C_AdcMsbOrLsbFst    : integer := 0  -- 0 = MSB first, 1 = LSB first
 	);
     port (
 		DCLK_p	           : in std_logic;
@@ -404,8 +406,10 @@ Gen_2 : for cw in ((C_AdcChnls/2)*C_AdcWireInt)-1 downto 0 generate
 --	severity note;
 	AdcToplevel_I_AdcData : entity AdcData_Lib.AdcData
 	generic map (
-		C_AdcBits		=> C_AdcBits,		-- Can be 12, 14 or 16
-		C_AdcWireInt	=> C_AdcWireInt		-- 1 = 1-wire, 2 = 2-wire.
+        C_AdcBits         => C_AdcBits,     -- Can be 12, 14 or 16
+        C_AdcWireInt      => C_AdcWireInt,  -- 1 = 1-wire, 2 = 2-wire.
+        C_AdcMsbOrLsbFst  => C_AdcMsbOrLsbFst,
+        C_AdcBytOrBitMode => C_AdcBytOrBitMode
 	)
 	port map (
 		DatD0_n			=> DATA_n(cw*2),		-- in

@@ -17,7 +17,11 @@ module top
     output logic CSB1,
     output logic CSB2,
     inout  logic SDIO,
-    output logic SCLK
+    output logic SCLK,
+    output logic led0,
+    output logic led1,
+    output logic led2,
+    output logic led3
 );
 
     logic AdcFrmSyncWrn, AdcBitClkAlgnWrn, AdcBitClkInvrtd, AdcBitClkDone, AdcIdlyCtrlRdy, dcm_locked;
@@ -25,6 +29,12 @@ module top
     logic [63:0] data;
     logic [15:0] AdcFrmDataOut, AdcMemFlags;
     logic [3:0] AdcMemFull, AdcMemEmpty;
+    logic [31:0] MB_O;
+
+    assign led0 = dcm_locked;
+    assign led1 = rst_200m;
+    assign led2 = MB_O[0];
+    assign led3 = MB_O[1];
 
     clk_wiz_0 MMCM
     (
@@ -67,6 +77,22 @@ module top
         .sync_out(rst_125m)
     );
 
+    // LocalRstEna #
+    // (
+    //     .C_LocalUseRstDly(1),
+    //     .C_LocalRstDly(6),
+    //     .C_LocalEnaDly(6)
+    // )
+    // reset_contrl_200m
+    // (
+    //     .ClkIn(clk_200m),
+    //     .Ena(dcm_locked),
+    //     .Rst(0),
+    //     .RstOut(rst_200m),
+    //     .EnaOut(ena_200m)
+    // );
+
+
     AdcToplevel_Toplevel ADC
     (
         .DCLK_p_pin(DCLK_p_pin),
@@ -78,7 +104,7 @@ module top
 
         .SysRefClk(clk_200m),
         .AdcIntrfcRst(rst_200m),
-        .AdcIntrfcEna(dcm_locked),
+        .AdcIntrfcEna(MB_O[0]),
         .AdcReSync(btnc),
         .AdcFrmSyncWrn(AdcFrmSyncWrn),
         .AdcBitClkAlgnWrn(AdcBitClkAlgnWrn),
@@ -90,7 +116,7 @@ module top
 
         .AdcMemClk(clk_125m),
         .AdcMemRst(rst_125m),
-        .AdcMemEna(dcm_locked),
+        .AdcMemEna(MB_O[1]),
         .AdcMemDataOut(data),
         .AdcMemFlags(AdcMemFlags),
         .AdcMemFull(AdcMemFull),
@@ -103,7 +129,7 @@ module top
       ila_0 ILA
     (
         .clk(clk_125m),
-        .probe0(data[15:0]),
+        .probe0({data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15], data[7:0]}),
         .probe1(data[31:16]),
         .probe2(data[47:32]),
         .probe3(data[63:48]),
@@ -131,6 +157,7 @@ module top
         .usb_uart_txd(usb_uart_txd),
         .clk_100m(clk_100m),
         .clk_50m(clk_50m),
-        .dcm_locked(dcm_locked)
+        .dcm_locked(dcm_locked),
+        .O(MB_O)
     );
 endmodule

@@ -93,11 +93,15 @@ entity AdcToplevel_Toplevel is
         C_StatTaps              : integer := 16;
         C_AdcUseIdlyCtrl        : integer := 1;      -- 0 = No, 1 = Yes
         C_AdcIdlyCtrlLoc        : string  := "IDELAYCTRL_X0Y4";
-        C_FrmPattern            : string  := "0000000011110000"  -- "1111111100000000"
+        C_FrmPattern            : string  := "0000000011110000"; -- "1111111100000000"
                                           -- 2-Wire, 16-bit      -- 1-wire, 16-bit
                                           --
                                           -- "111111000000"      -- "000000111000"
-    );                                    -- 1-wire, 12-bit      -- 2-wire, 12-bit
+                                          -- 1-wire, 12-bit      -- 2-wire, 12-bit
+        C_AdcMsbOrLsbFst        : integer := 0; -- 0 = MSB first, 1 = LSB first
+        C_AdcBytOrBitMode       : integer := 1  -- 1 = BIT mode, 0 = BYTE mode,
+        );
+
     port (
         DCLK_p_pin              : in std_logic;
         DCLK_n_pin              : in std_logic;
@@ -187,7 +191,9 @@ AdcToplevel_Toplevel_I_AdcToplevel : entity xil_defaultlib.AdcToplevel
         C_StatTaps          => C_StatTaps,
         C_AdcUseIdlyCtrl    => C_AdcUseIdlyCtrl,
         C_AdcIdlyCtrlLoc    => C_AdcIdlyCtrlLoc,
-		C_FrmPattern	    => C_FrmPattern
+		C_FrmPattern	    => C_FrmPattern,
+        C_AdcBytOrBitMode   => C_AdcBytOrBitMode,
+        C_AdcMsbOrLsbFst    => C_AdcMsbOrLsbFst
     )
     port map (
         DCLK_p             => IntDCLK_p, -- in

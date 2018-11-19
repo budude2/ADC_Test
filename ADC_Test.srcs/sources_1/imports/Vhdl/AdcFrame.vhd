@@ -244,7 +244,7 @@ architecture AdcFrame_struct of AdcFrame  is
 -- Bit n-3 of the output string gets bit n-2 of the input. ex: out(4) <= In(5).
 -- and etcetera....
 -- This:		Bit_7, Bit_6, Bit_5, Bit_4, Bit_3, Bit_2, Bit_1, Bit_0.
--- Results in:	Bit_6, Bit_7, Bit-$, Bit_5, Bit_2, Bit_3, Bit_0, Bit_1.
+-- Results in:	Bit_6, Bit_7, Bit-4, Bit_5, Bit_2, Bit_3, Bit_0, Bit_1.
 	function BitSwap(Inp: std_logic_vector) return std_logic_vector is
 	variable Temp : std_logic_vector(Inp'range);
 	begin
@@ -295,7 +295,7 @@ constant IntPatternBitSwapped :
 -- BitSwap swaps every pair of bits of the IntPatternBitShifted constant
 -- Like this:
 -- This:		Bit_7, Bit_6, Bit_5, Bit_4, Bit_3, Bit_2, Bit_1, Bit_0.
--- Results in:	Bit_6, Bit_7, Bit-$, Bit_5, Bit_2, Bit_3, Bit_0, Bit_1.
+-- Results in:	Bit_6, Bit_7, Bit-4, Bit_5, Bit_2, Bit_3, Bit_0, Bit_1.
 --
 -- If this is given at the entity level:
 --		C_AdcBits			: 12
