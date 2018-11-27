@@ -1,0 +1,15 @@
+/*
+ * spi.h
+ *
+ *  Created on: Nov 26, 2018
+ *      Author: Jacob
+ */
+
+#ifndef SRC_SPI_H_
+#define SRC_SPI_H_
+
+void spi_init();
+void spi_write(unsigned int txAddr, unsigned int txData);
+unsigned int spi_read(unsigned int rxAddr);
+
+#endif /* SRC_SPI_H_ */

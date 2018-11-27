@@ -1,0 +1,42 @@
+/*
+ * spi.c
+ *
+ *  Created on: Nov 26, 2018
+ *      Author: Jacob
+ */
+
+#include <xparameters.h>
+#include "xil_io.h"
+
+#define BASE_ADDR 	XPAR_SPI_3_WIRE_0_S00_AXI_BASEADDR
+
+// Setup register map
+#define SPI_MODE 	 BASE_ADDR			// CPOL (bit 0), CPHA (bit 1)
+#define SPI_CONTR 	(BASE_ADDR | 0x4)	// En (bit 0), RW (bit 1)
+#define TX_CMD 		(BASE_ADDR | 0x8)
+#define TX_DATA 	(BASE_ADDR | 0xC)
+#define RX_DATA 	(BASE_ADDR | 0x10)
+
+void spi_init()
+{
+	Xil_Out32(SPI_MODE,  0x03); // Set CPOL and CPHA to 1
+}
+
+void spi_write(unsigned int txAddr, unsigned int txData)
+{
+	Xil_Out32(TX_CMD, 	 txAddr);
+	Xil_Out32(TX_DATA, 	 txData);
+	Xil_Out32(SPI_CONTR, 0x03);   // Enable and set to write
+	Xil_Out32(SPI_CONTR, 0x00);   // Disable
+}
+
+unsigned int spi_read(unsigned int rxAddr)
+{
+    Xil_Out32(TX_CMD, 	 0x8000 | rxAddr); // Need to set the top bit to 1 to tell the ADC it's a read
+    Xil_Out32(SPI_CONTR, 0x01);			   // Enable and set to read
+    Xil_Out32(SPI_CONTR, 0x00);			   // Disable
+
+    usleep(1000);
+
+    data = Xil_In32(0x44a00010);
+}
