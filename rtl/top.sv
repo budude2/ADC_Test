@@ -26,9 +26,9 @@ module top
 
     logic dcm_locked, bitslip;
     logic clk_100m, clk_50m, clk_200m, clk_125m, rst_200m, rst_125m, adc_clk;
-    logic [13:0] data;
+    logic [13:0] adc2, adc4, adc8;
     logic [31:0] MB_O;
-    logic [7:0] frmData, d0a2, d1a2;
+    logic [7:0] frmData;
 
     assign led0 = dcm_locked;
     assign led1 = rst_200m;
@@ -61,23 +61,29 @@ module top
         .d0a2_n(DATA_n_pin[0]),
         .d1a2_p(DATA_p_pin[1]),
         .d1a2_n(DATA_n_pin[1]),
-        .adc2(data),
+        .d0b2_p(DATA_p_pin[2]),
+        .d0b2_n(DATA_n_pin[2]),
+        .d1b2_p(DATA_p_pin[3]),
+        .d1b2_n(DATA_n_pin[3]),
+        .d0d2_p(DATA_p_pin[4]),
+        .d0d2_n(DATA_n_pin[4]),
+        .d1d2_p(DATA_p_pin[5]),
+        .d1d2_n(DATA_n_pin[5]),
+        .adc2(adc2),
+        .adc4(adc4),
+        .adc8(adc8),
         .divclk_o(adc_clk),
-        .bitslip(bitslip),
         .frmData(frmData),
-        .d0a2_data(d0a2),
-        .d1a2_data(d1a2),
         .adc_en(MB_O[0])
     );
 
     ila_0 ILA
     (
         .clk(adc_clk),
-        .probe0(data),
-        .probe1(bitslip),
-        .probe2(frmData),
-        .probe3(d0a2),
-        .probe4(d1a2)
+        .probe0(adc2),
+        .probe1(adc4),
+        .probe2(adc8),
+        .probe3(frmData)
     );
 
     ADC_Control_wrapper MB
