@@ -73,32 +73,35 @@
 # This path must be under timing control because the clock is not only used for ISERDES.CLKDIV
 # but also for normal clocked logic.
 #
-create_clock -period 2.000 -name AdcBitClk -waveform {0.000 1.000} [get_ports DCLK_p_pin]
 #
 # Create a clock path for all that has to do with timing of IDELAY updating.
 #create_clock -period 5.000 -name SysRefClk -waveform {0.000 2.500} [get_ports SysRefClk_p]
 #
 # Remove the path from the ADC forwarded clock package pin to all ISERDES.CLK pins from the timing
 # engine and timing checking for place&route.
-set_false_path -from [get_ports DCLK_p_pin] -through [get_cells ADC/AdcToplevel_Toplevel_I_AdcToplevel/AdcToplevel_I_AdcClock/AdcClock_I_Isrds_Master] -through [get_cells ADC/AdcToplevel_Toplevel_I_AdcToplevel/AdcToplevel_I_AdcClock/AdcClock_I_Bufio] -to [get_cells -hierarchical *Isrds*]
+#set_false_path -from [get_ports DCLK_p_pin] -through [get_cells ADC/AdcToplevel_Toplevel_I_AdcToplevel/AdcToplevel_I_AdcClock/AdcClock_I_Isrds_Master] -through [get_cells ADC/AdcToplevel_Toplevel_I_AdcToplevel/AdcToplevel_I_AdcClock/AdcClock_I_Bufio] -to [get_cells -hierarchical *Isrds*]
 #
 # Create a clock path for the timing engine from the BUFR output to all elements using this clock.
-create_generated_clock -name AdcBitClkDiv -source [get_pins ADC/AdcToplevel_Toplevel_I_AdcToplevel/AdcToplevel_I_AdcClock/AdcClock_I_Isrds_Master/DDLY] -divide_by 4 [get_nets -hierarchical *IntClkDiv*]
 #
-set_false_path -from [get_clocks AdcBitClkDiv] -to [get_clocks AdcBitClk]
-set_false_path -from [get_clocks AdcBitClk] -to [get_clocks AdcBitClk]
-set_false_path -from [get_clocks clk_125m_clk_wiz_0] -to [get_clocks AdcBitClkDiv]
-set_false_path -from [get_clocks AdcBitClkDiv] -to [get_clocks clk_125m_clk_wiz_0]
-set_false_path -from [get_clocks clk_200m_clk_wiz_0] -to [get_clocks AdcBitClkDiv]
-set_false_path -from [get_clocks AdcBitClkDiv] -to [get_clocks clk_200m_clk_wiz_0]
+#set_false_path -from [get_clocks AdcBitClkDiv] -to [get_clocks AdcBitClk]
+#set_false_path -from [get_clocks AdcBitClk] -to [get_clocks AdcBitClk]
+#set_false_path -from [get_clocks clk_125m_clk_wiz_0] -to [get_clocks AdcBitClkDiv]
+#set_false_path -from [get_clocks AdcBitClkDiv] -to [get_clocks clk_125m_clk_wiz_0]
+#set_false_path -from [get_clocks clk_200m_clk_wiz_0] -to [get_clocks AdcBitClkDiv]
+#set_false_path -from [get_clocks AdcBitClkDiv] -to [get_clocks clk_200m_clk_wiz_0]
 #
+
+
+create_clock -period 2.000 -name AdcBitClk -waveform {0.000 1.000} [get_ports DCLK_p_pin]
+create_generated_clock -name ClkDiv -source [get_pins adc_inst/BUFR_inst/O] -divide_by 4 [get_nets -hierarchical *divclk_o*]
+
 #-------------------------------------------------------------------------------------------
 # Create and area for the out_of_context design block.
 #-------------------------------------------------------------------------------------------
 # Command for logic placed with IO_Bank
 #
 create_pblock Apps_AdcToplevel
-add_cells_to_pblock [get_pblocks Apps_AdcToplevel] [get_cells -quiet [list ADC/AdcToplevel_Toplevel_I_AdcToplevel]]
+add_cells_to_pblock [get_pblocks Apps_AdcToplevel] [get_cells -quiet [list adc_inst]]
 resize_pblock [get_pblocks Apps_AdcToplevel] -add {SLICE_X0Y200:SLICE_X7Y249}
 #
 #-------------------------------------------------------------------------------------------
@@ -142,16 +145,27 @@ set_property -dict {PACKAGE_pin E30 IOSTANDARD LVDS_25} [get_ports {DATA_n_pin[7
 set_property -dict {PACKAGE_pin B30 IOSTANDARD LVDS_25} [get_ports FCLK_p_pin]
 set_property -dict {PACKAGE_pin A30 IOSTANDARD LVDS_25} [get_ports FCLK_n_pin]
 set_property -dict {PACKAGE_pin D27 IOSTANDARD LVDS_25} [get_ports DCLK_p_pin]
-set_property LOC BUFIO_X0Y17 [get_cells ADC/AdcToplevel_Toplevel_I_AdcToplevel/AdcToplevel_I_AdcClock/AdcClock_I_Bufio]
-set_property LOC ILOGIC_X0Y224 [get_cells ADC/AdcToplevel_Toplevel_I_AdcToplevel/AdcToplevel_I_AdcClock/AdcClock_I_Isrds_Master]
-set_property LOC IDELAY_X0Y224 [get_cells ADC/AdcToplevel_Toplevel_I_AdcToplevel/AdcToplevel_I_AdcClock/AdcClock_I_Iodly]
 set_property -dict {PACKAGE_pin C27 IOSTANDARD LVDS_25} [get_ports DCLK_n_pin]
 
 ## Clock Signal
 set_property -dict {PACKAGE_PIN AD11 IOSTANDARD LVDS} [get_ports SysRefClk_n]
 set_property -dict {PACKAGE_PIN AD12 IOSTANDARD LVDS} [get_ports SysRefClk_p]
+
+#set_property LOC BUFIO_X0Y17 [get_cells ADC/AdcToplevel_Toplevel_I_AdcToplevel/AdcToplevel_I_AdcClock/AdcClock_I_Bufio]
+#set_property LOC ILOGIC_X0Y224 [get_cells ADC/AdcToplevel_Toplevel_I_AdcToplevel/AdcToplevel_I_AdcClock/AdcClock_I_Isrds_Master]
+#set_property LOC IDELAY_X0Y224 [get_cells ADC/AdcToplevel_Toplevel_I_AdcToplevel/AdcToplevel_I_AdcClock/AdcClock_I_Iodly]
 #
 #-------------------------------------------------------------------------------------------
 # The end
 
 
+
+
+#set_input_delay -clock [get_clocks AdcBitClk] -clock_fall -min -add_delay 0.500 [get_ports {DATA_n_pin[*]}]
+#set_input_delay -clock [get_clocks AdcBitClk] -clock_fall -max -add_delay 0.500 [get_ports {DATA_n_pin[*]}]
+#set_input_delay -clock [get_clocks AdcBitClk] -min -add_delay 0.500 [get_ports {DATA_n_pin[*]}]
+#set_input_delay -clock [get_clocks AdcBitClk] -max -add_delay 0.500 [get_ports {DATA_n_pin[*]}]
+#set_input_delay -clock [get_clocks AdcBitClk] -clock_fall -min -add_delay 0.500 [get_ports {DATA_p_pin[*]}]
+#set_input_delay -clock [get_clocks AdcBitClk] -clock_fall -max -add_delay 0.500 [get_ports {DATA_p_pin[*]}]
+#set_input_delay -clock [get_clocks AdcBitClk] -min -add_delay 0.500 [get_ports {DATA_p_pin[*]}]
+#set_input_delay -clock [get_clocks AdcBitClk] -max -add_delay 0.500 [get_ports {DATA_p_pin[*]}]
