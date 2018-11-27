@@ -11,6 +11,10 @@ module adc
         input logic d0a2_n,
         input logic d1a2_p,
         input logic d1a2_n,
+        input logic d0a1_p,
+        input logic d0a1_n,
+        input logic d1a1_p,
+        input logic d1a1_n,
         input logic d0b2_p,
         input logic d0b2_n,
         input logic d1b2_p,
@@ -20,6 +24,7 @@ module adc
         input logic d1d2_p,
         input logic d1d2_n,
         input logic adc_en,
+        output logic [13:0] adc1,
         output logic [13:0] adc2,
         output logic [13:0] adc4,
         output logic [13:0] adc8,
@@ -27,9 +32,9 @@ module adc
         output logic [7:0] frmData
     );
 
-    logic DCLK, DCLK_IO, rst, CLKDIV, FCLK, iserdes_rst, adc_rst, d0a2, d1a2;
+    logic DCLK, DCLK_IO, rst, CLKDIV, FCLK, iserdes_rst, adc_rst, d0a2, d1a2, d0a1, d1a1;
     logic d0b2, d1b2, bitslip, d0d1, d0d2;
-    logic [7:0] d0a2_data, d1a2_data, d0b2_data, d1b2_data, d1d2_data, d0d2_data;
+    logic [7:0] d0a2_data, d1a2_data, d0b2_data, d1b2_data, d1d2_data, d0d2_data, d0a1_data, d1a1_data;
     //logic [15:0] adc2, adc4;
 
     IBUFDS #(
@@ -110,6 +115,26 @@ module adc
         .I(d1d2_p),    // Diff_p buffer input (connect directly to top-level port)
         .IB(d1d2_n),   // Diff_n buffer input (connect directly to top-level port)
         .O(d1d2)       // Buffer output
+    );
+
+    IBUFDS #(
+        .DIFF_TERM("TRUE"),     // Differential Termination
+        .IBUF_LOW_PWR("FALSE"), // Low power="TRUE", Highest performance="FALSE"
+        .IOSTANDARD("LVDS_25")  // Specify the input I/O standard
+    ) IBUFDS_d0a1 (
+        .I(d0a1_p),    // Diff_p buffer input (connect directly to top-level port)
+        .IB(d0a1_n),   // Diff_n buffer input (connect directly to top-level port)
+        .O(d0a1)       // Buffer output
+    );
+
+    IBUFDS #(
+        .DIFF_TERM("TRUE"),     // Differential Termination
+        .IBUF_LOW_PWR("FALSE"), // Low power="TRUE", Highest performance="FALSE"
+        .IOSTANDARD("LVDS_25")  // Specify the input I/O standard
+    ) IBUFDS_d1a1 (
+        .I(d1a1_p),    // Diff_p buffer input (connect directly to top-level port)
+        .IB(d1a1_n),   // Diff_n buffer input (connect directly to top-level port)
+        .O(d1a1)       // Buffer output
     );
 
     BUFIO BUFIO_inst (
@@ -238,6 +263,34 @@ module adc
                    d1d2_data[4], d0d2_data[4],
                    d1d2_data[5], d0d2_data[5],
                    d1d2_data[6], d0d2_data[6]};
+
+   dataDeserializer d0a1_inst
+    (
+        .CLK(DCLK_IO),
+        .CLKDIV(CLKDIV),
+        .RST(adc_rst),
+        .D(d0a1),
+        .data_o(d0a1_data),
+        .bitslip(bitslip)
+    );
+
+    dataDeserializer d1a1_inst
+    (
+        .CLK(DCLK_IO),
+        .CLKDIV(CLKDIV),
+        .RST(adc_rst),
+        .D(d1a1),
+        .data_o(d1a1_data),
+        .bitslip(bitslip)
+    );
+
+    assign adc1 = {d1a1_data[0], d0a1_data[0],
+                   d1a1_data[1], d0a1_data[1],
+                   d1a1_data[2], d0a1_data[2],
+                   d1a1_data[3], d0a1_data[3],
+                   d1a1_data[4], d0a1_data[4],
+                   d1a1_data[5], d0a1_data[5],
+                   d1a1_data[6], d0a1_data[6]};
 
     assign divclk_o = CLKDIV;
 

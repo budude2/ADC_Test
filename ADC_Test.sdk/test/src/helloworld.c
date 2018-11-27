@@ -87,8 +87,8 @@ int main()
     data = spi_read(0x005);
     xil_printf("0x%x\n\r", data);
 
-//    print("Enable \"Chop Mode\"\r\n");
-//    spi_write(0x00C, 0x04);
+    print("Enable \"Chop Mode\"\r\n");
+    spi_write(0x00C, 0x04);
 //    print("Disable \"Chop Mode\"\r\n");
 //    spi_write(0x00C, 0x00);
 //	  usleep(1000);
@@ -102,7 +102,7 @@ int main()
 //	data = spi_read(0x15);
 //	xil_printf("0x%x\n\r", data);
 //
-//	usleep(1000);
+	usleep(1000);
 
 	print("Set to bitwise\r\n");
 	spi_write(0x021, 0x20);
@@ -122,11 +122,13 @@ int main()
 	print("Digital Reset De-assertion\r\n");
 	spi_write(0x008, 0x00);
 
+	usleep(1000);
+
 //	print("Enable Checkerboard\r\n");
 //	spi_write(0x00D, 0x04);
 
-//	print("Disable Checkerboard\r\n");
-//	spi_write(0x00D, 0x00);
+	print("Disable Checkerboard\r\n");
+	spi_write(0x00D, 0x00);
 
 	usleep(2000000);
 
