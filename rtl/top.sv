@@ -21,7 +21,16 @@ module top
     output logic led0,
     output logic led1,
     output logic led2,
-    output logic led3
+    output logic led3,
+    output logic eth_mdc,
+    inout  logic eth_mdio,
+    input  logic [3:0] eth_rxd,
+    input  logic eth_rxck,
+    input  logic eth_rxctl,
+    output logic [3:0] eth_txd,
+    output logic ETH_TX_EN,
+    output logic eth_txck,
+    output logic ETH_PHYRST_N
 );
 
     logic dcm_locked, bitslip;
@@ -103,7 +112,18 @@ module top
         .usb_uart_txd(usb_uart_txd),
         .clk_100m(clk_100m),
         .clk_50m(clk_50m),
+        .clk_200m(clk_200m),
+        .clk_125m(clk_125m),
         .dcm_locked(dcm_locked),
-        .O(MB_O)
+        .O(MB_O),
+        .eth_mdio_mdc_0_mdc(eth_mdc),
+        .eth_mdio_mdc_0_mdio_io(eth_mdio),
+        .eth_rgmii_0_rd(eth_rxd),
+        .eth_rgmii_0_rx_ctl(eth_rxctl),
+        .eth_rgmii_0_rxc(eth_rxck),
+        .eth_rgmii_0_td(eth_txd),
+        .eth_rgmii_0_tx_ctl(ETH_TX_EN),
+        .eth_rgmii_0_txc(eth_txck),
+        .phy_reset_out(ETH_PHYRST_N)
     );
 endmodule

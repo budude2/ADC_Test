@@ -13566,7 +13566,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Thu Oct 25 00:03:51 UTC 2018</spirit:value>
+            <spirit:value>Wed Nov 28 04:44:33 UTC 2018</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
@@ -13597,7 +13597,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Nov 12 23:20:36 UTC 2018</spirit:value>
+            <spirit:value>Wed Nov 28 04:44:33 UTC 2018</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
@@ -13617,7 +13617,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Thu Oct 25 00:03:51 UTC 2018</spirit:value>
+            <spirit:value>Wed Nov 28 04:44:33 UTC 2018</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
@@ -13637,7 +13637,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Nov 12 23:20:36 UTC 2018</spirit:value>
+            <spirit:value>Wed Nov 28 04:44:33 UTC 2018</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
@@ -25014,6 +25014,12 @@
   <spirit:fileSets>
     <spirit:fileSet>
       <spirit:name>xilinx_vhdlsynthesis_view_fileset</spirit:name>
+      <spirit:file>
+        <spirit:name>data/mb_bootloop_le.elf</spirit:name>
+        <spirit:userFileType>elf</spirit:userFileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+      </spirit:file>
       <spirit:file>
         <spirit:name>ADC_Control_microblaze_0_1.xdc</spirit:name>
         <spirit:userFileType>xdc</spirit:userFileType>

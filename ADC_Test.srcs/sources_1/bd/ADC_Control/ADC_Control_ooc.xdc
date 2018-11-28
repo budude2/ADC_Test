@@ -7,5 +7,8 @@
 # of Vivado)
 ################################################################################
 create_clock -name clk_100m -period 10 [get_ports clk_100m]
+create_clock -name clk_125m -period 8 [get_ports clk_125m]
+create_clock -name clk_200m -period 5 [get_ports clk_200m]
+create_clock -name eth_rgmii_0_rxc -period 10 [get_ports eth_rgmii_0_rxc]
 
 ################################################################################
