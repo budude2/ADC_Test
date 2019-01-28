@@ -5,7 +5,8 @@ module bitslip
       input logic CLKDIV,
       input logic rst,
       input logic [7:0] ISERDES_FCO,
-      output logic ISERDES_bslip
+      output logic ISERDES_bslip,
+      output logic aligned
    );
 
    typedef enum logic [3:0] {STARTUP = 4'b0001, POLL = 4'b0010, SLIP = 4'b0100, STOP = 4'b1000} state_type;
@@ -59,6 +60,7 @@ module bitslip
 
             STOP:
                 begin
+                    aligned = 1'b1;
                 end
 
             default:

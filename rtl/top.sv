@@ -30,12 +30,16 @@ module top
     output logic [3:0] eth_txd,
     output logic ETH_TX_EN,
     output logic eth_txck,
-    output logic ETH_PHYRST_N
+    output logic ETH_PHYRST_N,
+    input logic eth_int_b,
+    input logic eth_pme_b,
+    output logic [3:0] eth_leds
 );
 
     logic dcm_locked, bitslip;
-    logic clk_100m, clk_50m, clk_200m, clk_125m, rst_200m, rst_125m, adc_clk;
-    logic [13:0] adc1, adc2, adc4, adc8;
+    logic clk_100m, clk_50m, clk_200m, clk_125m, rst_200m, rst_125m, adc_clk, aligned;
+    logic [13:0] adc2, adc4, adc8;
+    logic [15:0] adc1;
     logic [31:0] MB_O;
     logic [7:0] frmData;
 
@@ -49,8 +53,8 @@ module top
         // Clock out ports
         .clk_100m(clk_100m),     // output clk_100m
         .clk_50m(clk_50m),       // output clk_50m
-        .clk_200m(clk_200m),     // output clk_200m
-        .clk_125m(clk_125m),     // output clk_125m
+        .clk_125m(clk_125m),     // output clk_200m
+        .clk_125m90(clk_125m90),     // output clk_125m
         // Status and control signals
         .resetn(cpu_resetn),     // input resetn
         .locked(dcm_locked),     // output locked
@@ -88,13 +92,14 @@ module top
         .adc8(adc8),
         .divclk_o(adc_clk),
         .frmData(frmData),
-        .adc_en(MB_O[0])
+        .adc_en(MB_O[0]),
+        .aligned(aligned)
     );
 
     ila_0 ILA
     (
         .clk(adc_clk),
-        .probe0(adc1),
+        .probe0(),
         .probe1(adc2),
         .probe2(adc4),
         .probe3(adc8),
@@ -112,18 +117,80 @@ module top
         .usb_uart_txd(usb_uart_txd),
         .clk_100m(clk_100m),
         .clk_50m(clk_50m),
-        .clk_200m(clk_200m),
-        .clk_125m(clk_125m),
         .dcm_locked(dcm_locked),
-        .O(MB_O),
-        .eth_mdio_mdc_0_mdc(eth_mdc),
-        .eth_mdio_mdc_0_mdio_io(eth_mdio),
-        .eth_rgmii_0_rd(eth_rxd),
-        .eth_rgmii_0_rx_ctl(eth_rxctl),
-        .eth_rgmii_0_rxc(eth_rxck),
-        .eth_rgmii_0_td(eth_txd),
-        .eth_rgmii_0_tx_ctl(ETH_TX_EN),
-        .eth_rgmii_0_txc(eth_txck),
-        .phy_reset_out(ETH_PHYRST_N)
+        .O(MB_O)
     );
+
+
+    logic full_wr, empty_wr, en_wr, en_rd, empty_rd, full_rd, eth_en;
+    logic [7:0] eth_data;
+
+    controller writeController
+    (
+        .clk(adc_clk),
+        .rstn(cpu_resetn),
+        .full(full_wr),
+        .empty(empty_wr),
+        .start(aligned),
+        .wr_en(en_wr)
+    );
+
+    widthConverter adc1_buffer
+    (
+        .rst(!cpu_resetn),
+
+        .wr_clk(adc_clk),
+        .wr_en(en_wr),
+        .din(adc1),
+        .full(full_wr),
+        .wr_empty(empty_wr),    // Empty flag in wr_clk domain
+        .wr_rst_busy(),
+
+        .rd_clk(clk_125m),
+        .rd_en(en_rd),
+        .dout(eth_data),
+        .empty(empty_rd),
+        .rd_full(full_rd),     // Full flag in rd_clk domain
+        .rd_rst_busy()
+    );
+
+    readController readController
+    (
+        .clk(clk_125m),
+        .rstn(cpu_resetn),
+        .full(full_rd),
+        .empty(empty_rd),
+        .eth_en(eth_en),
+        .rd_en(en_rd)
+    );
+
+    gigabit_test gigabit_tx
+    (
+            .clk125MHz(clk_125m),
+            .clk125MHz90(clk_125m90),
+            .switches(),
+            .leds(),
+            .en(eth_en),
+            .data_in(eth_data),
+           
+            // Ethernet control signals   
+            .eth_int_b(eth_int_b),
+            .eth_pme_b(eth_pme_b),
+            .eth_rst_b(ETH_PHYRST_N),
+
+            // Ethernet management interface
+            .eth_mdc(eth_mdc),
+            .eth_mdio(eth_mdio),
+
+            // Ethernet RX interface
+            .eth_rxck(eth_rxck),
+            .eth_rxctl(eth_rxctl),
+            .eth_rxd(eth_rxd),
+
+            // Ethernet TX interface
+            .eth_txck(eth_txck),
+            .eth_txctl(ETH_TX_EN),
+            .eth_txd(eth_txd)
+    );
+
 endmodule
