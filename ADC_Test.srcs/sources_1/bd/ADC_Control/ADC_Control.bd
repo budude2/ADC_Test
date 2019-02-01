@@ -147,7 +147,7 @@
           </spirit:wire>
         </spirit:port>
         <spirit:port>
-          <spirit:name>ADC_CSB1</spirit:name>
+          <spirit:name>ADC_CSB2</spirit:name>
           <spirit:wire>
             <spirit:direction>out</spirit:direction>
             <spirit:vector>
@@ -157,7 +157,7 @@
           </spirit:wire>
         </spirit:port>
         <spirit:port>
-          <spirit:name>ADC_CSB2</spirit:name>
+          <spirit:name>ADC_CSB1</spirit:name>
           <spirit:wire>
             <spirit:direction>out</spirit:direction>
             <spirit:vector>
@@ -257,7 +257,7 @@
         <spirit:componentRef spirit:library="ip" spirit:name="xlconcat" spirit:vendor="xilinx.com" spirit:version="2.1"/>
         <spirit:configurableElementValues>
           <spirit:configurableElementValue spirit:referenceId="bd:xciName">ADC_Control_microblaze_0_xlconcat_0</spirit:configurableElementValue>
-          <spirit:configurableElementValue spirit:referenceId="NUM_PORTS">2</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="NUM_PORTS">1</spirit:configurableElementValue>
         </spirit:configurableElementValues>
       </spirit:componentInstance>
       <spirit:componentInstance>
@@ -386,8 +386,8 @@
       <spirit:adHocConnection>
         <spirit:name>axi_quad_spi_0_ss_o</spirit:name>
         <spirit:internalPortReference spirit:componentRef="SPI_3_wire_0" spirit:portRef="ss_n"/>
-        <spirit:externalPortReference spirit:portRef="ADC_CSB2"/>
         <spirit:externalPortReference spirit:portRef="ADC_CSB1"/>
+        <spirit:externalPortReference spirit:portRef="ADC_CSB2"/>
       </spirit:adHocConnection>
       <spirit:adHocConnection>
         <spirit:name>SPI_3_wire_0_sclk</spirit:name>

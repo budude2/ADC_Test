@@ -7,6 +7,7 @@
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="can&apos;t read &quot;source_name(1)&quot;: no such element in array"/>
 			<item value="Hsi 55-1545"/>
 		</list>
 		<list key="replacehistory">

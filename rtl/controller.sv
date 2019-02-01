@@ -1,24 +1,4 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 01/18/2019 01:52:01 PM
-// Design Name: 
-// Module Name: controller
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
 
 module controller(
     input  logic full,
@@ -26,15 +6,18 @@ module controller(
     input  logic clk,
     input  logic rstn,
     input  logic start,
-    output logic wr_en
+    input  logic fifo_rst,
+    output logic wr_en,
+    output logic [3:0] state
     );
 
 typedef enum logic [3:0] {init = 4'b0001, buffer = 4'b0010, pause = 4'b0100, stop = 4'b1000} state_type;
 state_type curr_state, next_state;
 
+assign state = curr_state;
 
 always_ff @(posedge clk) begin
-    if(rstn == 0'b1) begin
+    if(rstn == 0'b0) begin
         curr_state <= init;
     end
     else begin
@@ -50,7 +33,7 @@ always_comb begin
     case(curr_state)
     	init:
     	begin
-            if(start == 1)
+            if((start == 1) & (fifo_rst == 0))
     		    next_state = buffer;
     	end
 

@@ -21,6 +21,7 @@ entity gigabit_test is
             leds        : out   std_logic_vector(3 downto 0);
             en          : in    std_logic;
             data_in     : in    std_logic_vector(7 downto 0);
+            din_rdy     : out   std_logic;
            
             -- Ethernet Control signals
             eth_int_b   : in    std_logic; -- interrupt
@@ -199,6 +200,8 @@ process(clk125Mhz)
    ----------------------------------------------------
    -- Data for the packet
    ----------------------------------------------------
+
+din_rdy <= raw_data_user;
 
 data: byte_data
   port map ( 

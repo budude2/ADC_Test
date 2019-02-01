@@ -1,30 +1,11 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 01/28/2019 03:10:39 PM
-// Design Name: 
-// Module Name: readController
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
 
 module readController(
     input  logic clk,
     input  logic rstn,
     input  logic full,
     input  logic empty,
+    input  logic fifo_rst,
     output logic eth_en,
     output logic rd_en
     );
@@ -34,7 +15,7 @@ state_type curr_state, next_state;
 
 
 always_ff @(posedge clk) begin
-    if(rstn == 0'b1) begin
+    if(rstn == 0'b0) begin
         curr_state <= pause;
     end
     else begin
@@ -51,7 +32,7 @@ always_comb begin
     case(curr_state)
     	pause:
     	begin
-            if(full == 1)
+            if((full == 1) & (fifo_rst == 0))
     		    next_state = buffer;
     	end
 

@@ -87,10 +87,10 @@ int main()
     data = spi_read(0x005);
     xil_printf("0x%x\n\r", data);
 
-    print("Enable \"Chop Mode\"\r\n");
-    spi_write(0x00C, 0x04);
-//    print("Disable \"Chop Mode\"\r\n");
-//    spi_write(0x00C, 0x00);
+//    print("Enable \"Chop Mode\"\r\n");
+//    spi_write(0x00C, 0x04);
+    print("Disable \"Chop Mode\"\r\n");
+    spi_write(0x00C, 0x00);
 //	  usleep(1000);
 
 //    print("Enable 2x drive\r\n");

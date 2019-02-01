@@ -2,17 +2,17 @@
 
 module top
 ( 
-    input logic DCLK_p_pin,
-    input logic DCLK_n_pin,
-    input logic FCLK_p_pin,
-    input logic FCLK_n_pin,
-    input logic SysRefClk_p,
-    input logic SysRefClk_n,
-    input logic [7:0] DATA_p_pin,
-    input logic [7:0] DATA_n_pin,
-    input logic cpu_resetn,
-    input logic btnc,
-    input logic usb_uart_rxd,
+    input  logic DCLK_p_pin,
+    input  logic DCLK_n_pin,
+    input  logic FCLK_p_pin,
+    input  logic FCLK_n_pin,
+    input  logic SysRefClk_p,
+    input  logic SysRefClk_n,
+    input  logic [7:0] DATA_p_pin,
+    input  logic [7:0] DATA_n_pin,
+    input  logic cpu_resetn,
+    input  logic btnc,
+    input  logic usb_uart_rxd,
     output logic usb_uart_txd,
     output logic CSB1,
     output logic CSB2,
@@ -31,8 +31,8 @@ module top
     output logic ETH_TX_EN,
     output logic eth_txck,
     output logic ETH_PHYRST_N,
-    input logic eth_int_b,
-    input logic eth_pme_b,
+    input  logic eth_int_b,
+    input  logic eth_pme_b,
     output logic [3:0] eth_leds
 );
 
@@ -96,16 +96,6 @@ module top
         .aligned(aligned)
     );
 
-    ila_0 ILA
-    (
-        .clk(adc_clk),
-        .probe0(),
-        .probe1(adc2),
-        .probe2(adc4),
-        .probe3(adc8),
-        .probe4(frmData)
-    );
-
     ADC_Control_wrapper MB
    (
         .ADC_CSB1(CSB1),
@@ -122,17 +112,23 @@ module top
     );
 
 
-    logic full_wr, empty_wr, en_wr, en_rd, empty_rd, full_rd, eth_en;
+    logic full_wr, empty_wr, en_wr, en_rd, empty_rd, full_rd, eth_en, wr_rst_busy, rd_rst_busy, din_rdy, start, fifo_rst_state;
     logic [7:0] eth_data;
+    logic [3:0] state;
+
+    assign start = aligned & btnc;
+    assign fifo_rst_state = wr_rst_busy | rd_rst_busy;
 
     controller writeController
     (
-        .clk(adc_clk),
         .rstn(cpu_resetn),
+        .clk(adc_clk),
         .full(full_wr),
         .empty(empty_wr),
-        .start(aligned),
-        .wr_en(en_wr)
+        .start(start),
+        .fifo_rst(fifo_rst_state),
+        .wr_en(en_wr),
+        .state(state)
     );
 
     widthConverter adc1_buffer
@@ -144,14 +140,14 @@ module top
         .din(adc1),
         .full(full_wr),
         .wr_empty(empty_wr),    // Empty flag in wr_clk domain
-        .wr_rst_busy(),
+        .wr_rst_busy(wr_rst_busy),
 
         .rd_clk(clk_125m),
-        .rd_en(en_rd),
+        .rd_en(en_rd & din_rdy),
         .dout(eth_data),
         .empty(empty_rd),
         .rd_full(full_rd),     // Full flag in rd_clk domain
-        .rd_rst_busy()
+        .rd_rst_busy(rd_rst_busy)
     );
 
     readController readController
@@ -160,37 +156,57 @@ module top
         .rstn(cpu_resetn),
         .full(full_rd),
         .empty(empty_rd),
+        .fifo_rst(fifo_rst_state),
         .eth_en(eth_en),
         .rd_en(en_rd)
     );
 
     gigabit_test gigabit_tx
     (
-            .clk125MHz(clk_125m),
-            .clk125MHz90(clk_125m90),
-            .switches(),
-            .leds(),
-            .en(eth_en),
-            .data_in(eth_data),
-           
-            // Ethernet control signals   
-            .eth_int_b(eth_int_b),
-            .eth_pme_b(eth_pme_b),
-            .eth_rst_b(ETH_PHYRST_N),
+        .clk125MHz(clk_125m),
+        .clk125MHz90(clk_125m90),
+        .switches(),
+        .leds(eth_leds),
+        .en(eth_en),
+        .data_in(eth_data),
+        .din_rdy(din_rdy),
+       
+        // Ethernet control signals   
+        .eth_int_b(eth_int_b),
+        .eth_pme_b(eth_pme_b),
+        .eth_rst_b(ETH_PHYRST_N),
 
-            // Ethernet management interface
-            .eth_mdc(eth_mdc),
-            .eth_mdio(eth_mdio),
+        // Ethernet management interface
+        .eth_mdc(eth_mdc),
+        .eth_mdio(eth_mdio),
 
-            // Ethernet RX interface
-            .eth_rxck(eth_rxck),
-            .eth_rxctl(eth_rxctl),
-            .eth_rxd(eth_rxd),
+        // Ethernet RX interface
+        .eth_rxck(eth_rxck),
+        .eth_rxctl(eth_rxctl),
+        .eth_rxd(eth_rxd),
 
-            // Ethernet TX interface
-            .eth_txck(eth_txck),
-            .eth_txctl(ETH_TX_EN),
-            .eth_txd(eth_txd)
+        // Ethernet TX interface
+        .eth_txck(eth_txck),
+        .eth_txctl(ETH_TX_EN),
+        .eth_txd(eth_txd)
+    );
+
+    ila_0 ILA
+    (
+        .clk(clk_125m),
+        .probe0(adc2),
+        .probe1(adc4),
+        .probe2(adc8),
+        .probe3(frmData),
+        .probe4(en_wr),
+        .probe5(full_wr), // input wire [0:0]  probe5 
+        .probe6(aligned), // input wire [0:0]  probe6 
+        .probe7(start), // input wire [0:0]  probe7 
+        .probe8(en_rd), // input wire [0:0]  probe8 
+        .probe9(din_rdy), // input wire [0:0]  probe9 
+        .probe10(eth_en), // input wire [0:0]  probe10
+        .probe11(state), // input wire [0:0]  probe11 
+        .probe12(fifo_rst_state) // input wire [0:0]  probe13
     );
 
 endmodule

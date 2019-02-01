@@ -1,0 +1,10 @@
+0.6
+2018.2
+Jun 14 2018
+20:41:02
+C:/Users/Jacob/Research/adc_test/ADC_Test.sim/sim_1/behav/xsim/glbl.v,1529022455,verilog,,,,glbl,,,,,,,,
+C:/Users/Jacob/Research/adc_test/ADC_Test.srcs/sources_1/ip/fifo_generator_0/sim/fifo_generator_0.v,1548706593,verilog,,,,fifo_generator_0,,,../../../../ADC_Test.srcs/sources_1/bd/ADC_Control/ipshared/ec67/hdl;../../../../ADC_Test.srcs/sources_1/ip/clk_wiz_0,,,,,
+C:/Users/Jacob/Research/adc_test/rtl/bufferTB.sv,1548889984,systemVerilog,,,,bufferTB,,,../../../../ADC_Test.srcs/sources_1/bd/ADC_Control/ipshared/ec67/hdl;../../../../ADC_Test.srcs/sources_1/ip/clk_wiz_0,,,,,
+C:/Users/Jacob/Research/adc_test/rtl/controller.sv,1549055720,systemVerilog,,C:/Users/Jacob/Research/adc_test/rtl/readController.sv,,controller,,,../../../../ADC_Test.srcs/sources_1/bd/ADC_Control/ipshared/ec67/hdl;../../../../ADC_Test.srcs/sources_1/ip/clk_wiz_0,,,,,
+C:/Users/Jacob/Research/adc_test/rtl/readController.sv,1548873248,systemVerilog,,C:/Users/Jacob/Research/adc_test/rtl/widthConverter.sv,,readController,,,../../../../ADC_Test.srcs/sources_1/bd/ADC_Control/ipshared/ec67/hdl;../../../../ADC_Test.srcs/sources_1/ip/clk_wiz_0,,,,,
+C:/Users/Jacob/Research/adc_test/rtl/widthConverter.sv,1548708452,systemVerilog,,C:/Users/Jacob/Research/adc_test/rtl/bufferTB.sv,,widthConverter,,,../../../../ADC_Test.srcs/sources_1/bd/ADC_Control/ipshared/ec67/hdl;../../../../ADC_Test.srcs/sources_1/ip/clk_wiz_0,,,,,

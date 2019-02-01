@@ -31,6 +31,7 @@ module bitslip
         state_next    = state_curr;
         count_next    = count_curr;
         ISERDES_bslip = 0;
+        aligned       = 0;
 
         case(state_curr)
             STARTUP:

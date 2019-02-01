@@ -34,7 +34,7 @@ module adc
     );
 
     logic DCLK, DCLK_IO, rst, CLKDIV, FCLK, iserdes_rst, adc_rst, d0a2, d1a2, d0a1, d1a1;
-    logic d0b2, d1b2, bitslip, d0d1, d0d2, aligned;
+    logic d0b2, d1b2, bitslip, d0d1, d0d2;
     logic [7:0] d0a2_data, d1a2_data, d0b2_data, d1b2_data, d1d2_data, d0d2_data, d0a1_data, d1a1_data;
     //logic [15:0] adc2, adc4;
 
