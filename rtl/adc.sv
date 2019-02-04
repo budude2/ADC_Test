@@ -30,7 +30,8 @@ module adc
         output logic [13:0] adc8,
         output logic divclk_o,
         output logic [7:0] frmData,
-        output logic aligned
+        output logic aligned,
+        output logic RstOut
     );
 
     logic DCLK, DCLK_IO, rst, CLKDIV, FCLK, iserdes_rst, adc_rst, d0a2, d1a2, d0a1, d1a1;
@@ -296,14 +297,6 @@ module adc
                    d1a1_data[7], d0a1_data[7]};
 
     assign divclk_o = CLKDIV;
-
-    // always_ff @(posedge CLKDIV) begin
-    //     if(adc_rst == 1) begin
-    //         adc2_q <= 0;
-    //     end // if(adc_rst == 1)
-    //     else begin
-    //         adc2_q <= adc2;
-    //     end // else
-    // end // always_ff @(posedge CLKDIV)
+    assign RstOut = adc_rst;
 
 endmodule // top

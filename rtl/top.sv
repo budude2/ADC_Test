@@ -100,7 +100,8 @@ module top
         .divclk_o(adc_clk),
         .frmData(frmData),
         .adc_en(en_synced),
-        .aligned(aligned)
+        .aligned(aligned),
+        .RstOut(wr_rst)
     );
 
     ADC_Control_wrapper MB
@@ -119,7 +120,7 @@ module top
     );
 
 
-    logic full_wr, empty_wr, en_wr, en_rd, empty_rd, full_rd, eth_en, wr_rst_busy, rd_rst_busy, din_rdy, start, fifo_rst_state;
+    logic wr_rst, full_wr, empty_wr, en_wr, en_rd, empty_rd, full_rd, eth_en, wr_rst_busy, rd_rst_busy, din_rdy, start, fifo_rst_state;
     logic [7:0] eth_data;
     logic [3:0] wrstate;
     logic [1:0] rdstate;
@@ -129,7 +130,7 @@ module top
 
     controller writeController
     (
-        .rstn(cpu_resetn),
+        .rstn(!wr_rst),
         .clk(adc_clk),
         .full(full_wr),
         .empty(empty_wr),
@@ -141,7 +142,7 @@ module top
 
     widthConverter adc1_buffer
     (
-        .rst(!cpu_resetn),
+        .rst(wr_rst),
 
         .wr_clk(adc_clk),
         .wr_en(en_wr),
