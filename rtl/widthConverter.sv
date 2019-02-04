@@ -34,7 +34,7 @@ module widthConverter
       .rd_rst_busy(rd_rst_busy)   // output wire rd_rst_busy
     );
 
-    logic wr_empty0, wr_empty1;
+    (* ASYNC_REG="TRUE" *) logic wr_empty0, wr_empty1;
 
     always_ff @(posedge wr_clk) begin
         wr_empty0 <= empty;
@@ -43,7 +43,7 @@ module widthConverter
 
     assign wr_empty = wr_empty1;
 
-    logic rd_full0, rd_full1;
+    (* ASYNC_REG="TRUE" *) logic rd_full0, rd_full1;
 
     always_ff @(posedge rd_clk) begin
          rd_full0 <= full;

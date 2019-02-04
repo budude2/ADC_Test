@@ -11,13 +11,13 @@ module controller(
     output logic [3:0] state
     );
 
-typedef enum logic [3:0] {init = 4'b0001, buffer = 4'b0010, pause = 4'b0100, stop = 4'b1000} state_type;
+typedef enum logic [2:0] {init = 3'b001, buffer = 3'b010, pause = 3'b100} state_type;
 state_type curr_state, next_state;
 
 assign state = curr_state;
 
 always_ff @(posedge clk) begin
-    if(rstn == 0'b0) begin
+    if(rstn == 1'b0) begin
         curr_state <= init;
     end
     else begin
@@ -51,7 +51,7 @@ always_comb begin
     			next_state = init;
     	end
 
-        stop:
+        default:
         begin
         end
     endcase // curr_state

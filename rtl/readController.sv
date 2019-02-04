@@ -7,7 +7,8 @@ module readController(
     input  logic empty,
     input  logic fifo_rst,
     output logic eth_en,
-    output logic rd_en
+    output logic rd_en,
+    output logic [1:0] state
     );
 
 typedef enum logic [1:0] {pause = 2'b01, buffer = 2'b10} state_type;
@@ -15,7 +16,7 @@ state_type curr_state, next_state;
 
 
 always_ff @(posedge clk) begin
-    if(rstn == 0'b0) begin
+    if(rstn == 1'b0) begin
         curr_state <= pause;
     end
     else begin
@@ -44,7 +45,13 @@ always_comb begin
     		if(empty == 1)
     			next_state = pause;
     	end
+
+        default:
+        begin
+        end
     endcase // curr_state
 end
+
+assign state = curr_state;
 
 endmodule

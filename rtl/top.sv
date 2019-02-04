@@ -37,14 +37,13 @@ module top
 );
 
     logic dcm_locked, bitslip;
-    logic clk_100m, clk_50m, clk_200m, clk_125m, rst_200m, rst_125m, adc_clk, aligned;
+    logic clk_100m, clk_50m, clk_200m, clk_125m, rst_125m, adc_clk, aligned;
     logic [13:0] adc2, adc4, adc8;
     logic [15:0] adc1;
     logic [31:0] MB_O;
     logic [7:0] frmData;
 
     assign led0 = dcm_locked;
-    assign led1 = rst_200m;
     assign led2 = MB_O[0];
     assign led3 = MB_O[1];
 
@@ -62,6 +61,14 @@ module top
         .clk_in1_p(SysRefClk_p), // input clk_in1_p
         .clk_in1_n(SysRefClk_n)  // input clk_in1_n
     );
+
+
+    (* ASYNC_REG="TRUE" *) logic meta0, en_synced;
+
+    always_ff @(posedge adc_clk) begin
+         meta0 <= MB_O[0];
+         en_synced <= meta0;
+    end
 
     adc adc_inst
     ( 
@@ -92,7 +99,7 @@ module top
         .adc8(adc8),
         .divclk_o(adc_clk),
         .frmData(frmData),
-        .adc_en(MB_O[0]),
+        .adc_en(en_synced),
         .aligned(aligned)
     );
 
@@ -114,7 +121,8 @@ module top
 
     logic full_wr, empty_wr, en_wr, en_rd, empty_rd, full_rd, eth_en, wr_rst_busy, rd_rst_busy, din_rdy, start, fifo_rst_state;
     logic [7:0] eth_data;
-    logic [3:0] state;
+    logic [3:0] wrstate;
+    logic [1:0] rdstate;
 
     assign start = aligned & btnc;
     assign fifo_rst_state = wr_rst_busy | rd_rst_busy;
@@ -128,7 +136,7 @@ module top
         .start(start),
         .fifo_rst(fifo_rst_state),
         .wr_en(en_wr),
-        .state(state)
+        .state(wrstate)
     );
 
     widthConverter adc1_buffer
@@ -158,7 +166,8 @@ module top
         .empty(empty_rd),
         .fifo_rst(fifo_rst_state),
         .eth_en(eth_en),
-        .rd_en(en_rd)
+        .rd_en(en_rd),
+        .state(rdstate)
     );
 
     gigabit_test gigabit_tx
@@ -205,8 +214,11 @@ module top
         .probe8(en_rd), // input wire [0:0]  probe8 
         .probe9(din_rdy), // input wire [0:0]  probe9 
         .probe10(eth_en), // input wire [0:0]  probe10
-        .probe11(state), // input wire [0:0]  probe11 
-        .probe12(fifo_rst_state) // input wire [0:0]  probe13
+        .probe11(wrstate), // input wire [0:0]  probe11 
+        .probe12(fifo_rst_state), // input wire [0:0]  probe13
+        .probe13(full_rd),
+        .probe14(empty_rd),
+        .probe15(rdstate)
     );
 
 endmodule

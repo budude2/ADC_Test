@@ -93,7 +93,7 @@
 
 
 create_clock -period 2.000 -name AdcBitClk -waveform {0.000 1.000} [get_ports DCLK_p_pin]
-create_generated_clock -name ClkDiv -source [get_pins adc_inst/BUFR_inst/O] -divide_by 4 [get_nets -hierarchical *divclk_o*]
+create_generated_clock -add -name ClkDiv -source [get_pins adc_inst/BUFR_inst/O] -divide_by 4 [get_nets -hierarchical *divclk_o*]
 
 #-------------------------------------------------------------------------------------------
 # Create and area for the out_of_context design block.
