@@ -77,7 +77,6 @@ module clk_wiz_0_clk_wiz
   output        clk_125m,
   output        clk_125m90,
   // Status and control signals
-  input         resetn,
   output        locked,
   input         clk_in1_p,
   input         clk_in1_n
@@ -125,7 +124,6 @@ wire clk_in2_clk_wiz_0;
   wire        clkout6_unused;
   wire        clkfbstopped_unused;
   wire        clkinstopped_unused;
-  wire        reset_high;
 
   MMCME2_ADV
   #(.BANDWIDTH            ("OPTIMIZED"),
@@ -193,8 +191,7 @@ wire clk_in2_clk_wiz_0;
     .CLKINSTOPPED        (clkinstopped_unused),
     .CLKFBSTOPPED        (clkfbstopped_unused),
     .PWRDWN              (1'b0),
-    .RST                 (reset_high));
-  assign reset_high = ~resetn; 
+    .RST                 (1'b0));
 
   assign locked = locked_int;
 // Clock Monitor clock assigning

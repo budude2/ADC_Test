@@ -5,7 +5,6 @@ module readController(
     input  logic rstn,
     input  logic full,
     input  logic empty,
-    input  logic fifo_rst,
     output logic eth_en,
     output logic rd_en,
     output logic [1:0] state
@@ -33,7 +32,7 @@ always_comb begin
     case(curr_state)
     	pause:
     	begin
-            if((full == 1) & (fifo_rst == 0))
+            if((full == 1) & (empty == 0))
     		    next_state = buffer;
     	end
 

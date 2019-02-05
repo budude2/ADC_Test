@@ -54,26 +54,26 @@
 
 (* DowngradeIPIdentifiedWarnings = "yes" *)
 module fifo_generator_0 (
-  rst,
   wr_clk,
+  wr_rst,
   rd_clk,
+  rd_rst,
   din,
   wr_en,
   rd_en,
   dout,
   full,
-  empty,
-  wr_rst_busy,
-  rd_rst_busy
+  empty
 );
 
-input wire rst;
 (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME write_clk, FREQ_HZ 100000000, PHASE 0.000" *)
 (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 write_clk CLK" *)
 input wire wr_clk;
+input wire wr_rst;
 (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME read_clk, FREQ_HZ 100000000, PHASE 0.000" *)
 (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 read_clk CLK" *)
 input wire rd_clk;
+input wire rd_rst;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_DATA" *)
 input wire [15 : 0] din;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_EN" *)
@@ -86,8 +86,6 @@ output wire [7 : 0] dout;
 output wire full;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_read:1.0 FIFO_READ EMPTY" *)
 output wire empty;
-output wire wr_rst_busy;
-output wire rd_rst_busy;
 
   fifo_generator_v13_2_2 #(
     .C_COMMON_CLOCK(0),
@@ -152,8 +150,8 @@ output wire rd_rst_busy;
     .C_WR_PNTR_WIDTH(15),
     .C_WR_RESPONSE_LATENCY(1),
     .C_MSGON_VAL(1),
-    .C_ENABLE_RST_SYNC(1),
-    .C_EN_SAFETY_CKT(1),
+    .C_ENABLE_RST_SYNC(0),
+    .C_EN_SAFETY_CKT(0),
     .C_ERROR_INJECTION_TYPE(0),
     .C_SYNCHRONIZER_STAGE(2),
     .C_INTERFACE_TYPE(0),
@@ -296,12 +294,12 @@ output wire rd_rst_busy;
     .backup(1'D0),
     .backup_marker(1'D0),
     .clk(1'D0),
-    .rst(rst),
+    .rst(1'D0),
     .srst(1'D0),
     .wr_clk(wr_clk),
-    .wr_rst(1'D0),
+    .wr_rst(wr_rst),
     .rd_clk(rd_clk),
-    .rd_rst(1'D0),
+    .rd_rst(rd_rst),
     .din(din),
     .wr_en(wr_en),
     .rd_en(rd_en),
@@ -331,8 +329,8 @@ output wire rd_rst_busy;
     .prog_empty(),
     .sbiterr(),
     .dbiterr(),
-    .wr_rst_busy(wr_rst_busy),
-    .rd_rst_busy(rd_rst_busy),
+    .wr_rst_busy(),
+    .rd_rst_busy(),
     .m_aclk(1'D0),
     .s_aclk(1'D0),
     .s_aresetn(1'D0),

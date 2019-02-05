@@ -79,7 +79,6 @@
     .clk_125m(clk_125m),     // output clk_125m
     .clk_125m90(clk_125m90),     // output clk_125m90
     // Status and control signals
-    .resetn(resetn), // input resetn
     .locked(locked),       // output locked
    // Clock in ports
     .clk_in1_p(clk_in1_p),    // input clk_in1_p

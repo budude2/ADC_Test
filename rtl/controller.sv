@@ -6,9 +6,8 @@ module controller(
     input  logic clk,
     input  logic rstn,
     input  logic start,
-    input  logic fifo_rst,
     output logic wr_en,
-    output logic [3:0] state
+    output logic [2:0] state
     );
 
 typedef enum logic [2:0] {init = 3'b001, buffer = 3'b010, pause = 3'b100} state_type;
@@ -33,7 +32,7 @@ always_comb begin
     case(curr_state)
     	init:
     	begin
-            if((start == 1) & (fifo_rst == 0))
+            if(start == 1)
     		    next_state = buffer;
     	end
 

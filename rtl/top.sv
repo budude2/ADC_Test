@@ -55,7 +55,7 @@ module top
         .clk_125m(clk_125m),     // output clk_200m
         .clk_125m90(clk_125m90),     // output clk_125m
         // Status and control signals
-        .resetn(cpu_resetn),     // input resetn
+        //.resetn(cpu_resetn),     // input resetn
         .locked(dcm_locked),     // output locked
         // Clock in ports
         .clk_in1_p(SysRefClk_p), // input clk_in1_p
@@ -101,7 +101,7 @@ module top
         .frmData(frmData),
         .adc_en(en_synced),
         .aligned(aligned),
-        .RstOut(wr_rst)
+        .RstOut()
     );
 
     ADC_Control_wrapper MB
@@ -120,7 +120,7 @@ module top
     );
 
 
-    logic wr_rst, full_wr, empty_wr, en_wr, en_rd, empty_rd, full_rd, eth_en, wr_rst_busy, rd_rst_busy, din_rdy, start, fifo_rst_state;
+    logic wr_rst_n, rd_rst_n, full_wr, empty_wr, en_wr, en_rd, empty_rd, full_rd, eth_en, wr_rst_busy, rd_rst_busy, din_rdy, start, fifo_rst_state;
     logic [7:0] eth_data;
     logic [3:0] wrstate;
     logic [1:0] rdstate;
@@ -128,44 +128,55 @@ module top
     assign start = aligned & btnc;
     assign fifo_rst_state = wr_rst_busy | rd_rst_busy;
 
+    rstBridge writeReset
+    (
+    	.clk(adc_clk),
+    	.asyncrst_n(cpu_resetn),
+    	.rst_n(wr_rst_n)
+    );
+
     controller writeController
     (
-        .rstn(!wr_rst),
+        .rstn(wr_rst_n),
         .clk(adc_clk),
         .full(full_wr),
         .empty(empty_wr),
         .start(start),
-        .fifo_rst(fifo_rst_state),
         .wr_en(en_wr),
         .state(wrstate)
     );
 
     widthConverter adc1_buffer
     (
-        .rst(wr_rst),
+        .wr_rst(!wr_rst_n),
+        .rd_rst(!rd_rst_n),
 
         .wr_clk(adc_clk),
         .wr_en(en_wr),
         .din(adc1),
         .full(full_wr),
         .wr_empty(empty_wr),    // Empty flag in wr_clk domain
-        .wr_rst_busy(wr_rst_busy),
 
         .rd_clk(clk_125m),
         .rd_en(en_rd & din_rdy),
         .dout(eth_data),
         .empty(empty_rd),
-        .rd_full(full_rd),     // Full flag in rd_clk domain
-        .rd_rst_busy(rd_rst_busy)
+        .rd_full(full_rd)     // Full flag in rd_clk domain
+    );
+
+    rstBridge readReset
+    (
+    	.clk(clk_125m),
+    	.asyncrst_n(cpu_resetn),
+    	.rst_n(rd_rst_n)
     );
 
     readController readController
     (
         .clk(clk_125m),
-        .rstn(cpu_resetn),
+        .rstn(rd_rst_n),
         .full(full_rd),
         .empty(empty_rd),
-        .fifo_rst(fifo_rst_state),
         .eth_en(eth_en),
         .rd_en(en_rd),
         .state(rdstate)
@@ -208,10 +219,10 @@ module top
         .probe1(adc4),
         .probe2(adc8),
         .probe3(frmData),
-        .probe4(en_wr),
-        .probe5(full_wr), // input wire [0:0]  probe5 
+        .probe4(en_synced),
+        .probe5(wr_rst), // input wire [0:0]  probe5 
         .probe6(aligned), // input wire [0:0]  probe6 
-        .probe7(start), // input wire [0:0]  probe7 
+        .probe7(adc_clk), // input wire [0:0]  probe7 
         .probe8(en_rd), // input wire [0:0]  probe8 
         .probe9(din_rdy), // input wire [0:0]  probe9 
         .probe10(eth_en), // input wire [0:0]  probe10
