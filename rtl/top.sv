@@ -44,6 +44,7 @@ module top
     logic [7:0] frmData;
 
     assign led0 = dcm_locked;
+    assign led1 = 0;
     assign led2 = MB_O[0];
     assign led3 = MB_O[1];
 
@@ -121,8 +122,6 @@ module top
 
     logic wr_rst_n, rd_rst_n, full_wr, empty_wr, en_wr, en_rd, empty_rd, full_rd, eth_en, wr_rst_busy, rd_rst_busy, din_rdy, start, fifo_rst_state;
     logic [7:0] eth_data;
-    logic [3:0] wrstate;
-    logic [1:0] rdstate;
 
     assign start = aligned & btnc;
     assign fifo_rst_state = wr_rst_busy | rd_rst_busy;
@@ -142,7 +141,7 @@ module top
         .empty(empty_wr),
         .start(start),
         .wr_en(en_wr),
-        .state(wrstate)
+        .state()
     );
 
     widthConverter adc1_buffer
@@ -178,7 +177,7 @@ module top
         .empty(empty_rd),
         .eth_en(eth_en),
         .rd_en(en_rd),
-        .state(rdstate)
+        .state()
     );
 
     gigabit_test gigabit_tx
@@ -211,25 +210,25 @@ module top
         .eth_txd(eth_txd)
     );
 
-    ila_0 ILA
-    (
-        .clk(clk_125m),
-        .probe0(adc2),
-        .probe1(adc4),
-        .probe2(adc8),
-        .probe3(frmData),
-        .probe4(en_synced),
-        .probe5(wr_rst), // input wire [0:0]  probe5 
-        .probe6(aligned), // input wire [0:0]  probe6 
-        .probe7(adc_clk), // input wire [0:0]  probe7 
-        .probe8(en_rd), // input wire [0:0]  probe8 
-        .probe9(din_rdy), // input wire [0:0]  probe9 
-        .probe10(eth_en), // input wire [0:0]  probe10
-        .probe11(wrstate), // input wire [0:0]  probe11 
-        .probe12(fifo_rst_state), // input wire [0:0]  probe13
-        .probe13(full_rd),
-        .probe14(empty_rd),
-        .probe15(rdstate)
-    );
+    // ila_0 ILA
+    // (
+    //     .clk(clk_125m),
+    //     .probe0(adc2),
+    //     .probe1(adc4),
+    //     .probe2(adc8),
+    //     .probe3(frmData),
+    //     .probe4(en_synced),
+    //     .probe5(wr_rst), // input wire [0:0]  probe5 
+    //     .probe6(aligned), // input wire [0:0]  probe6 
+    //     .probe7(adc_clk), // input wire [0:0]  probe7 
+    //     .probe8(en_rd), // input wire [0:0]  probe8 
+    //     .probe9(din_rdy), // input wire [0:0]  probe9 
+    //     .probe10(eth_en), // input wire [0:0]  probe10
+    //     .probe11(wrstate), // input wire [0:0]  probe11 
+    //     .probe12(fifo_rst_state), // input wire [0:0]  probe13
+    //     .probe13(full_rd),
+    //     .probe14(empty_rd),
+    //     .probe15(rdstate)
+    // );
 
 endmodule

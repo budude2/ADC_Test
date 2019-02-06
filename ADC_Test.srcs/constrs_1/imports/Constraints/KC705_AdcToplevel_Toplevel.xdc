@@ -93,7 +93,7 @@
 
 
 create_clock -period 2.000 -name AdcBitClk -waveform {0.000 1.000} [get_ports DCLK_p_pin]
-#create_generated_clock -add -name ClkDiv -source [get_pins adc_inst/BUFR_inst/O] -divide_by 4 [get_nets -hierarchical *divclk_o*]
+#create_generated_clock -add -name Div -source [get_pins adc_inst/BUFR_inst/O] -divide_by 4 [get_nets -hierarchical *divclk_o*]
 
 #-------------------------------------------------------------------------------------------
 # Create and area for the out_of_context design block.
@@ -159,7 +159,7 @@ set_property -dict {PACKAGE_PIN AD12 IOSTANDARD LVDS} [get_ports SysRefClk_p]
 # The end
 
 set_max_delay -datapath_only -from [get_pins enCDC/Q_a_reg/C] -to [get_pins enCDC/D_a_reg/D] 8.000
-set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
-set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
-set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]
-connect_debug_port dbg_hub/clk [get_nets adc_clk]
+# set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
+# set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
+# set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]
+# connect_debug_port dbg_hub/clk [get_nets adc_clk]

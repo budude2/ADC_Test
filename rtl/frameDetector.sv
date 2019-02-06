@@ -24,7 +24,7 @@ ISERDESE2 #(
       .INIT_Q4(1'b0),
       .INTERFACE_TYPE("NETWORKING"),   // MEMORY, MEMORY_DDR3, MEMORY_QDR, NETWORKING, OVERSAMPLE
       .IOBDELAY("NONE"),           // NONE, BOTH, IBUF, IFD
-      .NUM_CE(1),                  // Number of clock enables (1,2)
+      .NUM_CE(2),                  // Number of clock enables (1,2)
       .OFB_USED("FALSE"),          // Select OFB path (FALSE, TRUE)
       .SERDES_MODE("MASTER"),      // MASTER, SLAVE
 
@@ -58,7 +58,7 @@ ISERDESE2 #(
 
       // CE1, CE2: 1-bit (each) input: Data register clock enable inputs
       .CE1(CE),
-      .CE2(1'b1),
+      .CE2(CE),
       .CLKDIVP(1'b0),           // 1-bit input: TBD
 
       // Clocks: 1-bit (each) input: ISERDESE2 clock input ports
