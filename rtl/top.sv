@@ -22,8 +22,8 @@ module top
     output logic led1,
     output logic led2,
     output logic led3,
-    output logic eth_mdc,
-    inout  logic eth_mdio,
+    //output logic eth_mdc,
+    //inout  logic eth_mdio,
     input  logic [3:0] eth_rxd,
     input  logic eth_rxck,
     input  logic eth_rxctl,
@@ -61,14 +61,6 @@ module top
         .clk_in1_p(SysRefClk_p), // input clk_in1_p
         .clk_in1_n(SysRefClk_n)  // input clk_in1_n
     );
-
-
-    (* ASYNC_REG="TRUE" *) logic meta0, en_synced;
-
-    always_ff @(posedge adc_clk) begin
-         meta0 <= MB_O[0];
-         en_synced <= meta0;
-    end
 
     adc adc_inst
     ( 
@@ -119,6 +111,13 @@ module top
         .O(MB_O)
     );
 
+   simpleCDC enCDC
+   (
+   	.sourceClk(clk_100m),
+   	.destClk(adc_clk),
+   	.d_in(MB_O[0]),
+   	.d_out(en_synced)
+	);
 
     logic wr_rst_n, rd_rst_n, full_wr, empty_wr, en_wr, en_rd, empty_rd, full_rd, eth_en, wr_rst_busy, rd_rst_busy, din_rdy, start, fifo_rst_state;
     logic [7:0] eth_data;
@@ -198,8 +197,8 @@ module top
         .eth_rst_b(ETH_PHYRST_N),
 
         // Ethernet management interface
-        .eth_mdc(eth_mdc),
-        .eth_mdio(eth_mdio),
+        .eth_mdc(),
+        .eth_mdio(),
 
         // Ethernet RX interface
         .eth_rxck(eth_rxck),
