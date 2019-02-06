@@ -34,8 +34,8 @@ module adc
         output logic RstOut
     );
 
-    logic DCLK, DCLK_IO, rst, CLKDIV, FCLK, iserdes_rst, adc_rst, d0a2, d1a2, d0a1, d1a1;
-    logic d0b2, d1b2, bitslip, d0d1, d0d2;
+    logic DCLK, DCLK_IO, rst, CLKDIV, FCLK, iserdes_rst, adc_rst, adc_rst_n, d0a2, d1a2, d0a1, d1a1;
+    logic d0b2, d1b2, bitslip, d0d1, d0d2, AppsRst_n;
     logic [7:0] d0a2_data, d1a2_data, d0b2_data, d1b2_data, d1d2_data, d0d2_data, d0a1_data, d1a1_data;
     //logic [15:0] adc2, adc4;
 
@@ -155,19 +155,27 @@ module adc
         .O(CLKDIV)         // 1-bit output: Clock output port
     );
 
-    AppsRst #(
-        .C_AppsRstDly(10)
-    ) rstController (
-        .ClkIn(CLKDIV),
-        .Locked(adc_en),
-        .Rst(~cpu_resetn),
-        .RstOut(adc_rst)
+    rstBridge writeReset
+    (
+        .clk(CLKDIV),
+        .asyncrst_n(cpu_resetn),
+        .rst_n(AppsRst_n)
     );
+
+    shiftReg rstDelay
+    (
+        .clk(CLKDIV),
+        .D(AppsRst_n),
+        .Q(adc_rst_n)
+    );
+
+    assign adc_rst = ~adc_rst_n;
 
     frameDetector fdet_inst
     (
         .CLK(DCLK_IO),
         .CLKDIV(CLKDIV),
+        .CE(adc_en),
         .RST(adc_rst),
         .D(FCLK),
         .data_o(frmData),
@@ -180,7 +188,8 @@ module adc
       .ISERDES_FCO(frmData),
       .rst(adc_rst),
       .ISERDES_bslip(bitslip),
-      .aligned(aligned)
+      .aligned(aligned),
+      .CE(adc_en)
    );
 
     dataDeserializer d0a2_inst
@@ -190,7 +199,8 @@ module adc
         .RST(adc_rst),
         .D(d0a2),
         .data_o(d0a2_data),
-        .bitslip(bitslip)
+        .bitslip(bitslip),
+        .CE(adc_en)
     );
 
     dataDeserializer d1a2_inst
@@ -200,7 +210,8 @@ module adc
         .RST(adc_rst),
         .D(d1a2),
         .data_o(d1a2_data),
-        .bitslip(bitslip)
+        .bitslip(bitslip),
+        .CE(adc_en)
     );
 
     assign adc2 = {d1a2_data[0], d0a2_data[0],
@@ -218,7 +229,8 @@ module adc
         .RST(adc_rst),
         .D(d0b2),
         .data_o(d0b2_data),
-        .bitslip(bitslip)
+        .bitslip(bitslip),
+        .CE(adc_en)
     );
 
     dataDeserializer d1b2_inst
@@ -228,7 +240,8 @@ module adc
         .RST(adc_rst),
         .D(d1b2),
         .data_o(d1b2_data),
-        .bitslip(bitslip)
+        .bitslip(bitslip),
+        .CE(adc_en)
     );
 
     assign adc4 = {d1b2_data[0], d0b2_data[0],
@@ -246,7 +259,8 @@ module adc
         .RST(adc_rst),
         .D(d0d2),
         .data_o(d0d2_data),
-        .bitslip(bitslip)
+        .bitslip(bitslip),
+        .CE(adc_en)
     );
 
     dataDeserializer d1d2_inst
@@ -256,7 +270,8 @@ module adc
         .RST(adc_rst),
         .D(d1d2),
         .data_o(d1d2_data),
-        .bitslip(bitslip)
+        .bitslip(bitslip),
+        .CE(adc_en)
     );
 
     assign adc8 = {d1d2_data[0], d0d2_data[0],
@@ -274,7 +289,8 @@ module adc
         .RST(adc_rst),
         .D(d0a1),
         .data_o(d0a1_data),
-        .bitslip(bitslip)
+        .bitslip(bitslip),
+        .CE(adc_en)
     );
 
     dataDeserializer d1a1_inst
@@ -284,7 +300,8 @@ module adc
         .RST(adc_rst),
         .D(d1a1),
         .data_o(d1a1_data),
-        .bitslip(bitslip)
+        .bitslip(bitslip),
+        .CE(adc_en)
     );
 
     assign adc1 = {d1a1_data[0], d0a1_data[0],

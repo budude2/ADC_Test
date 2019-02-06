@@ -135,7 +135,7 @@ module top
     	.rst_n(wr_rst_n)
     );
 
-    controller writeController
+    writeController writeController
     (
         .rstn(wr_rst_n),
         .clk(adc_clk),

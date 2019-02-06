@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module controller(
+module writeController(
     input  logic full,
     input  logic empty,
     input  logic clk,

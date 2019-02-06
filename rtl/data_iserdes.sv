@@ -4,6 +4,7 @@ module dataDeserializer
 (
 	input logic CLK,
 	input logic CLKDIV,
+   input logic CE,
 	input logic RST,
 	input logic D,
 	input logic bitslip,
@@ -56,7 +57,7 @@ ISERDESE2 #(
                                    // SDR).
 
       // CE1, CE2: 1-bit (each) input: Data register clock enable inputs
-      .CE1(1'b1),
+      .CE1(CE),
       .CE2(1'b1),
       .CLKDIVP(1'b0),           // 1-bit input: TBD
 

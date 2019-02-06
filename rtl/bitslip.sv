@@ -4,6 +4,7 @@ module bitslip
    (
       input logic CLKDIV,
       input logic rst,
+      input logic CE,
       input logic [7:0] ISERDES_FCO,
       output logic ISERDES_bslip,
       output logic aligned
@@ -36,7 +37,8 @@ module bitslip
         case(state_curr)
             STARTUP:
                 begin
-                    count_next = count_curr + 1;
+                    if(CE == 1)
+                        count_next = count_curr + 1;
                     if(count_curr == 3'b111)
                         state_next = POLL;
                 end
