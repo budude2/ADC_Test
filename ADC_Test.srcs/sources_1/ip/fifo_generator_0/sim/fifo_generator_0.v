@@ -63,7 +63,8 @@ module fifo_generator_0 (
   rd_en,
   dout,
   full,
-  empty
+  empty,
+  valid
 );
 
 (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME write_clk, FREQ_HZ 100000000, PHASE 0.000" *)
@@ -86,6 +87,7 @@ output wire [7 : 0] dout;
 output wire full;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_read:1.0 FIFO_READ EMPTY" *)
 output wire empty;
+output wire valid;
 
   fifo_generator_v13_2_2 #(
     .C_COMMON_CLOCK(0),
@@ -111,7 +113,7 @@ output wire empty;
     .C_HAS_RST(1),
     .C_HAS_SRST(0),
     .C_HAS_UNDERFLOW(0),
-    .C_HAS_VALID(0),
+    .C_HAS_VALID(1),
     .C_HAS_WR_ACK(0),
     .C_HAS_WR_DATA_COUNT(0),
     .C_HAS_WR_RST(0),
@@ -320,7 +322,7 @@ output wire empty;
     .overflow(),
     .empty(empty),
     .almost_empty(),
-    .valid(),
+    .valid(valid),
     .underflow(),
     .data_count(),
     .rd_data_count(),

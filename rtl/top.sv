@@ -24,16 +24,16 @@ module top
     output logic led3,
     //output logic eth_mdc,
     //inout  logic eth_mdio,
-    input  logic [3:0] eth_rxd,
-    input  logic eth_rxck,
-    input  logic eth_rxctl,
+   // input  logic [3:0] eth_rxd,
+    //input  logic eth_rxck,
+    //input  logic eth_rxctl,
     output logic [3:0] eth_txd,
     output logic ETH_TX_EN,
     output logic eth_txck,
-    output logic ETH_PHYRST_N,
-    input  logic eth_int_b,
-    input  logic eth_pme_b,
-    output logic [3:0] eth_leds
+    output logic ETH_PHYRST_N
+    //input  logic eth_int_b,
+    //input  logic eth_pme_b,
+    //output logic [3:0] eth_leds
 );
 
     logic dcm_locked, bitslip;
@@ -120,11 +120,26 @@ module top
    	.d_out(en_synced)
 	);
 
-    logic wr_rst_n, rd_rst_n, full_wr, empty_wr, en_wr, en_rd, empty_rd, full_rd, eth_en, wr_rst_busy, rd_rst_busy, din_rdy, start, fifo_rst_state;
+    logic wr_rst_n, rd_rst_n, full_wr, empty_wr, en_wr, en_rd, empty_rd, full_rd, eth_en, tx_valid, udp_busy, start, tick;
     logic [7:0] eth_data;
 
-    assign start = aligned & btnc;
-    assign fifo_rst_state = wr_rst_busy | rd_rst_busy;
+    db_fsm debouncer
+    (
+        .clk(clk_125m),
+        .reset(!rd_rst_n),
+        .sw(btnc),
+        .db(btnc_db)
+    );
+
+    edge_detect_moore edge_detector
+    (
+        .clk(clk_125m),
+        .reset(!rd_rst_n),
+        .level(btnc_db),
+        .tick(tick)
+    );
+
+    assign start = aligned & tick;
 
     rstBridge writeReset
     (
@@ -156,10 +171,11 @@ module top
         .wr_empty(empty_wr),    // Empty flag in wr_clk domain
 
         .rd_clk(clk_125m),
-        .rd_en(en_rd & din_rdy),
+        .rd_en(en_rd),
         .dout(eth_data),
         .empty(empty_rd),
-        .rd_full(full_rd)     // Full flag in rd_clk domain
+        .rd_full(full_rd),    // Full flag in rd_clk domain
+        .valid(tx_valid)
     );
 
     rstBridge readReset
@@ -176,59 +192,64 @@ module top
         .full(full_rd),
         .empty(empty_rd),
         .eth_en(eth_en),
-        .rd_en(en_rd),
-        .state()
+        .rd_en(en_rd)
     );
 
-    gigabit_test gigabit_tx
+    udp_tx_top udp_tx
     (
-        .clk125MHz(clk_125m),
-        .clk125MHz90(clk_125m90),
-        .switches(),
-        .leds(eth_leds),
-        .en(eth_en),
-        .data_in(eth_data),
-        .din_rdy(din_rdy),
-       
-        // Ethernet control signals   
-        .eth_int_b(eth_int_b),
-        .eth_pme_b(eth_pme_b),
-        .eth_rst_b(ETH_PHYRST_N),
+        .clk_125m(clk_125m),
+        .clk_125m90(clk_125m90),
 
-        // Ethernet management interface
-        .eth_mdc(),
-        .eth_mdio(),
+        .udp_tx_valid(eth_en),
+        .udp_tx_data(eth_data),
+        .udp_tx_busy(udp_busy),
 
-        // Ethernet RX interface
-        .eth_rxck(eth_rxck),
-        .eth_rxctl(eth_rxctl),
-        .eth_rxd(eth_rxd),
-
-        // Ethernet TX interface
+        .eth_txd(eth_txd),
+        .ETH_TX_EN(ETH_TX_EN),
         .eth_txck(eth_txck),
-        .eth_txctl(ETH_TX_EN),
-        .eth_txd(eth_txd)
+        .ETH_PHYRST_N(ETH_PHYRST_N)
     );
 
-    // ila_0 ILA
+//     ila_0 ila (
+//         .clk(clk_125m), // input wire clk
+
+//         .probe0(tx_valid), // input wire [0:0]  probe0  
+//         .probe1(eth_en), // input wire [0:0]  probe1 
+//         .probe2(udp_busy), // input wire [0:0]  probe2 
+//         .probe3(en_rd), // input wire [0:0]  probe3 
+//         .probe4(empty_rd), // input wire [0:0]  probe4 
+//         .probe5(full_rd), // input wire [0:0]  probe5 
+//         .probe6(rd_rst_n) // input wire [0:0]  probe6 
+// );
+
+    // gigabit_test gigabit_tx
     // (
-    //     .clk(clk_125m),
-    //     .probe0(adc2),
-    //     .probe1(adc4),
-    //     .probe2(adc8),
-    //     .probe3(frmData),
-    //     .probe4(en_synced),
-    //     .probe5(wr_rst), // input wire [0:0]  probe5 
-    //     .probe6(aligned), // input wire [0:0]  probe6 
-    //     .probe7(adc_clk), // input wire [0:0]  probe7 
-    //     .probe8(en_rd), // input wire [0:0]  probe8 
-    //     .probe9(din_rdy), // input wire [0:0]  probe9 
-    //     .probe10(eth_en), // input wire [0:0]  probe10
-    //     .probe11(wrstate), // input wire [0:0]  probe11 
-    //     .probe12(fifo_rst_state), // input wire [0:0]  probe13
-    //     .probe13(full_rd),
-    //     .probe14(empty_rd),
-    //     .probe15(rdstate)
+    //     .clk125MHz(clk_125m),
+    //     .clk125MHz90(clk_125m90),
+    //     .switches(),
+    //     .leds(eth_leds),
+    //     .en(eth_en),
+    //     .data_in(eth_data),
+    //     .din_rdy(din_rdy),
+       
+    //     // Ethernet control signals   
+    //     .eth_int_b(eth_int_b),
+    //     .eth_pme_b(eth_pme_b),
+    //     .eth_rst_b(ETH_PHYRST_N),
+
+    //     // Ethernet management interface
+    //     .eth_mdc(),
+    //     .eth_mdio(),
+
+    //     // Ethernet RX interface
+    //     .eth_rxck(eth_rxck),
+    //     .eth_rxctl(eth_rxctl),
+    //     .eth_rxd(eth_rxd),
+
+    //     // Ethernet TX interface
+    //     .eth_txck(eth_txck),
+    //     .eth_txctl(ETH_TX_EN),
+    //     .eth_txd(eth_txd)
     // );
 
 endmodule

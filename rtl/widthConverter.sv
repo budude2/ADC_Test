@@ -15,7 +15,8 @@ module widthConverter
         input  logic        rd_en,
         output logic [7:0]  dout,
         output logic        empty,
-        output logic        rd_full
+        output logic        rd_full,
+        output logic        valid
     );
 
     fifo_generator_0 fifo
@@ -29,7 +30,8 @@ module widthConverter
       .rd_en(rd_en),    // input wire rd_en
       .dout(dout),      // output wire [7 : 0] dout
       .full(full),      // output wire full
-      .empty(empty)     // output wire empty
+      .empty(empty),    // output wire empty
+      .valid(valid)    // output wire valid
     );
 
     (* ASYNC_REG="TRUE" *) logic wr_empty0, wr_empty1;

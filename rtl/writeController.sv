@@ -32,7 +32,7 @@ always_comb begin
     case(curr_state)
     	init:
     	begin
-            if(start == 1)
+            if((start == 1) & (full == 0))
     		    next_state = buffer;
     	end
 
