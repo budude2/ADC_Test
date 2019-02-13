@@ -15,23 +15,21 @@ module widthConverter
         input  logic        rd_en,
         output logic [7:0]  dout,
         output logic        empty,
-        output logic        rd_full,
-        output logic        valid
+        output logic        rd_full
     );
 
     fifo_generator_0 fifo
     (
-      .wr_clk(wr_clk),  // input wire wr_clk
-      .wr_rst(wr_rst),  // input wire wr_rst
-      .rd_clk(rd_clk),  // input wire rd_clk
-      .rd_rst(rd_rst),  // input wire rd_rst
-      .din(din),        // input wire [15 : 0] din
-      .wr_en(wr_en),    // input wire wr_en
-      .rd_en(rd_en),    // input wire rd_en
-      .dout(dout),      // output wire [7 : 0] dout
-      .full(full),      // output wire full
-      .empty(empty),    // output wire empty
-      .valid(valid)    // output wire valid
+        .wr_clk(wr_clk),  // input wire wr_clk
+        .wr_rst(wr_rst),  // input wire wr_rst
+        .rd_clk(rd_clk),  // input wire rd_clk
+        .rd_rst(rd_rst),  // input wire rd_rst
+        .din(din),        // input wire [15 : 0] din
+        .wr_en(wr_en),    // input wire wr_en
+        .rd_en(rd_en),    // input wire rd_en
+        .dout(dout),      // output wire [7 : 0] dout
+        .full(full),      // output wire full
+        .empty(empty)     // output wire empty
     );
 
     (* ASYNC_REG="TRUE" *) logic wr_empty0, wr_empty1;
@@ -46,8 +44,8 @@ module widthConverter
     (* ASYNC_REG="TRUE" *) logic rd_full0, rd_full1;
 
     always_ff @(posedge rd_clk) begin
-         rd_full0 <= full;
-         rd_full1 <= rd_full0;
+        rd_full0 <= full;
+        rd_full1 <= rd_full0;
     end
     
     assign rd_full = rd_full1;
