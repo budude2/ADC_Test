@@ -48,7 +48,7 @@ always_comb begin
 
             if(empty == 1)
                 next_state = init;
-            else if(count_curr == 1023)
+            else if(count_curr == 511)
             begin
                 next_state = pause;
                 count_next = 0;
