@@ -4,15 +4,21 @@ module readController(
     input  logic clk,
     input  logic rstn,
     input  logic full,
-    input  logic empty,
+    input  logic empty1,
+    input  logic empty2,
     output logic eth_en,
-    output logic rd_en
+    output logic rd_en1,
+    output logic rd_en2,
+    output logic addr
     );
 
 typedef enum logic [2:0] {init = 3'b001, read = 3'b010, pause = 3'b100} state_type;
 state_type curr_state, next_state;
 
-logic [10:0] count_curr, count_next;
+logic empty;
+logic [15:0] count_curr, count_next;
+
+assign empty = empty1 & empty2;
 
 always_ff @(posedge clk) begin
     if(rstn == 1'b0) begin
@@ -30,7 +36,9 @@ always_comb begin
     count_next = count_curr;
 
     eth_en  = 0;
-    rd_en   = 0;
+    rd_en1  = 0;
+    rd_en2  = 0;
+    addr    = 0;
 
     case(curr_state)
         init:
@@ -42,13 +50,21 @@ always_comb begin
         read:
         begin
             eth_en = 1;
-            rd_en  = 1;
 
             count_next = count_curr + 1;
 
+            if(empty1 == 0) begin
+                rd_en1  = 1;
+                addr    = 0;
+            end
+            else if(empty2 == 0) begin
+                rd_en2  = 1;
+                addr    = 1;
+            end
+
             if(empty == 1)
                 next_state = init;
-            else if(count_curr == 511)
+            else if(count_curr == 1023)
             begin
                 next_state = pause;
                 count_next = 0;
@@ -59,9 +75,16 @@ always_comb begin
         begin
             count_next = count_curr + 1;
 
+            if(empty1 == 0) begin
+                addr    = 0;
+            end
+            else if(empty2 == 0) begin
+                addr    = 1;
+            end
+
             if(empty == 1)
                 next_state = init;
-            else if(count_curr == 2047)
+            else if(count_curr == 8191)
             begin
                 next_state = read;
                 count_next = 0;
@@ -71,7 +94,7 @@ always_comb begin
         default:
         begin
         end
-    endcase // curr_state
+    endcase
 end
 
 endmodule

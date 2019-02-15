@@ -33,7 +33,7 @@ udp_tx_packet #(
         .udp_tx_dst_port(16'h1000),
 
         .packet_out_request(),
-        .packet_out_granted(1),
+        .packet_out_granted(1'b1),
         .packet_out_valid(packet_valid),
         .packet_out_data(packet_data)
     );

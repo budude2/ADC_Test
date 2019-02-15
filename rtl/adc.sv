@@ -25,7 +25,7 @@ module adc
         input logic d1d2_n,
         input logic adc_en,
         output logic [15:0] adc1,
-        output logic [13:0] adc2,
+        output logic [15:0] adc2,
         output logic [13:0] adc4,
         output logic [13:0] adc8,
         output logic divclk_o,
@@ -220,7 +220,8 @@ module adc
                    d1a2_data[3], d0a2_data[3],
                    d1a2_data[4], d0a2_data[4],
                    d1a2_data[5], d0a2_data[5],
-                   d1a2_data[6], d0a2_data[6]};
+                   d1a2_data[6], d0a2_data[6],
+                   d1a2_data[7], d0a2_data[7]};
 
     dataDeserializer d0b2_inst
     (

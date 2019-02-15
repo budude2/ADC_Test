@@ -42,16 +42,16 @@ module top
     logic dcm_locked;
 
     // ADC Signals
-    logic adc_clk, bitslip, aligned;
-    logic [13:0] adc2, adc4, adc8;
-    logic [15:0] adc1;
+    logic adc_clk, bitslip, aligned, adc_rst, adc1_valid, adc2_valid;
+    logic [13:0] adc4, adc8;
+    logic [15:0] adc1, adc2, adc1_125m, adc2_125m;
     logic [7:0] frmData;
 
     // Microblaze Signals
     logic [31:0] MB_O;
 
     // Buffering Signals
-    logic wr_rst_n, rd_rst_n, full_wr, empty_wr, en_wr, en_rd, empty_rd, full_rd, eth_en, start, tick;
+    logic cdc_rst_n, rst_125m_n, eth_en, start, tick;
     logic [7:0] eth_data;
 
     assign led0 = dcm_locked;
@@ -78,7 +78,7 @@ module top
     db_fsm debouncer
     (
         .clk(clk_125m),
-        .reset(!rd_rst_n),
+        .reset(!rst_125m_n),
         .sw(btnc),
         .db(btnc_db)
     );
@@ -86,7 +86,7 @@ module top
     edge_detect_moore edge_detector
     (
         .clk(clk_125m),
-        .reset(!rd_rst_n),
+        .reset(!rst_125m_n),
         .level(btnc_db),
         .tick(tick)
     );
@@ -99,18 +99,18 @@ module top
         .d_out(en_synced)
     );
 
-    rstBridge writeReset
+    rstBridge cdcRestet
     (
         .clk(adc_clk),
         .asyncrst_n(cpu_resetn),
-        .rst_n(wr_rst_n)
+        .rst_n(cdc_rst_n)
     );
 
-    rstBridge readReset
+    rstBridge rst_125m
     (
         .clk(clk_125m),
         .asyncrst_n(cpu_resetn),
-        .rst_n(rd_rst_n)
+        .rst_n(rst_125m_n)
     );
 
     adc adc_inst
@@ -150,7 +150,35 @@ module top
         .frmData(frmData),
         .adc_en(en_synced),
         .aligned(aligned),
-        .RstOut()
+        .RstOut(adc_rst)
+    );
+
+    adc_cdc adc1_cdc
+    (
+		.wr_clk(adc_clk),
+		.wr_rst(!cdc_rst_n),
+		.rd_clk(clk_125m),
+		.rd_rst(!rst_125m_n),
+
+		.din(adc1),
+		.din_valid(aligned),
+
+		.dout(adc1_125m),
+		.dout_valid(adc1_valid)
+    );
+
+    adc_cdc adc2_cdc
+    (
+		.wr_clk(adc_clk),
+		.wr_rst(!cdc_rst_n),
+		.rd_clk(clk_125m),
+		.rd_rst(!rst_125m_n),
+
+		.din(adc2),
+		.din_valid(aligned),
+
+		.dout(adc2_125m),
+		.dout_valid(adc2_valid)
     );
 
     ADC_Control_wrapper MB
@@ -173,12 +201,16 @@ module top
 
     assign start = aligned & tick;
 
+    logic en_wr, addr;
+    logic full_adc1, empty_adc1, en_rd1, full_adc2, empty_adc2, en_rd2;
+    logic [7:0] dout1, dout2;
+
     writeController writeController
     (
-        .rstn(wr_rst_n),
-        .clk(adc_clk),
-        .full(full_wr),
-        .empty(empty_wr),
+        .rstn(rst_125m_n),
+        .clk(clk_125m),
+        .full(full_adc1 | full_adc2),
+        .empty(empty_adc1 & empty_adc2),
         .start(start),
         .wr_en(en_wr),
         .state()
@@ -186,32 +218,59 @@ module top
 
     widthConverter adc1_buffer
     (
-        .wr_rst(!wr_rst_n),
-        .rd_rst(!rd_rst_n),
+    	.clk(clk_125m),
+        .rst(!rst_125m_n),
+        
+        .wr_en(en_wr & adc1_valid),
+        .din(adc1_125m),
+        .full(full_adc1),
 
-        .wr_clk(adc_clk),
-        .wr_en(en_wr),
-        .din(adc1),
-        .full(full_wr),
-        .wr_empty(empty_wr),    // Empty flag in wr_clk domain
+        .rd_en(en_rd1),
+        .dout(dout1),
+        .empty(empty_adc1)
+    );
 
-        .rd_clk(clk_125m),
-        .rd_en(en_rd),
-        .dout(eth_data),
-        .empty(empty_rd),
-        .rd_full(full_rd)     // Full flag in rd_clk domain
+    widthConverter adc2_buffer
+    (
+    	.clk(clk_125m),
+        .rst(!rst_125m_n),
+
+        .wr_en(en_wr & adc2_valid),
+        .din(adc2_125m),
+        .full(full_adc2),
+
+        .rd_en(en_rd2),
+        .dout(dout2),
+        .empty(empty_adc2)
     );
     
     readController readController
     (
         .clk(clk_125m),
-        .rstn(rd_rst_n),
+        .rstn(rst_125m_n),
         
-        .full(full_rd),
-        .empty(empty_rd),
+        .full(full_adc1 | full_adc2),
+        .empty1(empty_adc1),
+        .empty2(empty_adc2),
         .eth_en(eth_en),
-        .rd_en(en_rd)
+        .rd_en1(en_rd1),
+        .rd_en2(en_rd2),
+        .addr(addr)
     );
+
+    always_comb begin
+    	case(addr)
+    		0:
+    		begin
+    			eth_data = dout1;
+    		end
+
+    		1:
+    		begin
+    			eth_data = dout2;
+    		end
+    	endcase
+    end
 
     udp_tx_top udp_tx
     (
@@ -228,16 +287,18 @@ module top
         .ETH_PHYRST_N(ETH_PHYRST_N)
     );
 
-//     ila_0 ila (
-//         .clk(clk_125m), // input wire clk
+    ila_0 ila (
+        .clk(clk_125m), // input wire clk
 
-//         .probe0(tx_valid), // input wire [0:0]  probe0  
-//         .probe1(eth_en), // input wire [0:0]  probe1 
-//         .probe2(udp_busy), // input wire [0:0]  probe2 
-//         .probe3(en_rd), // input wire [0:0]  probe3 
-//         .probe4(empty_rd), // input wire [0:0]  probe4 
-//         .probe5(full_rd), // input wire [0:0]  probe5 
-//         .probe6(rd_rst_n) // input wire [0:0]  probe6 
-// );
+        .probe0(start), // input wire [0:0]  probe0  
+        .probe1(adc1_valid), // input wire [0:0]  probe1 
+        .probe2(adc2_valid), // input wire [0:0]  probe2 
+        .probe3(empty_adc1), // input wire [0:0]  probe3 
+        .probe4(empty_adc2), // input wire [0:0]  probe4 
+        .probe5(en_rd1), // input wire [0:0]  probe5 
+        .probe6(en_rd2), // input wire [0:0]  probe6
+        .probe7(full_adc1),
+        .probe8(full_adc2)
+);
 
 endmodule
