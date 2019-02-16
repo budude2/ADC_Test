@@ -42,9 +42,8 @@ module top
     logic dcm_locked;
 
     // ADC Signals
-    logic adc_clk, bitslip, aligned, adc_rst, adc1_valid, adc2_valid;
-    logic [13:0] adc4, adc8;
-    logic [15:0] adc1, adc2, adc1_125m, adc2_125m;
+    logic adc_clk, bitslip, aligned, adc_rst, adc1_valid, adc2_valid, adc4_valid, adc8_valid;
+    logic [15:0] adc1, adc2, adc4, adc8, adc1_125m, adc2_125m, adc4_125m, adc8_125m;
     logic [7:0] frmData;
 
     // Microblaze Signals
@@ -181,6 +180,34 @@ module top
 		.dout_valid(adc2_valid)
     );
 
+    adc_cdc adc4_cdc
+    (
+        .wr_clk(adc_clk),
+        .wr_rst(!cdc_rst_n),
+        .rd_clk(clk_125m),
+        .rd_rst(!rst_125m_n),
+
+        .din(adc4),
+        .din_valid(aligned),
+
+        .dout(adc4_125m),
+        .dout_valid(adc4_valid)
+    );
+
+    adc_cdc adc8_cdc
+    (
+        .wr_clk(adc_clk),
+        .wr_rst(!cdc_rst_n),
+        .rd_clk(clk_125m),
+        .rd_rst(!rst_125m_n),
+
+        .din(adc8),
+        .din_valid(aligned),
+
+        .dout(adc8_125m),
+        .dout_valid(adc8_valid)
+    );
+
     ADC_Control_wrapper MB
     (
         .clk_100m(clk_100m),
@@ -201,16 +228,20 @@ module top
 
     assign start = aligned & tick;
 
-    logic en_wr, addr;
-    logic full_adc1, empty_adc1, en_rd1, full_adc2, empty_adc2, en_rd2;
-    logic [7:0] dout1, dout2;
+    logic en_wr;
+    logic full_adc1, empty_adc1, en_rd1;
+    logic full_adc2, empty_adc2, en_rd2;
+    logic full_adc4, empty_adc4, en_rd4;
+    logic full_adc8, empty_adc8, en_rd8;
+    logic [1:0] addr;
+    logic [7:0] dout1, dout2, dout4, dout8;
 
     writeController writeController
     (
         .rstn(rst_125m_n),
         .clk(clk_125m),
-        .full(full_adc1 | full_adc2),
-        .empty(empty_adc1 & empty_adc2),
+        .full(full_adc1 | full_adc2 | full_adc4 | full_adc8),
+        .empty(empty_adc1 & empty_adc2 & empty_adc4 & empty_adc8),
         .start(start),
         .wr_en(en_wr),
         .state()
@@ -243,32 +274,74 @@ module top
         .dout(dout2),
         .empty(empty_adc2)
     );
+
+    widthConverter adc4_buffer
+    (
+        .clk(clk_125m),
+        .rst(!rst_125m_n),
+
+        .wr_en(en_wr & adc4_valid),
+        .din(adc4_125m),
+        .full(full_adc4),
+
+        .rd_en(en_rd4),
+        .dout(dout4),
+        .empty(empty_adc4)
+    );
+
+    widthConverter adc8_buffer
+    (
+        .clk(clk_125m),
+        .rst(!rst_125m_n),
+
+        .wr_en(en_wr & adc8_valid),
+        .din(adc8_125m),
+        .full(full_adc8),
+
+        .rd_en(en_rd8),
+        .dout(dout8),
+        .empty(empty_adc8)
+    );
     
     readController readController
     (
         .clk(clk_125m),
         .rstn(rst_125m_n),
         
-        .full(full_adc1 | full_adc2),
+        .full(full_adc1 | full_adc2 | full_adc4 | full_adc8),
         .empty1(empty_adc1),
         .empty2(empty_adc2),
+        .empty4(empty_adc4),
+        .empty8(empty_adc8),
         .eth_en(eth_en),
         .rd_en1(en_rd1),
         .rd_en2(en_rd2),
+        .rd_en4(en_rd4),
+        .rd_en8(en_rd8),
         .addr(addr)
     );
 
     always_comb begin
     	case(addr)
-    		0:
+    		2'b00:
     		begin
     			eth_data = dout1;
     		end
 
-    		1:
+    		2'b01:
     		begin
     			eth_data = dout2;
     		end
+
+            2'b10:
+            begin
+                eth_data = dout4;
+            end
+
+            2'b11:
+            begin
+                eth_data = dout8;
+            end
     	endcase
     end
 
@@ -287,18 +360,18 @@ module top
         .ETH_PHYRST_N(ETH_PHYRST_N)
     );
 
-    ila_0 ila (
-        .clk(clk_125m), // input wire clk
+    // ila_0 ila (
+    //     .clk(clk_125m), // input wire clk
 
-        .probe0(start), // input wire [0:0]  probe0  
-        .probe1(adc1_valid), // input wire [0:0]  probe1 
-        .probe2(adc2_valid), // input wire [0:0]  probe2 
-        .probe3(empty_adc1), // input wire [0:0]  probe3 
-        .probe4(empty_adc2), // input wire [0:0]  probe4 
-        .probe5(en_rd1), // input wire [0:0]  probe5 
-        .probe6(en_rd2), // input wire [0:0]  probe6
-        .probe7(full_adc1),
-        .probe8(full_adc2)
-);
+    //     .probe0(start), // input wire [0:0]  probe0  
+    //     .probe1(adc1_valid), // input wire [0:0]  probe1 
+    //     .probe2(adc2_valid), // input wire [0:0]  probe2 
+    //     .probe3(empty_adc1), // input wire [0:0]  probe3 
+    //     .probe4(empty_adc2), // input wire [0:0]  probe4 
+    //     .probe5(en_rd1), // input wire [0:0]  probe5 
+    //     .probe6(en_rd2), // input wire [0:0]  probe6
+    //     .probe7(full_adc1),
+    //     .probe8(full_adc2)
+    // );
 
 endmodule

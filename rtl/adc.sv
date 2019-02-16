@@ -26,8 +26,8 @@ module adc
         input logic adc_en,
         output logic [15:0] adc1,
         output logic [15:0] adc2,
-        output logic [13:0] adc4,
-        output logic [13:0] adc8,
+        output logic [15:0] adc4,
+        output logic [15:0] adc8,
         output logic divclk_o,
         output logic [7:0] frmData,
         output logic aligned,
@@ -251,7 +251,8 @@ module adc
                    d1b2_data[3], d0b2_data[3],
                    d1b2_data[4], d0b2_data[4],
                    d1b2_data[5], d0b2_data[5],
-                   d1b2_data[6], d0b2_data[6]};
+                   d1b2_data[6], d0b2_data[6],
+                   d1b2_data[7], d0b2_data[7]};
 
     dataDeserializer d0d2_inst
     (
@@ -281,7 +282,8 @@ module adc
                    d1d2_data[3], d0d2_data[3],
                    d1d2_data[4], d0d2_data[4],
                    d1d2_data[5], d0d2_data[5],
-                   d1d2_data[6], d0d2_data[6]};
+                   d1d2_data[6], d0d2_data[6],
+                   d1d2_data[7], d0d2_data[7]};
 
    dataDeserializer d0a1_inst
     (
