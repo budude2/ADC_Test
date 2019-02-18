@@ -42,7 +42,7 @@ module top
     logic dcm_locked;
 
     // ADC Signals
-    logic adc_clk, bitslip, aligned, adc_rst, adc1_valid, adc2_valid, adc4_valid, adc8_valid;
+    logic adc_clk, aligned, adc1_valid, adc2_valid, adc4_valid, adc8_valid, en_synced;
     logic [15:0] adc1, adc2, adc4, adc8, adc1_125m, adc2_125m, adc4_125m, adc8_125m;
     logic [7:0] frmData;
 
@@ -52,6 +52,9 @@ module top
     // Buffering Signals
     logic cdc_rst_n, rst_125m_n, eth_en, start, tick;
     logic [7:0] eth_data;
+
+    // Input signals
+    logic btnc_db;
 
     assign led0 = dcm_locked;
     assign led1 = 0;
@@ -112,27 +115,35 @@ module top
         .rst_n(rst_125m_n)
     );
 
-    adc adc_inst
+    adc_interface adc_inst
     ( 
         .DCLK_p_pin(DCLK_p_pin),
         .DCLK_n_pin(DCLK_n_pin),
         .FCLK_p_pin(FCLK_p_pin),
         .FCLK_n_pin(FCLK_n_pin),
-        .cpu_resetn(cpu_resetn),
 
-        // Input Pins
+        .rst_n(cpu_resetn),
+        .adc_en(en_synced),
+
+        // ADC 1
         .d0a1_p(DATA_p_pin[6]),
         .d0a1_n(DATA_n_pin[6]),
         .d1a1_p(DATA_p_pin[7]),
         .d1a1_n(DATA_n_pin[7]),
+
+        // ADC 2
         .d0a2_p(DATA_p_pin[0]),
         .d0a2_n(DATA_n_pin[0]),
         .d1a2_p(DATA_p_pin[1]),
         .d1a2_n(DATA_n_pin[1]),
+
+        // ADC 4
         .d0b2_p(DATA_p_pin[2]),
         .d0b2_n(DATA_n_pin[2]),
         .d1b2_p(DATA_p_pin[3]),
         .d1b2_n(DATA_n_pin[3]),
+
+        // ADC 8
         .d0d2_p(DATA_p_pin[4]),
         .d0d2_n(DATA_n_pin[4]),
         .d1d2_p(DATA_p_pin[5]),
@@ -147,9 +158,8 @@ module top
         // Clocks and Status Outputs
         .divclk_o(adc_clk),
         .frmData(frmData),
-        .adc_en(en_synced),
-        .aligned(aligned),
-        .RstOut(adc_rst)
+        
+        .aligned(aligned)
     );
 
     adc_cdc adc1_cdc
