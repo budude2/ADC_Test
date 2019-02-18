@@ -82,65 +82,6 @@ set_property -dict {PACKAGE_PIN AJ11 IOSTANDARD LVCMOS15} [get_ports {eth_txd[2]
 set_property -dict {PACKAGE_PIN AK10 IOSTANDARD LVCMOS15} [get_ports {eth_txd[3]}]
 set_property -dict {PACKAGE_PIN AK14 IOSTANDARD LVCMOS15} [get_ports ETH_TX_EN]
 
-## VGA Connector
-#set_property -dict { PACKAGE_PIN AH20  IOSTANDARD LVCMOS33 } [get_ports { vga_b[0] }]; #IO_L22N_T3_12 Sch=vga_b[3]
-#set_property -dict { PACKAGE_PIN AG20  IOSTANDARD LVCMOS33 } [get_ports { vga_b[1] }]; #IO_L22P_T3_12 Sch=vga_b[4]
-#set_property -dict { PACKAGE_PIN AF21  IOSTANDARD LVCMOS33 } [get_ports { vga_b[2] }]; #IO_L19N_T3_VREF_12 Sch=vga_b[5]
-#set_property -dict { PACKAGE_PIN AK20  IOSTANDARD LVCMOS33 } [get_ports { vga_b[3] }]; #IO_L24P_T3_12 Sch=vga_b[6]
-#set_property -dict { PACKAGE_PIN AG22  IOSTANDARD LVCMOS33 } [get_ports { vga_b[4] }]; #IO_L20P_T3_12 Sch=vga_b[7]
-
-#set_property -dict { PACKAGE_PIN AJ23  IOSTANDARD LVCMOS33 } [get_ports { vga_g[0] }]; #IO_L21N_T3_DQS_12 Sch=vga_g[2]
-#set_property -dict { PACKAGE_PIN AJ22  IOSTANDARD LVCMOS33 } [get_ports { vga_g[1] }]; #IO_L21P_T3_DQS_12 Sch=vga_g[3]
-#set_property -dict { PACKAGE_PIN AH22  IOSTANDARD LVCMOS33 } [get_ports { vga_g[2] }]; #IO_L20N_T3_12 Sch=vga_g[4]
-#set_property -dict { PACKAGE_PIN AK21  IOSTANDARD LVCMOS33 } [get_ports { vga_g[3] }]; #IO_L24N_T3_12 Sch=vga_g[5]
-#set_property -dict { PACKAGE_PIN AJ21  IOSTANDARD LVCMOS33 } [get_ports { vga_g[4] }]; #IO_L23N_T3_12 Sch=vga_g[6]
-#set_property -dict { PACKAGE_PIN AK23  IOSTANDARD LVCMOS33 } [get_ports { vga_g[5] }]; #IO_L17P_T2_12 Sch=vga_g[7]
-
-#set_property -dict { PACKAGE_PIN AK25  IOSTANDARD LVCMOS33 } [get_ports { vga_r[0] }]; #IO_L15N_T2_DQS_12 Sch=vga_r[3]
-#set_property -dict { PACKAGE_PIN AG25  IOSTANDARD LVCMOS33 } [get_ports { vga_r[1] }]; #IO_L18P_T2_12 Sch=vga_r[4]
-#set_property -dict { PACKAGE_PIN AH25  IOSTANDARD LVCMOS33 } [get_ports { vga_r[2] }]; #IO_L18N_T2_12 Sch=vga_r[5]
-#set_property -dict { PACKAGE_PIN AK24  IOSTANDARD LVCMOS33 } [get_ports { vga_r[3] }]; #IO_L17N_T2_12 Sch=vga_r[6]
-#set_property -dict { PACKAGE_PIN AJ24  IOSTANDARD LVCMOS33 } [get_ports { vga_r[4] }]; #IO_L15P_T2_DQS_12 Sch=vga_r[7]
-
-#set_property -dict { PACKAGE_PIN AF20  IOSTANDARD LVCMOS33 } [get_ports { vga_hs }]; #IO_L19P_T3_12 Sch=vga_hs
-#set_property -dict { PACKAGE_PIN AG23  IOSTANDARD LVCMOS33 } [get_ports { vga_vs }]; #IO_L13N_T2_MRCC_12 Sch=vga_vs
-
-## HDMI in
-#set_property -dict { PACKAGE_PIN Y21   IOSTANDARD LVCMOS33 } [get_ports { hdmi_rx_cec }]; #IO_L2P_T0_12 Sch=hdmi_rx_cec
-#set_property -dict { PACKAGE_PIN AF28  IOSTANDARD TMDS_33  } [get_ports { hdmi_rx_clk_n }]; #IO_L14N_T2_SRCC_13 Sch=hdmi_rx_clk_n
-#set_property -dict { PACKAGE_PIN AE28  IOSTANDARD TMDS_33  } [get_ports { hdmi_rx_clk_p }]; #IO_L14P_T2_SRCC_13 Sch=hdmi_rx_clk_p
-#set_property -dict { PACKAGE_PIN AH29  IOSTANDARD LVCMOS33 } [get_ports { hdmi_rx_hpa }]; #IO_L13N_T2_MRCC_13 Sch=hdmi_rx_hpa
-#set_property -dict { PACKAGE_PIN AJ28  IOSTANDARD LVCMOS33 } [get_ports { hdmi_rx_scl }]; #IO_L17P_T2_13 Sch=hdmi_rx_scl
-#set_property -dict { PACKAGE_PIN AJ29  IOSTANDARD LVCMOS33 } [get_ports { hdmi_rx_sda }]; #IO_L17N_T2_13 Sch=hdmi_rx_sda
-#set_property -dict { PACKAGE_PIN AK26  IOSTANDARD TMDS_33  } [get_ports { hdmi_rx_n[0] }]; #IO_L24N_T3_13 Sch=hdmi_rx_n[0]
-#set_property -dict { PACKAGE_PIN AJ26  IOSTANDARD TMDS_33  } [get_ports { hdmi_rx_p[0] }]; #IO_L24P_T3_13 Sch=hdmi_rx_p[0]
-#set_property -dict { PACKAGE_PIN AG28  IOSTANDARD TMDS_33  } [get_ports { hdmi_rx_n[1] }]; #IO_L21N_T3_DQS_13 Sch=hdmi_rx_n[1]
-#set_property -dict { PACKAGE_PIN AG27  IOSTANDARD TMDS_33  } [get_ports { hdmi_rx_p[1] }]; #IO_L21P_T3_DQS_13 Sch=hdmi_rx_p[1]
-#set_property -dict { PACKAGE_PIN AH27  IOSTANDARD TMDS_33  } [get_ports { hdmi_rx_n[2] }]; #IO_L22N_T3_13 Sch=hdmi_rx_n[2]
-#set_property -dict { PACKAGE_PIN AH26  IOSTANDARD TMDS_33  } [get_ports { hdmi_rx_p[2] }]; #IO_L22P_T3_13 Sch=hdmi_rx_p[2]
-
-## HDMI out
-#set_property -dict { PACKAGE_PIN Y24   IOSTANDARD LVCMOS33 } [get_ports { hdmi_tx_cec }]; #IO_L1N_T0_12 Sch=hdmi_tx_cec
-#set_property -dict { PACKAGE_PIN AB20  IOSTANDARD TMDS_33  } [get_ports { hdmi_tx_clk_n }]; #IO_L6N_T0_VREF_12 Sch=hdmi_tx_clk_n
-#set_property -dict { PACKAGE_PIN AA20  IOSTANDARD TMDS_33  } [get_ports { hdmi_tx_clk_p }]; #IO_L6P_T0_12 Sch=hdmi_tx_clk_p
-#set_property -dict { PACKAGE_PIN AG29  IOSTANDARD LVCMOS33 } [get_ports { hdmi_tx_hpd }]; #IO_L13P_T2_MRCC_13 Sch=hdmi_tx_hpd
-#set_property -dict { PACKAGE_PIN AF27  IOSTANDARD LVCMOS33 } [get_ports { hdmi_tx_scl }]; #IO_L23N_T3_13 Sch=hdmi_tx_scl
-#set_property -dict { PACKAGE_PIN AF26  IOSTANDARD LVCMOS33 } [get_ports { hdmi_tx_sda }]; #IO_L23P_T3_13 Sch=hdmi_tx_sda
-#set_property -dict { PACKAGE_PIN AC21  IOSTANDARD TMDS_33  } [get_ports { hdmi_tx_n[0] }]; #IO_L5N_T0_12 Sch=hdmi_tx_n[0]
-#set_property -dict { PACKAGE_PIN AC20  IOSTANDARD TMDS_33  } [get_ports { hdmi_tx_p[0] }]; #IO_L5P_T0_12 Sch=hdmi_tx_p[0]
-#set_property -dict { PACKAGE_PIN AA23  IOSTANDARD TMDS_33  } [get_ports { hdmi_tx_n[1] }]; #IO_L4N_T0_12 Sch=hdmi_tx_n[1]
-#set_property -dict { PACKAGE_PIN AA22  IOSTANDARD TMDS_33  } [get_ports { hdmi_tx_p[1] }]; #IO_L4P_T0_12 Sch=hdmi_tx_p[1]
-#set_property -dict { PACKAGE_PIN AC25  IOSTANDARD TMDS_33  } [get_ports { hdmi_tx_n[2] }]; #IO_L7N_T1_12 Sch=hdmi_tx_n[2]
-#set_property -dict { PACKAGE_PIN AB24  IOSTANDARD TMDS_33  } [get_ports { hdmi_tx_p[2] }]; #IO_L7P_T1_12 Sch=hdmi_tx_p[2]
-
-## OLED Display
-#set_property -dict { PACKAGE_PIN AC17  IOSTANDARD LVCMOS18 } [get_ports { oled_dc }]; #IO_L18N_T2_32 Sch=oled_dc
-#set_property -dict { PACKAGE_PIN AB17  IOSTANDARD LVCMOS18 } [get_ports { oled_res }]; #IO_L18P_T2_32 Sch=oled_res
-#set_property -dict { PACKAGE_PIN AF17  IOSTANDARD LVCMOS18 } [get_ports { oled_sclk }]; #IO_L12P_T1_MRCC_32 Sch=oled_sclk
-#set_property -dict { PACKAGE_PIN Y15   IOSTANDARD LVCMOS18 } [get_ports { oled_sdin }]; #IO_L24N_T3_32 Sch=oled_sdin
-#set_property -dict { PACKAGE_PIN AB22  IOSTANDARD LVCMOS33 } [get_ports { oled_vbat }]; #IO_L3P_T0_DQS_12 Sch=oled_vbat
-#set_property -dict { PACKAGE_PIN AG17  IOSTANDARD LVCMOS18 } [get_ports { oled_vdd }]; #IO_L12N_T1_MRCC_32 Sch=oled_vdd
-
 ## PMOD Header JA
 #set_property -dict { PACKAGE_PIN U28   IOSTANDARD LVCMOS33 } [get_ports { ja[0] }]; #IO_L13N_T2_MRCC_14 Sch=ja_n[1]
 #set_property -dict { PACKAGE_PIN U27   IOSTANDARD LVCMOS33 } [get_ports { ja[1] }]; #IO_L13P_T2_MRCC_14 Sch=ja_p[1]
@@ -403,20 +344,6 @@ set_property -dict {PACKAGE_PIN L17 IOSTANDARD LVCMOS18} [get_ports SDIO]
 ## IIC Bus
 #set_property -dict { PACKAGE_PIN AE30  IOSTANDARD LVCMOS33 } [get_ports { SYS_SCL }]; #IO_L16P_T2_13 Sch=sys_scl
 #set_property -dict { PACKAGE_PIN AF30  IOSTANDARD LVCMOS33 } [get_ports { SYS_SDA }]; #IO_L16N_T2_13 Sch=sys_sda
-
-## Display Port IN
-#set_property -dict { PACKAGE_PIN AC19  IOSTANDARD LVCMOS18 } [get_ports { RX_AUX_IN_CH_N }]; #IO_L17N_T2_32 Sch=rx_aux_ch_n
-#set_property -dict { PACKAGE_PIN Y18   IOSTANDARD LVCMOS18 } [get_ports { RX_AUX_OUT_CH_N }]; #IO_L15N_T2_DQS_32 Sch=rx_aux_ch_n
-#set_property -dict { PACKAGE_PIN AB19  IOSTANDARD LVCMOS18 } [get_ports { RX_AUX_IN_CH_P }]; #IO_L17P_T2_32 Sch=rx_aux_ch_p
-#set_property -dict { PACKAGE_PIN Y19   IOSTANDARD LVCMOS18 } [get_ports { RX_AUX_OUT_CH_P }]; #IO_L15P_T2_DQS_32 Sch=rx_aux_ch_p
-#set_property -dict { PACKAGE_PIN AE21  IOSTANDARD LVCMOS33 } [get_ports { RX_HPD }]; #IO_L10N_T1_12 Sch=rx_hpd
-
-## Display Port OUT
-#set_property -dict { PACKAGE_PIN AD16  IOSTANDARD LVCMOS18 } [get_ports { TX_AUX_IN_CH_N }]; #IO_L14N_T2_SRCC_32 Sch=tx_aux_ch_n
-#set_property -dict { PACKAGE_PIN AB18  IOSTANDARD LVCMOS18 } [get_ports { TX_AUX_OUT_CH_N }]; #IO_L16N_T2_32 Sch=tx_aux_ch_n
-#set_property -dict { PACKAGE_PIN AA18  IOSTANDARD LVCMOS18 } [get_ports { TX_AUX_OUT_CH_P }]; #IO_L16P_T2_32 Sch=tx_aux_ch_p
-#set_property -dict { PACKAGE_PIN AD17  IOSTANDARD LVCMOS18 } [get_ports { TX_AUX_IN_CH_P }]; #IO_L14P_T2_SRCC_32 Sch=tx_aux_ch_p
-#set_property -dict { PACKAGE_PIN AD21  IOSTANDARD LVCMOS33 } [get_ports { TX_HPD }]; #IO_L10P_T1_12 Sch=tx_hpd
 
 ## USB
 #set_property -dict { PACKAGE_PIN AD18  IOSTANDARD LVCMOS18 } [get_ports { USB_OTG_CLK }]; #IO_L13P_T2_MRCC_32 Sch=usb_otg_clk

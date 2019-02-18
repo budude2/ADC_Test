@@ -113,29 +113,37 @@ resize_pblock [get_pblocks Apps_AdcToplevel] -add {SLICE_X0Y200:SLICE_X7Y249}
 # FMC_LPC_LA27_P   IOSTANDARD=LVCMOS25  VCCO - VADJ_FPGA - IO_L17P_T2_13
 # FMC_LPC_LA27_N   IOSTANDARD=LVCMOS25  VCCO - VADJ_FPGA - IO_L17N_T2_13
 
-#A2
+
+
+#ADC2
 set_property -dict {PACKAGE_pin D29 IOSTANDARD LVDS_25} [get_ports {DATA_p_pin[0]}]
 set_property -dict {PACKAGE_pin C30 IOSTANDARD LVDS_25} [get_ports {DATA_n_pin[0]}]
 set_property -dict {PACKAGE_pin H30 IOSTANDARD LVDS_25} [get_ports {DATA_p_pin[1]}]
 set_property -dict {PACKAGE_pin G30 IOSTANDARD LVDS_25} [get_ports {DATA_n_pin[1]}]
 
-#B2
+#ADC4
 set_property -dict {PACKAGE_pin F26 IOSTANDARD LVDS_25} [get_ports {DATA_p_pin[2]}]
 set_property -dict {PACKAGE_pin E26 IOSTANDARD LVDS_25} [get_ports {DATA_n_pin[2]}]
 set_property -dict {PACKAGE_pin A25 IOSTANDARD LVDS_25} [get_ports {DATA_p_pin[3]}]
 set_property -dict {PACKAGE_pin A26 IOSTANDARD LVDS_25} [get_ports {DATA_n_pin[3]}]
 
-#D2
+#ADC8
 set_property -dict {PACKAGE_pin B28 IOSTANDARD LVDS_25} [get_ports {DATA_p_pin[4]}]
 set_property -dict {PACKAGE_pin A28 IOSTANDARD LVDS_25} [get_ports {DATA_n_pin[4]}]
 set_property -dict {PACKAGE_pin B23 IOSTANDARD LVDS_25} [get_ports {DATA_p_pin[5]}]
 set_property -dict {PACKAGE_pin A23 IOSTANDARD LVDS_25} [get_ports {DATA_n_pin[5]}]
 
-#A1
+#ADC1
 set_property -dict {PACKAGE_pin D26 IOSTANDARD LVDS_25} [get_ports {DATA_p_pin[6]}]
 set_property -dict {PACKAGE_pin C26 IOSTANDARD LVDS_25} [get_ports {DATA_n_pin[6]}]
 set_property -dict {PACKAGE_pin E29 IOSTANDARD LVDS_25} [get_ports {DATA_p_pin[7]}]
 set_property -dict {PACKAGE_pin E30 IOSTANDARD LVDS_25} [get_ports {DATA_n_pin[7]}]
+
+#ADC3
+set_property -dict {PACKAGE_pin H26 IOSTANDARD LVDS_25} [get_ports {DATA_p_pin[8]}]
+set_property -dict {PACKAGE_pin H27 IOSTANDARD LVDS_25} [get_ports {DATA_n_pin[8]}]
+set_property -dict {PACKAGE_pin F25 IOSTANDARD LVDS_25} [get_ports {DATA_p_pin[9]}]
+set_property -dict {PACKAGE_pin E25 IOSTANDARD LVDS_25} [get_ports {DATA_n_pin[9]}]
 
 #
 # FMC_LPC_LA18_CC_P   IOSTANDARD=LVCMOS25  VCCO - VADJ_FPGA - IO_L11P_T1_SRCC_13
