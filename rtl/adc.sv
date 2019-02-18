@@ -15,7 +15,7 @@ module adc (
     input logic ln1_n,
 
     output logic [15:0] d_out
-    );
+);
     
     logic ln0, ln1;
     logic [7:0] ln0_des, ln1_des;
@@ -32,7 +32,7 @@ module adc (
         .ln1  (ln1)
     );
 
-    dataDeserializer ln0
+    dataDeserializer ln0_deserializer
     (
         .CLK(DCLK_IO),
         .CLKDIV(CLKDIV),
@@ -44,7 +44,7 @@ module adc (
         .data_o(ln0_des)
     );
 
-    dataDeserializer ln1
+    dataDeserializer ln1_deserializer
     (
         .CLK(DCLK_IO),
         .CLKDIV(CLKDIV),

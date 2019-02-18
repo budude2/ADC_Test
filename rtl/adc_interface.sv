@@ -76,7 +76,7 @@ module adc_interface
         .SIM_DEVICE("7SERIES") // Must be set to "7SERIES"
     ) BUFR_inst (
         .CE(1'b1),         // 1-bit input: Active high, clock enable (Divided modes only)
-        .CLR(~cpu_resetn), // 1-bit input: Active high, asynchronous clear (Divided modes only)
+        .CLR(~rst_n), // 1-bit input: Active high, asynchronous clear (Divided modes only)
         .I(DCLK),          // 1-bit input: Clock buffer input driven by an IBUF, MMCM or local interconnect
         .O(CLKDIV)         // 1-bit output: Clock output port
     );
