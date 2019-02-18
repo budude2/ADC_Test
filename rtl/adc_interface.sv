@@ -37,10 +37,10 @@ module adc_interface
         output logic [15:0] adc2,
         output logic [15:0] adc4,
         output logic [15:0] adc8,
+        
         output logic divclk_o,
         output logic [7:0] frmData,
-        output logic aligned,
-        output logic RstOut
+        output logic aligned
     );
 
     logic DCLK, DCLK_IO, CLKDIV, FCLK, adc_rst, adc_rst_n, bitslip, rst_sync;

@@ -42,15 +42,15 @@ module top
     logic dcm_locked;
 
     // ADC Signals
-    logic adc_clk, aligned, adc1_valid, adc2_valid, adc4_valid, adc8_valid, en_synced;
-    logic [15:0] adc1, adc2, adc4, adc8, adc1_125m, adc2_125m, adc4_125m, adc8_125m;
+    logic adc_clk, aligned, en_synced;
+    logic [15:0] adc1, adc2, adc4, adc8;
     logic [7:0] frmData;
 
     // Microblaze Signals
     logic [31:0] MB_O;
 
     // Buffering Signals
-    logic cdc_rst_n, rst_125m_n, eth_en, start, tick;
+    logic adc_rst_n, rst_125m_n, eth_valid, tick;
     logic [7:0] eth_data;
 
     // Input signals
@@ -101,11 +101,11 @@ module top
         .d_out(en_synced)
     );
 
-    rstBridge cdcRestet
+    rstBridge cdcReset
     (
         .clk(adc_clk),
         .asyncrst_n(cpu_resetn),
-        .rst_n(cdc_rst_n)
+        .rst_n(adc_rst_n)
     );
 
     rstBridge rst_125m
@@ -113,6 +113,24 @@ module top
         .clk(clk_125m),
         .asyncrst_n(cpu_resetn),
         .rst_n(rst_125m_n)
+    );
+
+    ADC_Control_wrapper MB
+    (
+        .clk_100m(clk_100m),
+        .clk_50m(clk_50m),
+        .dcm_locked(dcm_locked),
+        .cpu_resetn(cpu_resetn),
+
+        .ADC_CSB1(CSB1),
+        .ADC_CSB2(CSB2),
+        .ADC_SCLK(SCLK),
+        .ADC_SDIO(SDIO),
+        
+        .usb_uart_rxd(usb_uart_rxd),
+        .usb_uart_txd(usb_uart_txd),
+        
+        .O(MB_O)
     );
 
     adc_interface adc_inst
@@ -162,206 +180,33 @@ module top
         .aligned(aligned)
     );
 
-    adc_cdc adc1_cdc
-    (
-		.wr_clk(adc_clk),
-		.wr_rst(!cdc_rst_n),
-		.rd_clk(clk_125m),
-		.rd_rst(!rst_125m_n),
+    adc_buffer adc_buffer (
+        .start_buff(aligned & tick),
 
-		.din(adc1),
-		.din_valid(aligned),
+        .din_clk   (adc_clk   ),
+        .din_rst_n (adc_rst_n ),
+        .din_valid (aligned   ),
 
-		.dout(adc1_125m),
-		.dout_valid(adc1_valid)
+        .adc1      (adc1      ),
+        .adc2      (adc2      ),
+        .adc4      (adc4      ),
+        .adc8      (adc8      ),
+
+        .dout_clk  (clk_125m  ),
+        .dout_rst_n(rst_125m_n),
+
+        .dout      (eth_data  ),
+        .dout_valid(eth_valid )
     );
 
-    adc_cdc adc2_cdc
-    (
-		.wr_clk(adc_clk),
-		.wr_rst(!cdc_rst_n),
-		.rd_clk(clk_125m),
-		.rd_rst(!rst_125m_n),
-
-		.din(adc2),
-		.din_valid(aligned),
-
-		.dout(adc2_125m),
-		.dout_valid(adc2_valid)
-    );
-
-    adc_cdc adc4_cdc
-    (
-        .wr_clk(adc_clk),
-        .wr_rst(!cdc_rst_n),
-        .rd_clk(clk_125m),
-        .rd_rst(!rst_125m_n),
-
-        .din(adc4),
-        .din_valid(aligned),
-
-        .dout(adc4_125m),
-        .dout_valid(adc4_valid)
-    );
-
-    adc_cdc adc8_cdc
-    (
-        .wr_clk(adc_clk),
-        .wr_rst(!cdc_rst_n),
-        .rd_clk(clk_125m),
-        .rd_rst(!rst_125m_n),
-
-        .din(adc8),
-        .din_valid(aligned),
-
-        .dout(adc8_125m),
-        .dout_valid(adc8_valid)
-    );
-
-    ADC_Control_wrapper MB
-    (
-        .clk_100m(clk_100m),
-        .clk_50m(clk_50m),
-        .dcm_locked(dcm_locked),
-        .cpu_resetn(cpu_resetn),
-
-        .ADC_CSB1(CSB1),
-        .ADC_CSB2(CSB2),
-        .ADC_SCLK(SCLK),
-        .ADC_SDIO(SDIO),
-        
-        .usb_uart_rxd(usb_uart_rxd),
-        .usb_uart_txd(usb_uart_txd),
-        
-        .O(MB_O)
-    );
-
-    assign start = aligned & tick;
-
-    logic en_wr;
-    logic full_adc1, empty_adc1, en_rd1;
-    logic full_adc2, empty_adc2, en_rd2;
-    logic full_adc4, empty_adc4, en_rd4;
-    logic full_adc8, empty_adc8, en_rd8;
-    logic [1:0] addr;
-    logic [7:0] dout1, dout2, dout4, dout8;
-
-    writeController writeController
-    (
-        .rstn(rst_125m_n),
-        .clk(clk_125m),
-        .full(full_adc1 | full_adc2 | full_adc4 | full_adc8),
-        .empty(empty_adc1 & empty_adc2 & empty_adc4 & empty_adc8),
-        .start(start),
-        .wr_en(en_wr),
-        .state()
-    );
-
-    widthConverter adc1_buffer
-    (
-    	.clk(clk_125m),
-        .rst(!rst_125m_n),
-        
-        .wr_en(en_wr & adc1_valid),
-        .din(adc1_125m),
-        .full(full_adc1),
-
-        .rd_en(en_rd1),
-        .dout(dout1),
-        .empty(empty_adc1)
-    );
-
-    widthConverter adc2_buffer
-    (
-    	.clk(clk_125m),
-        .rst(!rst_125m_n),
-
-        .wr_en(en_wr & adc2_valid),
-        .din(adc2_125m),
-        .full(full_adc2),
-
-        .rd_en(en_rd2),
-        .dout(dout2),
-        .empty(empty_adc2)
-    );
-
-    widthConverter adc4_buffer
-    (
-        .clk(clk_125m),
-        .rst(!rst_125m_n),
-
-        .wr_en(en_wr & adc4_valid),
-        .din(adc4_125m),
-        .full(full_adc4),
-
-        .rd_en(en_rd4),
-        .dout(dout4),
-        .empty(empty_adc4)
-    );
-
-    widthConverter adc8_buffer
-    (
-        .clk(clk_125m),
-        .rst(!rst_125m_n),
-
-        .wr_en(en_wr & adc8_valid),
-        .din(adc8_125m),
-        .full(full_adc8),
-
-        .rd_en(en_rd8),
-        .dout(dout8),
-        .empty(empty_adc8)
-    );
-    
-    readController readController
-    (
-        .clk(clk_125m),
-        .rstn(rst_125m_n),
-        
-        .full(full_adc1 | full_adc2 | full_adc4 | full_adc8),
-        .empty1(empty_adc1),
-        .empty2(empty_adc2),
-        .empty4(empty_adc4),
-        .empty8(empty_adc8),
-        .eth_en(eth_en),
-        .rd_en1(en_rd1),
-        .rd_en2(en_rd2),
-        .rd_en4(en_rd4),
-        .rd_en8(en_rd8),
-        .addr(addr)
-    );
-
-    always_comb begin
-    	case(addr)
-    		2'b00:
-    		begin
-    			eth_data = dout1;
-    		end
-
-    		2'b01:
-    		begin
-    			eth_data = dout2;
-    		end
-
-            2'b10:
-            begin
-                eth_data = dout4;
-            end
-
-            2'b11:
-            begin
-                eth_data = dout8;
-            end
-    	endcase
-    end
 
     udp_tx_top udp_tx
     (
         .clk_125m(clk_125m),
         .clk_125m90(clk_125m90),
 
-        .udp_tx_valid(eth_en),
         .udp_tx_data(eth_data),
+        .udp_tx_valid(eth_valid),
         .udp_tx_busy(),
 
         .eth_txd(eth_txd),
