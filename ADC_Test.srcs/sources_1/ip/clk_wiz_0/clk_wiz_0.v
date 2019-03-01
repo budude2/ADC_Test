@@ -58,8 +58,8 @@
 //----------------------------------------------------------------------------
 // clk_100m___100.000______0.000______50.0______112.316_____89.971
 // _clk_50m____50.000______0.000______50.0______129.198_____89.971
-// clk_200m___200.000______0.000______50.0_______98.146_____89.971
 // clk_125m___125.000______0.000______50.0______107.523_____89.971
+// clk_125m90___125.000_____90.000______50.0______107.523_____89.971
 //
 //----------------------------------------------------------------------------
 // Input Clock   Freq (MHz)    Input Jitter (UI)
@@ -68,17 +68,16 @@
 
 `timescale 1ps/1ps
 
-(* CORE_GENERATION_INFO = "clk_wiz_0,clk_wiz_v6_0_1_0_0,{component_name=clk_wiz_0,use_phase_alignment=true,use_min_o_jitter=false,use_max_i_jitter=false,use_dyn_phase_shift=false,use_inclk_switchover=false,use_dyn_reconfig=false,enable_axi=0,feedback_source=FDBK_AUTO,PRIMITIVE=MMCM,num_out_clk=4,clkin1_period=5.000,clkin2_period=10.0,use_power_down=false,use_reset=true,use_locked=true,use_inclk_stopped=false,feedback_type=SINGLE,CLOCK_MGR_TYPE=NA,manual_override=false}" *)
+(* CORE_GENERATION_INFO = "clk_wiz_0,clk_wiz_v6_0_1_0_0,{component_name=clk_wiz_0,use_phase_alignment=true,use_min_o_jitter=false,use_max_i_jitter=false,use_dyn_phase_shift=false,use_inclk_switchover=false,use_dyn_reconfig=false,enable_axi=0,feedback_source=FDBK_AUTO,PRIMITIVE=MMCM,num_out_clk=4,clkin1_period=5.000,clkin2_period=10.0,use_power_down=false,use_reset=false,use_locked=true,use_inclk_stopped=false,feedback_type=SINGLE,CLOCK_MGR_TYPE=NA,manual_override=false}" *)
 
 module clk_wiz_0 
  (
   // Clock out ports
   output        clk_100m,
   output        clk_50m,
-  output        clk_200m,
   output        clk_125m,
+  output        clk_125m90,
   // Status and control signals
-  input         resetn,
   output        locked,
  // Clock in ports
   input         clk_in1_p,
@@ -90,10 +89,9 @@ module clk_wiz_0
   // Clock out ports  
   .clk_100m(clk_100m),
   .clk_50m(clk_50m),
-  .clk_200m(clk_200m),
   .clk_125m(clk_125m),
+  .clk_125m90(clk_125m90),
   // Status and control signals               
-  .resetn(resetn), 
   .locked(locked),
  // Clock in ports
   .clk_in1_p(clk_in1_p),

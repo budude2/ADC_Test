@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<Project Version="1" Minor="3" DIGEST="">
+	<TOOL_VERSION Version="2018.2"/>
+	<MODE Name="Post-Synthesis"/>
+	<SYSTEMINFO BOARD="digilentinc.com:genesys2:1.1" PART="xc7k325tffg900-2" ARCH="kintex7" PACKAGE="ffg900" DEVICE="7k325t" SPEED="-2" LUT="203800" FF="407600" BRAM="445" DSP="840"/>
+	<HIERARCHY Name="top"/>
+	<File Type="HW_HANDOFF" Name="ADC_Control.hwh" DESIGN_HIERARCHY="MB/ADC_Control_i" BD_TYPE="DEFAULT_BD"/>
+	<File Type="BD_TCL" Name="ADC_Control_bd.tcl"/>
+	<File Type="BIT" Name="top.bit"/>
+	<File Type="MMI" Name="top.mmi"/>
+	<DRIVERS>
+		<DRIVER IP_VLNV="xilinx.com:user:SPI_3_wire:1.0">
+			<File PATH="drivers/SPI_3_wire_v1_0/data/SPI_3_wire.mdd"/>
+			<File PATH="drivers/SPI_3_wire_v1_0/data/SPI_3_wire.tcl"/>
+			<File PATH="drivers/SPI_3_wire_v1_0/src/Makefile"/>
+			<File PATH="drivers/SPI_3_wire_v1_0/src/SPI_3_wire.h"/>
+			<File PATH="drivers/SPI_3_wire_v1_0/src/SPI_3_wire.c"/>
+			<File PATH="drivers/SPI_3_wire_v1_0/src/SPI_3_wire_selftest.c"/>
+		</DRIVER>
+	</DRIVERS>
+	<BOARD Type="NotIntegrated">
+		<BASEBOARD Name="digilentinc.com:genesys2:1.1">
+			<File PATH="board/genesys2/board.xml"/>
+			<File PATH="board/genesys2/part0_pins.xml"/>
+			<File PATH="board/genesys2/preset.xml"/>
+		</BASEBOARD>
+	</BOARD>
+	<USEDRESOURCES LUT="0" FF="3920" BRAM="116" DSP="0"/>
+</Project>
+

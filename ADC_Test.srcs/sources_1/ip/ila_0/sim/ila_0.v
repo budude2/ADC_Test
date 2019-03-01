@@ -58,6 +58,7 @@ probe4,
 probe5,
 probe6,
 probe7,
+<<<<<<< HEAD
 probe8,
 probe9,
 probe10,
@@ -67,20 +68,24 @@ probe13,
 probe14,
 probe15,
 probe16
+=======
+probe8
+>>>>>>> Ethernet
 );
 
 input clk;
 
 
-input [15 : 0] probe0;
-input [15 : 0] probe1;
-input [15 : 0] probe2;
-input [15 : 0] probe3;
+input [0 : 0] probe0;
+input [0 : 0] probe1;
+input [0 : 0] probe2;
+input [0 : 0] probe3;
 input [0 : 0] probe4;
 input [0 : 0] probe5;
 input [0 : 0] probe6;
 input [0 : 0] probe7;
 input [0 : 0] probe8;
+<<<<<<< HEAD
 input [15 : 0] probe9;
 input [3 : 0] probe10;
 input [15 : 0] probe11;
@@ -89,6 +94,8 @@ input [0 : 0] probe13;
 input [0 : 0] probe14;
 input [0 : 0] probe15;
 input [0 : 0] probe16;
+=======
+>>>>>>> Ethernet
 
 
 endmodule

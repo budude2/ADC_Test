@@ -1,4 +1,4 @@
-// (c) Copyright 1995-2018 Xilinx, Inc. All rights reserved.
+// (c) Copyright 1995-2019 Xilinx, Inc. All rights reserved.
 // 
 // This file contains confidential and proprietary information
 // of Xilinx, Inc. and is protected under U.S. and
@@ -55,22 +55,19 @@
 (* DowngradeIPIdentifiedWarnings = "yes" *)
 module fifo_generator_0 (
   clk,
-  rst,
+  srst,
   din,
   wr_en,
   rd_en,
   dout,
   full,
-  overflow,
-  empty,
-  valid,
-  underflow
+  empty
 );
 
 (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME core_clk, FREQ_HZ 100000000, PHASE 0.000" *)
 (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 core_clk CLK" *)
 input wire clk;
-input wire rst;
+input wire srst;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_DATA" *)
 input wire [15 : 0] din;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE WR_EN" *)
@@ -78,24 +75,21 @@ input wire wr_en;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_EN" *)
 input wire rd_en;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_read:1.0 FIFO_READ RD_DATA" *)
-output wire [15 : 0] dout;
+output wire [7 : 0] dout;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_write:1.0 FIFO_WRITE FULL" *)
 output wire full;
-output wire overflow;
 (* X_INTERFACE_INFO = "xilinx.com:interface:fifo_read:1.0 FIFO_READ EMPTY" *)
 output wire empty;
-output wire valid;
-output wire underflow;
 
   fifo_generator_v13_2_2 #(
     .C_COMMON_CLOCK(1),
     .C_SELECT_XPM(0),
     .C_COUNT_TYPE(0),
-    .C_DATA_COUNT_WIDTH(11),
+    .C_DATA_COUNT_WIDTH(16),
     .C_DEFAULT_VALUE("BlankString"),
     .C_DIN_WIDTH(16),
     .C_DOUT_RST_VAL("0"),
-    .C_DOUT_WIDTH(16),
+    .C_DOUT_WIDTH(8),
     .C_ENABLE_RLOCS(0),
     .C_FAMILY("kintex7"),
     .C_FULL_FLAGS_RST_VAL(0),
@@ -105,49 +99,49 @@ output wire underflow;
     .C_HAS_DATA_COUNT(0),
     .C_HAS_INT_CLK(0),
     .C_HAS_MEMINIT_FILE(0),
-    .C_HAS_OVERFLOW(1),
+    .C_HAS_OVERFLOW(0),
     .C_HAS_RD_DATA_COUNT(0),
     .C_HAS_RD_RST(0),
-    .C_HAS_RST(1),
-    .C_HAS_SRST(0),
-    .C_HAS_UNDERFLOW(1),
-    .C_HAS_VALID(1),
+    .C_HAS_RST(0),
+    .C_HAS_SRST(1),
+    .C_HAS_UNDERFLOW(0),
+    .C_HAS_VALID(0),
     .C_HAS_WR_ACK(0),
     .C_HAS_WR_DATA_COUNT(0),
     .C_HAS_WR_RST(0),
-    .C_IMPLEMENTATION_TYPE(6),
+    .C_IMPLEMENTATION_TYPE(0),
     .C_INIT_WR_PNTR_VAL(0),
-    .C_MEMORY_TYPE(4),
+    .C_MEMORY_TYPE(1),
     .C_MIF_FILE_NAME("BlankString"),
     .C_OPTIMIZATION_MODE(0),
     .C_OVERFLOW_LOW(0),
-    .C_PRELOAD_LATENCY(1),
-    .C_PRELOAD_REGS(0),
-    .C_PRIM_FIFO_TYPE("2kx18"),
-    .C_PROG_EMPTY_THRESH_ASSERT_VAL(2),
-    .C_PROG_EMPTY_THRESH_NEGATE_VAL(3),
+    .C_PRELOAD_LATENCY(0),
+    .C_PRELOAD_REGS(1),
+    .C_PRIM_FIFO_TYPE("8kx4"),
+    .C_PROG_EMPTY_THRESH_ASSERT_VAL(4),
+    .C_PROG_EMPTY_THRESH_NEGATE_VAL(5),
     .C_PROG_EMPTY_TYPE(0),
-    .C_PROG_FULL_THRESH_ASSERT_VAL(2046),
-    .C_PROG_FULL_THRESH_NEGATE_VAL(2045),
+    .C_PROG_FULL_THRESH_ASSERT_VAL(32765),
+    .C_PROG_FULL_THRESH_NEGATE_VAL(32764),
     .C_PROG_FULL_TYPE(0),
-    .C_RD_DATA_COUNT_WIDTH(11),
-    .C_RD_DEPTH(2048),
+    .C_RD_DATA_COUNT_WIDTH(17),
+    .C_RD_DEPTH(65536),
     .C_RD_FREQ(1),
-    .C_RD_PNTR_WIDTH(11),
+    .C_RD_PNTR_WIDTH(16),
     .C_UNDERFLOW_LOW(0),
-    .C_USE_DOUT_RST(0),
+    .C_USE_DOUT_RST(1),
     .C_USE_ECC(0),
     .C_USE_EMBEDDED_REG(0),
     .C_USE_PIPELINE_REG(0),
     .C_POWER_SAVING_MODE(0),
     .C_USE_FIFO16_FLAGS(0),
-    .C_USE_FWFT_DATA_COUNT(0),
+    .C_USE_FWFT_DATA_COUNT(1),
     .C_VALID_LOW(0),
     .C_WR_ACK_LOW(0),
-    .C_WR_DATA_COUNT_WIDTH(11),
-    .C_WR_DEPTH(2048),
+    .C_WR_DATA_COUNT_WIDTH(16),
+    .C_WR_DEPTH(32768),
     .C_WR_FREQ(1),
-    .C_WR_PNTR_WIDTH(11),
+    .C_WR_PNTR_WIDTH(15),
     .C_WR_RESPONSE_LATENCY(1),
     .C_MSGON_VAL(1),
     .C_ENABLE_RST_SYNC(1),
@@ -294,8 +288,8 @@ output wire underflow;
     .backup(1'D0),
     .backup_marker(1'D0),
     .clk(clk),
-    .rst(rst),
-    .srst(1'D0),
+    .rst(1'D0),
+    .srst(srst),
     .wr_clk(1'D0),
     .wr_rst(1'D0),
     .rd_clk(1'D0),
@@ -303,12 +297,12 @@ output wire underflow;
     .din(din),
     .wr_en(wr_en),
     .rd_en(rd_en),
-    .prog_empty_thresh(11'B0),
-    .prog_empty_thresh_assert(11'B0),
-    .prog_empty_thresh_negate(11'B0),
-    .prog_full_thresh(11'B0),
-    .prog_full_thresh_assert(11'B0),
-    .prog_full_thresh_negate(11'B0),
+    .prog_empty_thresh(16'B0),
+    .prog_empty_thresh_assert(16'B0),
+    .prog_empty_thresh_negate(16'B0),
+    .prog_full_thresh(15'B0),
+    .prog_full_thresh_assert(15'B0),
+    .prog_full_thresh_negate(15'B0),
     .int_clk(1'D0),
     .injectdbiterr(1'D0),
     .injectsbiterr(1'D0),
@@ -317,11 +311,11 @@ output wire underflow;
     .full(full),
     .almost_full(),
     .wr_ack(),
-    .overflow(overflow),
+    .overflow(),
     .empty(empty),
     .almost_empty(),
-    .valid(valid),
-    .underflow(underflow),
+    .valid(),
+    .underflow(),
     .data_count(),
     .rd_data_count(),
     .wr_data_count(),

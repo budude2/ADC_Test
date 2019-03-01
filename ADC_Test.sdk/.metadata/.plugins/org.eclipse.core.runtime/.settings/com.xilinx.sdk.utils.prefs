@@ -1,2 +1,6 @@
+<<<<<<< HEAD
 com.xilinx.sdk.preference.invokecount=24
+=======
+com.xilinx.sdk.preference.invokecount=1
+>>>>>>> Ethernet
 eclipse.preferences.version=1

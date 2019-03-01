@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2018 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2019 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -55,16 +55,13 @@
 COMPONENT fifo_generator_0
   PORT (
     clk : IN STD_LOGIC;
-    rst : IN STD_LOGIC;
+    srst : IN STD_LOGIC;
     din : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
     wr_en : IN STD_LOGIC;
     rd_en : IN STD_LOGIC;
-    dout : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+    dout : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
     full : OUT STD_LOGIC;
-    overflow : OUT STD_LOGIC;
-    empty : OUT STD_LOGIC;
-    valid : OUT STD_LOGIC;
-    underflow : OUT STD_LOGIC
+    empty : OUT STD_LOGIC
   );
 END COMPONENT;
 -- COMP_TAG_END ------ End COMPONENT Declaration ------------
@@ -76,16 +73,13 @@ END COMPONENT;
 your_instance_name : fifo_generator_0
   PORT MAP (
     clk => clk,
-    rst => rst,
+    srst => srst,
     din => din,
     wr_en => wr_en,
     rd_en => rd_en,
     dout => dout,
     full => full,
-    overflow => overflow,
-    empty => empty,
-    valid => valid,
-    underflow => underflow
+    empty => empty
   );
 -- INST_TAG_END ------ End INSTANTIATION Template ---------
 

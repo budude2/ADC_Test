@@ -20,6 +20,7 @@ clients =
 	{ client_name = "sdk"; 
 		rules = (
 			{
+<<<<<<< HEAD
 				context="sdk\\\\hardware/1542164872899";
 				xml_map="sdk\\\\hardware/1542164872899";
 				html_map="sdk\\\\hardware/1542164872899";
@@ -29,6 +30,17 @@ clients =
 				context="sdk\\\\bsp/1542165939684";
 				xml_map="sdk\\\\bsp/1542165939684";
 				html_map="sdk\\\\bsp/1542165939684";
+=======
+				context="sdk\\\\hardware/1551466191587";
+				xml_map="sdk\\\\hardware/1551466191587";
+				html_map="sdk\\\\hardware/1551466191587";
+				html_format="UnisimStatsStyle";
+			},
+			{
+				context="sdk\\\\bsp/1551466263782";
+				xml_map="sdk\\\\bsp/1551466263782";
+				html_map="sdk\\\\bsp/1551466263782";
+>>>>>>> Ethernet
 				html_format="UnisimStatsStyle";
 			}
 		);
