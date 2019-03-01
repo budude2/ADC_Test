@@ -11,6 +11,7 @@ module adc_buffer (
 	input logic	[15:0] adc2,
     input logic [15:0] adc3,
 	input logic [15:0] adc4,
+    input logic [15:0] adc7,
 	input logic [15:0] adc8,
 
 	input logic dout_clk,
@@ -20,18 +21,14 @@ module adc_buffer (
 	output logic dout_valid
 );
 	// Clock domain crossing
-	logic adc1_valid, adc2_valid, adc3_valid, adc4_valid, adc8_valid;
-	logic [15:0] adc1_125m, adc2_125m, adc3_125m, adc4_125m, adc8_125m;
+	logic adc1_valid, adc2_valid, adc3_valid, adc4_valid, adc7_valid, adc8_valid;
+	logic [15:0] adc1_125m, adc2_125m, adc3_125m, adc4_125m, adc7_125m, adc8_125m;
 
 	// Buffering side
 	logic en_wr;
-	logic full_adc1, empty_adc1, en_rd1;
-	logic full_adc2, empty_adc2, en_rd2;
-    logic full_adc3, empty_adc3, en_rd3;
-	logic full_adc4, empty_adc4, en_rd4;
-	logic full_adc8, empty_adc8, en_rd8;
+    logic [5:0] empty, rd_en, full;
 	logic [2:0] addr;
-	logic [7:0] dout1, dout2, dout3, dout4, dout8;
+	logic [7:0] dout1, dout2, dout3, dout4, dout7, dout8;
 
 	adc_cdc adc1_cdc
     (
@@ -89,6 +86,20 @@ module adc_buffer (
         .dout_valid(adc4_valid)
     );
 
+    adc_cdc adc7_cdc
+    (
+        .wr_clk(din_clk),
+        .wr_rst(!din_rst_n),
+        .rd_clk(dout_clk),
+        .rd_rst(!dout_rst_n),
+
+        .din(adc7),
+        .din_valid(din_valid),
+
+        .dout(adc7_125m),
+        .dout_valid(adc7_valid)
+    );
+
     adc_cdc adc8_cdc
     (
         .wr_clk(din_clk),
@@ -108,8 +119,8 @@ module adc_buffer (
     	.clk(dout_clk),
         .rstn(dout_rst_n),
         
-        .full(full_adc1 | full_adc2 | full_adc2 | full_adc4 | full_adc8),
-        .empty(empty_adc1 & empty_adc2 & empty_adc3 & empty_adc4 & empty_adc8),
+        .full(|full),
+        .empty(&empty),
         .start(start_buff),
 
         .wr_en(en_wr),
@@ -123,11 +134,11 @@ module adc_buffer (
         
         .wr_en(en_wr & adc1_valid),
         .din(adc1_125m),
-        .full(full_adc1),
+        .full(full[0]),
 
-        .rd_en(en_rd1),
+        .rd_en(rd_en[0]),
         .dout(dout1),
-        .empty(empty_adc1)
+        .empty(empty[0])
     );
 
     widthConverter adc2_buffer
@@ -137,11 +148,11 @@ module adc_buffer (
 
         .wr_en(en_wr & adc2_valid),
         .din(adc2_125m),
-        .full(full_adc2),
+        .full(full[1]),
 
-        .rd_en(en_rd2),
+        .rd_en(rd_en[1]),
         .dout(dout2),
-        .empty(empty_adc2)
+        .empty(empty[1])
     );
 
     widthConverter adc3_buffer
@@ -151,11 +162,11 @@ module adc_buffer (
 
         .wr_en(en_wr & adc3_valid),
         .din(adc3_125m),
-        .full(full_adc3),
+        .full(full[2]),
 
-        .rd_en(en_rd3),
+        .rd_en(rd_en[2]),
         .dout(dout3),
-        .empty(empty_adc3)
+        .empty(empty[2])
     );
 
     widthConverter adc4_buffer
@@ -165,11 +176,25 @@ module adc_buffer (
 
         .wr_en(en_wr & adc4_valid),
         .din(adc4_125m),
-        .full(full_adc4),
+        .full(full[3]),
 
-        .rd_en(en_rd4),
+        .rd_en(rd_en[3]),
         .dout(dout4),
-        .empty(empty_adc4)
+        .empty(empty[3])
+    );
+
+    widthConverter adc7_buffer
+    (
+        .clk(dout_clk),
+        .rst(!dout_rst_n),
+
+        .wr_en(en_wr & adc7_valid),
+        .din(adc7_125m),
+        .full(full[4]),
+
+        .rd_en(rd_en[4]),
+        .dout(dout7),
+        .empty(empty[4])
     );
 
     widthConverter adc8_buffer
@@ -179,11 +204,11 @@ module adc_buffer (
 
         .wr_en(en_wr & adc8_valid),
         .din(adc8_125m),
-        .full(full_adc8),
+        .full(full[5]),
 
-        .rd_en(en_rd8),
+        .rd_en(rd_en[5]),
         .dout(dout8),
-        .empty(empty_adc8)
+        .empty(empty[5])
     );
     
     readController readController
@@ -191,20 +216,12 @@ module adc_buffer (
         .clk(dout_clk),
         .rstn(dout_rst_n),
         
-        .full(full_adc1 | full_adc2 | full_adc3 | full_adc4 | full_adc8),
+        .full(|full),
 
-        .empty1(empty_adc1),
-        .empty2(empty_adc2),
-        .empty3(empty_adc3),
-        .empty4(empty_adc4),
-        .empty8(empty_adc8),
+        .empty(empty),
 
         .eth_en(dout_valid),
-        .rd_en1(en_rd1),
-        .rd_en2(en_rd2),
-        .rd_en3(en_rd3),
-        .rd_en4(en_rd4),
-        .rd_en8(en_rd8),
+        .rd_en(rd_en),
 
         .addr(addr)
     );
@@ -232,6 +249,11 @@ module adc_buffer (
             end
 
             3'b100:
+            begin
+                dout = dout7;
+            end
+
+            3'b101:
             begin
                 dout = dout8;
             end

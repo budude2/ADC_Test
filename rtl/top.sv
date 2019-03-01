@@ -17,8 +17,8 @@ module top
     input  logic DCLK_n_pin,
     input  logic FCLK_p_pin,
     input  logic FCLK_n_pin,
-    input  logic [9:0] DATA_p_pin,
-    input  logic [9:0] DATA_n_pin,
+    input  logic [11:0] DATA_p_pin,
+    input  logic [11:0] DATA_n_pin,
 
     // UART
     input  logic usb_uart_rxd,
@@ -43,7 +43,7 @@ module top
 
     // ADC Signals
     logic adc_clk, aligned, en_synced;
-    logic [15:0] adc1, adc2, adc3, adc4, adc8;
+    logic [15:0] adc1, adc2, adc3, adc4, adc7, adc8;
     logic [7:0] frmData;
 
     // Microblaze Signals
@@ -167,6 +167,12 @@ module top
         .d1b2_p(DATA_p_pin[3]),
         .d1b2_n(DATA_n_pin[3]),
 
+        // ADC 7
+        .d0d1_p(DATA_p_pin[10]),
+        .d0d1_n(DATA_n_pin[10]),
+        .d1d1_p(DATA_p_pin[11]),
+        .d1d1_n(DATA_n_pin[11]),
+
         // ADC 8
         .d0d2_p(DATA_p_pin[4]),
         .d0d2_n(DATA_n_pin[4]),
@@ -178,6 +184,7 @@ module top
         .adc2(adc2),
         .adc3(adc3),
         .adc4(adc4),
+        .adc7(adc7),
         .adc8(adc8),
 
         // Clocks and Status Outputs
@@ -198,6 +205,7 @@ module top
         .adc2      (adc2      ),
         .adc3      (adc3      ),
         .adc4      (adc4      ),
+        .adc7      (adc7      ),
         .adc8      (adc8      ),
 
         .dout_clk  (clk_125m  ),

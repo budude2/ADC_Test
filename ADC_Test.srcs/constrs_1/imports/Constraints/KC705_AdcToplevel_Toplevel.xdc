@@ -145,6 +145,12 @@ set_property -dict {PACKAGE_pin H27 IOSTANDARD LVDS_25} [get_ports {DATA_n_pin[8
 set_property -dict {PACKAGE_pin F25 IOSTANDARD LVDS_25} [get_ports {DATA_p_pin[9]}]
 set_property -dict {PACKAGE_pin E25 IOSTANDARD LVDS_25} [get_ports {DATA_n_pin[9]}]
 
+#ADC7
+set_property -dict {PACKAGE_pin C29 IOSTANDARD LVDS_25} [get_ports {DATA_p_pin[10]}]
+set_property -dict {PACKAGE_pin B29 IOSTANDARD LVDS_25} [get_ports {DATA_n_pin[10]}]
+set_property -dict {PACKAGE_pin B27 IOSTANDARD LVDS_25} [get_ports {DATA_p_pin[11]}]
+set_property -dict {PACKAGE_pin A27 IOSTANDARD LVDS_25} [get_ports {DATA_n_pin[11]}]
+
 #
 # FMC_LPC_LA18_CC_P   IOSTANDARD=LVCMOS25  VCCO - VADJ_FPGA - IO_L11P_T1_SRCC_13
 # FMC_LPC_LA18_CC_N   IOSTANDARD=LVCMOS25  VCCO - VADJ_FPGA - IO_L11N_T1_SRCC_13

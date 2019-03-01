@@ -33,6 +33,12 @@ module adc_interface
         input logic d1b2_p,
         input logic d1b2_n,
 
+        // ADC 7
+        input logic d0d1_p,
+        input logic d0d1_n,
+        input logic d1d1_p,
+        input logic d1d1_n,
+
         // ADC 8
         input logic d0d2_p,
         input logic d0d2_n,
@@ -43,6 +49,7 @@ module adc_interface
         output logic [15:0] adc2,
         output logic [15:0] adc3,
         output logic [15:0] adc4,
+        output logic [15:0] adc7,
         output logic [15:0] adc8,
         
         output logic divclk_o,
@@ -191,6 +198,23 @@ module adc_interface
         .ln1_n  (d1b2_n  ),
 
         .d_out  (adc4  )
+    );
+
+    adc adc7_inst
+    (
+        .DCLK_IO(DCLK_IO),
+        .CLKDIV (CLKDIV ),
+        .RST    (adc_rst),
+        .CE     (adc_en),
+
+        .bitslip(bitslip),
+
+        .ln0_p  (d0d1_p  ),
+        .ln0_n  (d0d1_n  ),
+        .ln1_p  (d1d1_p  ),
+        .ln1_n  (d1d1_n  ),
+
+        .d_out  (adc7  )
     );
 
     adc adc8_inst

@@ -4,27 +4,19 @@ module readController(
     input  logic clk,
     input  logic rstn,
     input  logic full,
-    input  logic empty1,
-    input  logic empty2,
-    input  logic empty3,
-    input  logic empty4,
-    input  logic empty8,
+    input  logic [5:0] empty,
     output logic eth_en,
-    output logic rd_en1,
-    output logic rd_en2,
-    output logic rd_en3,
-    output logic rd_en4,
-    output logic rd_en8,
+    output logic [5:0] rd_en,
     output logic [2:0] addr
     );
 
 typedef enum logic [2:0] {init = 3'b001, read = 3'b010, pause = 3'b100} state_type;
 state_type curr_state, next_state;
 
-logic empty;
+logic empty_red;
 logic [15:0] count_curr, count_next;
 
-assign empty = empty1 & empty2 & empty3 & empty4 & empty8;
+assign empty_red = &empty;
 
 always_ff @(posedge clk) begin
     if(rstn == 1'b0) begin
@@ -42,17 +34,13 @@ always_comb begin
     count_next = count_curr;
 
     eth_en  = 0;
-    rd_en1  = 0;
-    rd_en2  = 0;
-    rd_en3  = 0;
-    rd_en4  = 0;
-    rd_en8  = 0;
+    rd_en   = 6'b000000;
     addr    = 3'b000;
 
     case(curr_state)
         init:
         begin
-            if((full == 1) & (empty == 0))
+            if((full == 1) & (empty_red == 0))
                 next_state = read;
         end
 
@@ -62,28 +50,32 @@ always_comb begin
 
             count_next = count_curr + 1;
 
-            if(empty1 == 0) begin
-                rd_en1  = 1;
+            if(empty[0] == 0) begin
+                rd_en[0]  = 1;
                 addr    = 3'b000;
             end
-            else if(empty2 == 0) begin
-                rd_en2  = 1;
+            else if(empty[1] == 0) begin
+                rd_en[1]  = 1;
                 addr    = 3'b001;
             end
-            else if(empty3 == 0) begin
-                rd_en3  = 1;
+            else if(empty[2] == 0) begin
+                rd_en[2]  = 1;
                 addr    = 3'b010;
             end
-            else if(empty4 == 0) begin
-                rd_en4  = 1;
+            else if(empty[3] == 0) begin
+                rd_en[3]  = 1;
                 addr    = 3'b011;
             end
-            else if(empty8 == 0) begin
-                rd_en8  = 1;
+            else if(empty[4] == 0) begin
+                rd_en[4]  = 1;
                 addr    = 3'b100;
             end
+            else if(empty[5] == 0) begin
+                rd_en[5]  = 1;
+                addr    = 3'b101;
+            end
 
-            if(empty == 1)
+            if(empty_red == 1)
                 next_state = init;
             else if(count_curr == 1023)
             begin
@@ -96,23 +88,26 @@ always_comb begin
         begin
             count_next = count_curr + 1;
 
-            if(empty1 == 0) begin
+            if(empty[0] == 0) begin
                 addr    = 3'b000;
             end
-            else if(empty2 == 0) begin
+            else if(empty[1] == 0) begin
                 addr    = 3'b001;
             end
-            else if(empty3 == 0) begin
+            else if(empty[2] == 0) begin
                 addr    = 3'b010;
             end
-            else if(empty4 == 0) begin
+            else if(empty[3] == 0) begin
                 addr    = 3'b011;
             end
-            else if(empty8 == 0) begin
+            else if(empty[4] == 0) begin
                 addr    = 3'b100;
             end
+            else if(empty[5] == 0) begin
+                addr    = 3'b101;
+            end
 
-            if(empty == 1)
+            if(empty_red == 1)
                 next_state = init;
             else if(count_curr == 8191)
             begin
