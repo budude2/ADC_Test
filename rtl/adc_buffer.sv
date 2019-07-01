@@ -118,7 +118,7 @@ module adc_buffer (
     (
     	.clk(dout_clk),
         .rstn(dout_rst_n),
-        
+
         .full(|full),
         .empty(&empty),
         .start(start_buff),
@@ -131,7 +131,7 @@ module adc_buffer (
     (
     	.clk(dout_clk),
         .rst(!dout_rst_n),
-        
+
         .wr_en(en_wr & adc1_valid),
         .din(adc1_125m),
         .full(full[0]),
@@ -210,12 +210,12 @@ module adc_buffer (
         .dout(dout8),
         .empty(empty[5])
     );
-    
+
     readController readController
     (
         .clk(dout_clk),
         .rstn(dout_rst_n),
-        
+
         .full(|full),
 
         .empty(empty),

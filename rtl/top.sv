@@ -34,7 +34,11 @@ module top
     output logic [3:0] eth_txd,
     output logic ETH_TX_EN,
     output logic eth_txck,
-    output logic ETH_PHYRST_N
+    output logic ETH_PHYRST_N,
+
+    input logic eth_rxck,
+    input logic eth_rxctl,
+    input logic [3:0] eth_rxd
 );
 
     // MMCM signals
@@ -126,15 +130,15 @@ module top
         .ADC_CSB2(CSB2),
         .ADC_SCLK(SCLK),
         .ADC_SDIO(SDIO),
-        
+
         .usb_uart_rxd(usb_uart_rxd),
         .usb_uart_txd(usb_uart_txd),
-        
+
         .O(MB_O)
     );
 
     adc_interface adc_inst
-    ( 
+    (
         .DCLK_p_pin(DCLK_p_pin),
         .DCLK_n_pin(DCLK_n_pin),
         .FCLK_p_pin(FCLK_p_pin),
@@ -190,12 +194,13 @@ module top
         // Clocks and Status Outputs
         .divclk_o(adc_clk),
         .frmData(frmData),
-        
+
         .aligned(aligned)
     );
 
     adc_buffer adc_buffer (
         .start_buff(aligned & tick),
+        //.start_buff(aligned),
 
         .din_clk   (adc_clk   ),
         .din_rst_n (adc_rst_n ),
@@ -215,34 +220,103 @@ module top
         .dout_valid(eth_valid )
     );
 
+    logic [7:0] rx_axis_tdata;
+    logic rx_axis_tvalid, rx_axis_tlast, rx_axis_tuser, rx_error_bad_frame;
+    logic [1:0] speed;
 
-    udp_tx_top udp_tx
+    eth_mac_1g_rgmii_fifo #
     (
-        .clk_125m(clk_125m),
-        .clk_125m90(clk_125m90),
+        // target ("SIM", "GENERIC", "XILINX", "ALTERA")
+        .TARGET("XILINX"),
+        // IODDR style ("IODDR", "IODDR2")
+        // Use IODDR for Virtex-4, Virtex-5, Virtex-6, 7 Series, Ultrascale
+        // Use IODDR2 for Spartan-6
+        .IODDR_STYLE("IODDR"),
+        // Clock input style ("BUFG", "BUFR", "BUFIO", "BUFIO2")
+        // Use BUFR for Virtex-5, Virtex-6, 7-series
+        // Use BUFG for Ultrascale
+        // Use BUFIO2 for Spartan-6
+        .CLOCK_INPUT_STYLE("BUFR"),
+        // Use 90 degree clock for RGMII transmit ("TRUE", "FALSE")
+        .USE_CLK90("TRUE"),
+        .ENABLE_PADDING(1),
+        .MIN_FRAME_LENGTH(8),
+        .TX_FIFO_ADDR_WIDTH(12),
+        .TX_FRAME_FIFO(1),
+        .TX_DROP_BAD_FRAME(1),
+        .TX_DROP_WHEN_FULL(0),
+        .RX_FIFO_ADDR_WIDTH(12),
+        .RX_FRAME_FIFO(1),
+        .RX_DROP_BAD_FRAME(1),
+        .RX_DROP_WHEN_FULL(1)
+    ) eth_i (
+        .gtx_clk(clk_125m),
+        .gtx_clk90(clk_125m90),
+        .gtx_rst(!rst_125m_n),
+        .logic_clk(clk_125m),
+        .logic_rst(!rst_125m_n),
 
-        .udp_tx_data(eth_data),
-        .udp_tx_valid(eth_valid),
-        .udp_tx_busy(),
+        /*
+         * AXI input
+         */
+        .tx_axis_tdata(8'h00),  // [7:0]
+        .tx_axis_tvalid(1'b0),
+        .tx_axis_tready(),
+        .tx_axis_tlast(1'b0),
+        .tx_axis_tuser(1'b0),
 
-        .eth_txd(eth_txd),
-        .ETH_TX_EN(ETH_TX_EN),
-        .eth_txck(eth_txck),
-        .ETH_PHYRST_N(ETH_PHYRST_N)
+        /*
+         * AXI output
+         */
+        .rx_axis_tdata(rx_axis_tdata),   // [7:0]
+        .rx_axis_tvalid(rx_axis_tvalid),
+        .rx_axis_tready(1'b1),
+        .rx_axis_tlast(rx_axis_tlast),
+        .rx_axis_tuser(rx_axis_tuser),
+
+        /*
+         * RGMII interface
+         */
+        .rgmii_rx_clk(eth_rxck),
+        .rgmii_rxd(eth_rxd),
+        .rgmii_rx_ctl(eth_rxctl),
+        .rgmii_tx_clk(eth_txck),
+        .rgmii_txd(eth_txd),
+        .rgmii_tx_ctl(ETH_TX_EN),
+
+        /*
+         * Status
+         */
+        .tx_error_underflow(),
+        .tx_fifo_overflow(),
+        .tx_fifo_bad_frame(),
+        .tx_fifo_good_frame(),
+        .rx_error_bad_frame(rx_error_bad_frame),
+        .rx_error_bad_fcs(),
+        .rx_fifo_overflow(),
+        .rx_fifo_bad_frame(),
+        .rx_fifo_good_frame(),
+        .speed(speed),
+
+        /*
+         * Configuration
+         */
+        .ifg_delay(1)
     );
 
-    // ila_0 ila (
-    //     .clk(clk_125m), // input wire clk
+    assign ETH_PHYRST_N = 1'b1;
 
-    //     .probe0(start), // input wire [0:0]  probe0  
-    //     .probe1(adc1_valid), // input wire [0:0]  probe1 
-    //     .probe2(adc2_valid), // input wire [0:0]  probe2 
-    //     .probe3(empty_adc1), // input wire [0:0]  probe3 
-    //     .probe4(empty_adc2), // input wire [0:0]  probe4 
-    //     .probe5(en_rd1), // input wire [0:0]  probe5 
-    //     .probe6(en_rd2), // input wire [0:0]  probe6
-    //     .probe7(full_adc1),
-    //     .probe8(full_adc2)
-    // );
+    ila_0 ila
+    (
+        .clk(clk_125m), // input wire clk
+
+        .probe0(rx_axis_tdata),  // input wire [0:0] probe0
+        .probe1(rx_axis_tvalid), // input wire [0:0] probe1
+        .probe2(rx_error_bad_frame),    // input wire [0:0] probe2
+        .probe3(rx_axis_tlast),
+        .probe4(rx_axis_tuser),
+        .probe5(speed)
+    );
+
 
 endmodule

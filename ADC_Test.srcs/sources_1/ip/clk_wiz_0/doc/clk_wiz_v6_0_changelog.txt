@@ -1,3 +1,8 @@
+2018.3:
+ * Version 6.0 (Rev. 2)
+ * Bug Fix: Made input source independent for primary and secondary clock
+ * Other: New family support added
+
 2018.2:
  * Version 6.0 (Rev. 1)
  * Bug Fix: Removed vco freq check when Primitive is None
