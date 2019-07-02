@@ -54,11 +54,14 @@ module top
     logic [31:0] MB_O;
 
     // Buffering Signals
-    logic adc_rst_n, rst_125m_n, eth_valid, tick;
+    logic  eth_valid, tick;
     logic [7:0] eth_data;
 
     // Input signals
     logic btnc_db;
+
+    // Reset Signals
+    logic adc_rst_n, rst_125m_n, rst_125m;
 
     assign led0 = dcm_locked;
     assign led1 = 0;
@@ -84,7 +87,7 @@ module top
     db_fsm debouncer
     (
         .clk(clk_125m),
-        .reset(!rst_125m_n),
+        .reset(rst_125m),
         .sw(btnc),
         .db(btnc_db)
     );
@@ -92,7 +95,7 @@ module top
     edge_detect_moore edge_detector
     (
         .clk(clk_125m),
-        .reset(!rst_125m_n),
+        .reset(rst_125m),
         .level(btnc_db),
         .tick(tick)
     );
@@ -112,12 +115,14 @@ module top
         .rst_n(adc_rst_n)
     );
 
-    rstBridge rst_125m
+    rstBridge rst_cross_125m
     (
         .clk(clk_125m),
         .asyncrst_n(cpu_resetn),
         .rst_n(rst_125m_n)
     );
+
+    assign rst_125m = ~rst_125m_n;
 
     ADC_Control_wrapper MB
     (
@@ -202,121 +207,84 @@ module top
         .start_buff(aligned & tick),
         //.start_buff(aligned),
 
-        .din_clk   (adc_clk   ),
-        .din_rst_n (adc_rst_n ),
-        .din_valid (aligned   ),
+        .din_clk   (adc_clk),
+        .din_rst_n (adc_rst_n),
+        .din_valid (aligned),
 
-        .adc1      (adc1      ),
-        .adc2      (adc2      ),
-        .adc3      (adc3      ),
-        .adc4      (adc4      ),
-        .adc7      (adc7      ),
-        .adc8      (adc8      ),
+        .adc1      (adc1),
+        .adc2      (adc2),
+        .adc3      (adc3),
+        .adc4      (adc4),
+        .adc7      (adc7),
+        .adc8      (adc8),
 
-        .dout_clk  (clk_125m  ),
+        .dout_clk  (clk_125m),
         .dout_rst_n(rst_125m_n),
 
-        .dout      (eth_data  ),
-        .dout_valid(eth_valid )
+        .dout      (eth_data),
+        .dout_valid(eth_valid)
     );
 
-    logic [7:0] rx_axis_tdata;
-    logic rx_axis_tvalid, rx_axis_tlast, rx_axis_tuser, rx_error_bad_frame;
-    logic [1:0] speed;
+    logic m_udp_hdr_valid, m_udp_payload_axis_tvalid, m_udp_payload_axis_tlast, m_udp_payload_axis_tuser;
+    logic [15:0] m_udp_source_port, m_udp_dest_port, m_udp_length, m_udp_checksum;
+    logic [7:0] m_udp_payload_axis_tdata;
 
-    eth_mac_1g_rgmii_fifo #
+    eth eth_i
     (
-        // target ("SIM", "GENERIC", "XILINX", "ALTERA")
-        .TARGET("XILINX"),
-        // IODDR style ("IODDR", "IODDR2")
-        // Use IODDR for Virtex-4, Virtex-5, Virtex-6, 7 Series, Ultrascale
-        // Use IODDR2 for Spartan-6
-        .IODDR_STYLE("IODDR"),
-        // Clock input style ("BUFG", "BUFR", "BUFIO", "BUFIO2")
-        // Use BUFR for Virtex-5, Virtex-6, 7-series
-        // Use BUFG for Ultrascale
-        // Use BUFIO2 for Spartan-6
-        .CLOCK_INPUT_STYLE("BUFR"),
-        // Use 90 degree clock for RGMII transmit ("TRUE", "FALSE")
-        .USE_CLK90("TRUE"),
-        .ENABLE_PADDING(1),
-        .MIN_FRAME_LENGTH(8),
-        .TX_FIFO_ADDR_WIDTH(12),
-        .TX_FRAME_FIFO(1),
-        .TX_DROP_BAD_FRAME(1),
-        .TX_DROP_WHEN_FULL(0),
-        .RX_FIFO_ADDR_WIDTH(12),
-        .RX_FRAME_FIFO(1),
-        .RX_DROP_BAD_FRAME(1),
-        .RX_DROP_WHEN_FULL(1)
-    ) eth_i (
         .gtx_clk(clk_125m),
         .gtx_clk90(clk_125m90),
-        .gtx_rst(!rst_125m_n),
+        .gtx_rst(rst_125m),
         .logic_clk(clk_125m),
-        .logic_rst(!rst_125m_n),
-
-        /*
-         * AXI input
-         */
-        .tx_axis_tdata(8'h00),  // [7:0]
-        .tx_axis_tvalid(1'b0),
-        .tx_axis_tready(),
-        .tx_axis_tlast(1'b0),
-        .tx_axis_tuser(1'b0),
-
-        /*
-         * AXI output
-         */
-        .rx_axis_tdata(rx_axis_tdata),   // [7:0]
-        .rx_axis_tvalid(rx_axis_tvalid),
-        .rx_axis_tready(1'b1),
-        .rx_axis_tlast(rx_axis_tlast),
-        .rx_axis_tuser(rx_axis_tuser),
+        .logic_rst(rst_125m),
 
         /*
          * RGMII interface
          */
-        .rgmii_rx_clk(eth_rxck),
-        .rgmii_rxd(eth_rxd),
-        .rgmii_rx_ctl(eth_rxctl),
-        .rgmii_tx_clk(eth_txck),
-        .rgmii_txd(eth_txd),
-        .rgmii_tx_ctl(ETH_TX_EN),
+        .rgmii_rx_clk(eth_rxck),                                // Input
+        .rgmii_rxd(eth_rxd),                                    // Input [3:0]
+        .rgmii_rx_ctl(eth_rxctl),                               // Input
+
+        .rgmii_tx_clk(eth_txck),                                // Output
+        .rgmii_txd(eth_txd),                                    // Output [3:0]
+        .rgmii_tx_ctl(ETH_TX_EN),                               // Output
+
+        .tx_udp_payload_axis_tdata(eth_data),                   // Input [7:0]
+        .tx_udp_payload_axis_tvalid(eth_valid),                 // Input
+        .tx_udp_payload_axis_tready(),                          // Output
+        .tx_udp_payload_axis_tlast(),                           // Input
+        .tx_udp_payload_axis_tuser(),                           // Input
 
         /*
-         * Status
+         * UDP frame output
          */
-        .tx_error_underflow(),
-        .tx_fifo_overflow(),
-        .tx_fifo_bad_frame(),
-        .tx_fifo_good_frame(),
-        .rx_error_bad_frame(rx_error_bad_frame),
-        .rx_error_bad_fcs(),
-        .rx_fifo_overflow(),
-        .rx_fifo_bad_frame(),
-        .rx_fifo_good_frame(),
-        .speed(speed),
-
-        /*
-         * Configuration
-         */
-        .ifg_delay(1)
+        .udp_rx_ready(1'b1),                                    // Input
+        .udp_hdr_valid(m_udp_hdr_valid),                        // Output
+        .udp_source_port(m_udp_source_port),                    // Output [15:0]
+        .udp_dest_port(m_udp_dest_port),                        // Output [15:0]
+        .udp_length(m_udp_length),                              // Output [15:0]
+        .udp_checksum(m_udp_checksum),                          // Output [15:0]
+        .rx_udp_payload_axis_tdata(m_udp_payload_axis_tdata),   // Output [7:0]
+        .rx_udp_payload_axis_tvalid(m_udp_payload_axis_tvalid), // Output
+        .rx_udp_payload_axis_tlast(m_udp_payload_axis_tlast),   // Output
+        .rx_udp_payload_axis_tuser(m_udp_payload_axis_tuser)    // Output
     );
 
     assign ETH_PHYRST_N = 1'b1;
 
     ila_0 ila
     (
-        .clk(clk_125m), // input wire clk
+        .clk(clk_125m),                     // input wire clk
 
-        .probe0(rx_axis_tdata),  // input wire [0:0] probe0
-        .probe1(rx_axis_tvalid), // input wire [0:0] probe1
-        .probe2(rx_error_bad_frame),    // input wire [0:0] probe2
-        .probe3(rx_axis_tlast),
-        .probe4(rx_axis_tuser),
-        .probe5(speed)
-    );
+        .probe0(m_udp_hdr_valid),           // input wire [0:0]  probe0
+        .probe1(m_udp_source_port),         // input wire [15:0]  probe1
+        .probe2(m_udp_dest_port),           // input wire [15:0]  probe2
+        .probe3(m_udp_length),              // input wire [15:0]  probe3
+        .probe4(m_udp_checksum),            // input wire [15:0]  probe4
+        .probe5(m_udp_payload_axis_tdata),  // input wire [7:0]  probe5
+        .probe6(m_udp_payload_axis_tvalid), // input wire [0:0]  probe6
+        .probe7(m_udp_payload_axis_tlast),  // input wire [0:0]  probe7
+        .probe8(m_udp_payload_axis_tuser)   // input wire [0:0]  probe8
+);
 
 
 endmodule
