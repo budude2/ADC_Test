@@ -7,7 +7,8 @@ module readController(
     input  logic [5:0] empty,
     output logic eth_en,
     output logic [5:0] rd_en,
-    output logic [2:0] addr
+    output logic [2:0] addr,
+    output logic axis_tlast
     );
 
 typedef enum logic [2:0] {init = 3'b001, read = 3'b010, pause = 3'b100} state_type;
@@ -33,9 +34,10 @@ always_comb begin
     next_state = curr_state;
     count_next = count_curr;
 
-    eth_en  = 0;
-    rd_en   = 6'b000000;
-    addr    = 3'b000;
+    eth_en     = 0;
+    rd_en      = 6'b000000;
+    addr       = 3'b000;
+    axis_tlast = 1'b0;
 
     case(curr_state)
         init:
@@ -76,11 +78,15 @@ always_comb begin
             end
 
             if(empty_red == 1)
+            begin
                 next_state = init;
+                axis_tlast = 1'b1;
+            end
             else if(count_curr == 1023)
             begin
                 next_state = pause;
                 count_next = 0;
+                axis_tlast = 1'b1;
             end
         end
 

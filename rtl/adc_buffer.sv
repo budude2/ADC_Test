@@ -18,7 +18,8 @@ module adc_buffer (
 	input logic dout_rst_n,
 
 	output logic [7:0] dout,
-	output logic dout_valid
+	output logic dout_valid,
+    output logic axis_tlast
 );
 	// Clock domain crossing
 	logic adc1_valid, adc2_valid, adc3_valid, adc4_valid, adc7_valid, adc8_valid;
@@ -223,7 +224,9 @@ module adc_buffer (
         .eth_en(dout_valid),
         .rd_en(rd_en),
 
-        .addr(addr)
+        .addr(addr),
+
+        .axis_tlast(axis_tlast)
     );
 
     always_comb begin

@@ -202,7 +202,7 @@ module eth
         .s_udp_hdr_ready(),                                     // Output
         .s_eth_dest_mac(48'hFFFFFFFFFFFF),                      // Input [47:0]
         .s_eth_src_mac(48'hDEADBEEF0123),                       // Input [47:0]
-        .s_eth_type(16'h0001),                                  // Input [15:0]
+        .s_eth_type(16'h0800),                                  // Input [15:0]
         .s_ip_version(4'h4),                                    // Input [3:0]
         .s_ip_ihl(4'h0),                                        // Input [3:0]
         .s_ip_dscp(6'b001110),                                  // Input [5:0]
@@ -217,7 +217,7 @@ module eth
         .s_ip_dest_ip(32'hFFFFFFFF),                            // Input [31:0]
         .s_udp_source_port(16'h1000),                           // Input [15:0]
         .s_udp_dest_port(16'h1000),                             // Input [15:0]
-        .s_udp_length(16'h0020),                                // Input [15:0]
+        .s_udp_length(16'h0200),                                // Input [15:0]
         .s_udp_checksum(16'h0000),                              // Input [15:0]
 
         .s_udp_payload_axis_tdata(tx_udp_payload_axis_tdata),   // Input [7:0]

@@ -54,7 +54,7 @@ module top
     logic [31:0] MB_O;
 
     // Buffering Signals
-    logic  eth_valid, tick;
+    logic  eth_valid, tick, eth_data_tlast;
     logic [7:0] eth_data;
 
     // Input signals
@@ -207,25 +207,26 @@ module top
         .start_buff(aligned & tick),
         //.start_buff(aligned),
 
-        .din_clk   (adc_clk),
-        .din_rst_n (adc_rst_n),
-        .din_valid (aligned),
+        .din_clk(adc_clk),
+        .din_rst_n(adc_rst_n),
+        .din_valid(aligned),
 
-        .adc1      (adc1),
-        .adc2      (adc2),
-        .adc3      (adc3),
-        .adc4      (adc4),
-        .adc7      (adc7),
-        .adc8      (adc8),
+        .adc1(adc1),
+        .adc2(adc2),
+        .adc3(adc3),
+        .adc4(adc4),
+        .adc7(adc7),
+        .adc8(adc8),
 
-        .dout_clk  (clk_125m),
+        .dout_clk(clk_125m),
         .dout_rst_n(rst_125m_n),
 
-        .dout      (eth_data),
-        .dout_valid(eth_valid)
+        .dout(eth_data),
+        .dout_valid(eth_valid),
+        .axis_tlast(eth_data_tlast)
     );
 
-    logic m_udp_hdr_valid, m_udp_payload_axis_tvalid, m_udp_payload_axis_tlast, m_udp_payload_axis_tuser;
+    logic m_udp_hdr_valid, m_udp_payload_axis_tvalid, m_udp_payload_axis_tlast, m_udp_payload_axis_tuser, eth_tready;
     logic [15:0] m_udp_source_port, m_udp_dest_port, m_udp_length, m_udp_checksum;
     logic [7:0] m_udp_payload_axis_tdata;
 
@@ -250,9 +251,9 @@ module top
 
         .tx_udp_payload_axis_tdata(eth_data),                   // Input [7:0]
         .tx_udp_payload_axis_tvalid(eth_valid),                 // Input
-        .tx_udp_payload_axis_tready(),                          // Output
-        .tx_udp_payload_axis_tlast(),                           // Input
-        .tx_udp_payload_axis_tuser(),                           // Input
+        .tx_udp_payload_axis_tready(eth_tready),                          // Output
+        .tx_udp_payload_axis_tlast(eth_data_tlast),             // Input
+        .tx_udp_payload_axis_tuser(1'b0),                       // Input
 
         /*
          * UDP frame output
@@ -275,15 +276,10 @@ module top
     (
         .clk(clk_125m),                     // input wire clk
 
-        .probe0(m_udp_hdr_valid),           // input wire [0:0]  probe0
-        .probe1(m_udp_source_port),         // input wire [15:0]  probe1
-        .probe2(m_udp_dest_port),           // input wire [15:0]  probe2
-        .probe3(m_udp_length),              // input wire [15:0]  probe3
-        .probe4(m_udp_checksum),            // input wire [15:0]  probe4
-        .probe5(m_udp_payload_axis_tdata),  // input wire [7:0]  probe5
-        .probe6(m_udp_payload_axis_tvalid), // input wire [0:0]  probe6
-        .probe7(m_udp_payload_axis_tlast),  // input wire [0:0]  probe7
-        .probe8(m_udp_payload_axis_tuser)   // input wire [0:0]  probe8
+        .probe0(eth_data),  // input wire [7:0]  probe5
+        .probe1(eth_valid), // input wire [0:0]  probe6
+        .probe2(eth_tready),  // input wire [0:0]  probe7
+        .probe3(eth_data_tlast)   // input wire [0:0]  probe8
 );
 
 
