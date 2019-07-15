@@ -271,8 +271,6 @@ module udp_tx
 
     */
 
-
-
     eth_axis_tx eth_axis_tx_i
     (
         .clk(logic_clk),

@@ -7,20 +7,30 @@ module bufferTB( );
     logic dcm_locked;
 
     // ADC Signals
-    logic adc_clk, aligned, adc_rst, adc1_valid, adc2_valid, adc_rst_n;
-    logic [15:0] adc1, adc2, adc1_125m, adc2_125m;
+    logic adc_clk, aligned, adc1_valid, adc2_valid, adc3_valid, adc4_valid, adc7_valid, adc8_valid, adc_rst_n;
+    logic [15:0] adc1, adc2, adc3, adc4, adc7, adc8;
+    logic [15:0] adc1_125m, adc2_125m, adc3_125m, adc4_125m, adc7_125m, adc8_125m;
 
     // Buffering Signals
-    logic rst_125m_n, eth_en, start, tick;
+    logic rst_125m_n, rst_125m, eth_en, start, tick;
     logic [7:0] eth_data;
+    logic [7:0] dout1, dout2, dout3, dout4, dout7, dout8;
 
     logic [3:0] eth_txd;
     logic ETH_TX_EN;
     logic eth_txck;
     logic ETH_PHYRST_N;
 
+    logic eth_rxck;
+    logic eth_rxctl;
+    logic [3:0] eth_rxd;
+
+    logic [5:0] rd_en, empty, full;
+
     // Simulation signals
     logic cpu_resetn;
+
+    logic eth_tready;
 
     clk_wiz_0 MMCM
     (
@@ -38,12 +48,14 @@ module bufferTB( );
         .clk_in1_n(SysRefClk_n)     // input clk_in1_n
     );
 
-    rstBridge rst_125m
+    rstBridge rst_cross_125m
     (
         .clk(clk_125m),
         .asyncrst_n(cpu_resetn),
         .rst_n(rst_125m_n)
     );
+
+    assign rst_125m = ~rst_125m_n;
 
     rstBridge writeReset
     (
@@ -57,7 +69,7 @@ module bufferTB( );
         .wr_clk(adc_clk),
         .rd_clk(clk_125m),
         .wr_rst(!adc_rst_n),
-        .rd_rst(!rst_125m_n),
+        .rd_rst(rst_125m),
 
         .din(adc1),
         .din_valid(aligned),
@@ -71,7 +83,7 @@ module bufferTB( );
         .wr_clk(adc_clk),
         .rd_clk(clk_125m),
         .wr_rst(!adc_rst_n),
-        .rd_rst(!rst_125m_n),
+        .rd_rst(rst_125m),
 
         .din(adc2),
         .din_valid(aligned),
@@ -80,18 +92,73 @@ module bufferTB( );
         .dout_valid(adc2_valid)
     );
 
+    adc_cdc adc3_cdc
+    (
+        .wr_clk(adc_clk),
+        .rd_clk(clk_125m),
+        .wr_rst(!adc_rst_n),
+        .rd_rst(rst_125m),
+
+        .din(adc3),
+        .din_valid(aligned),
+
+        .dout(adc3_125m),
+        .dout_valid(adc3_valid)
+    );
+
+    adc_cdc adc4_cdc
+    (
+        .wr_clk(adc_clk),
+        .rd_clk(clk_125m),
+        .wr_rst(!adc_rst_n),
+        .rd_rst(rst_125m),
+
+        .din(adc4),
+        .din_valid(aligned),
+
+        .dout(adc4_125m),
+        .dout_valid(adc4_valid)
+    );
+
+    adc_cdc adc7_cdc
+    (
+        .wr_clk(adc_clk),
+        .rd_clk(clk_125m),
+        .wr_rst(!adc_rst_n),
+        .rd_rst(rst_125m),
+
+        .din(adc7),
+        .din_valid(aligned),
+
+        .dout(adc7_125m),
+        .dout_valid(adc7_valid)
+    );
+
+    adc_cdc adc8_cdc
+    (
+        .wr_clk(adc_clk),
+        .rd_clk(clk_125m),
+        .wr_rst(!adc_rst_n),
+        .rd_rst(rst_125m),
+
+        .din(adc8),
+        .din_valid(aligned),
+
+        .dout(adc8_125m),
+        .dout_valid(adc8_valid)
+    );
+
     assign start = aligned & tick;
 
-    logic en_wr, addr;
-    logic full_adc1, empty_adc1, en_rd1, full_adc2, empty_adc2, en_rd2;
-    logic [7:0] dout1, dout2;
+    logic en_wr;
+    logic [2:0] addr;
 
     writeController writeController
     (
         .rstn(rst_125m_n),
         .clk(adc_clk),
-        .full(full_adc1 | full_adc2),
-        .empty(empty_adc1 & empty_adc2),
+        .full(|full),
+        .empty(&empty),
         .start(start),
         .wr_en(en_wr),
         .state()
@@ -100,58 +167,157 @@ module bufferTB( );
     widthConverter adc1_buffer
     (
         .clk(clk_125m),
-        .rst(!rst_125m_n),
-        
+        .rst(rst_125m),
+
         .wr_en(en_wr & adc1_valid),
         .din(adc1_125m),
-        .full(full_adc1),
+        .full(full[0]),
 
-        .rd_en(en_rd1),
+        .rd_en(rd_en[0] & eth_tready),
         .dout(dout1),
-        .empty(empty_adc1)
+        .empty(empty[0])
     );
 
     widthConverter adc2_buffer
     (
         .clk(clk_125m),
-        .rst(!rst_125m_n),
+        .rst(rst_125m),
 
         .wr_en(en_wr & adc2_valid),
         .din(adc2_125m),
-        .full(full_adc2),
+        .full(full[1]),
 
-        .rd_en(en_rd2),
+        .rd_en(rd_en[1] & eth_tready),
         .dout(dout2),
-        .empty(empty_adc2)
+        .empty(empty[1])
     );
-    
-    readController readController
+
+    widthConverter adc3_buffer
+    (
+        .clk(clk_125m),
+        .rst(rst_125m),
+
+        .wr_en(en_wr & adc3_valid),
+        .din(adc3_125m),
+        .full(full[2]),
+
+        .rd_en(rd_en[2] & eth_tready),
+        .dout(dout3),
+        .empty(empty[2])
+    );
+
+    widthConverter adc4_buffer
+    (
+        .clk(clk_125m),
+        .rst(rst_125m),
+
+        .wr_en(en_wr & adc4_valid),
+        .din(adc4_125m),
+        .full(full[3]),
+
+        .rd_en(rd_en[3] & eth_tready),
+        .dout(dout4),
+        .empty(empty[3])
+    );
+
+    widthConverter adc7_buffer
+    (
+        .clk(clk_125m),
+        .rst(rst_125m),
+
+        .wr_en(en_wr & adc7_valid),
+        .din(adc7_125m),
+        .full(full[4]),
+
+        .rd_en(rd_en[4] & eth_tready),
+        .dout(dout7),
+        .empty(empty[4])
+    );
+
+    widthConverter adc8_buffer
+    (
+        .clk(clk_125m),
+        .rst(rst_125m),
+
+        .wr_en(en_wr & adc8_valid),
+        .din(adc8_125m),
+        .full(full[5]),
+
+        .rd_en(rd_en[5] & eth_tready),
+        .dout(dout8),
+        .empty(empty[5])
+    );
+
+    logic eth_data_tlast, hdr_tvalid, tx_done;
+
+    readController2 readController
     (
         .clk(clk_125m),
         .rstn(rst_125m_n),
-        
-        .full(full_adc1 | full_adc2),
-        .empty1(empty_adc1),
-        .empty2(empty_adc2),
-        .eth_en(eth_en),
-        .rd_en1(en_rd1),
-        .rd_en2(en_rd2),
-        .addr(addr)
+
+        .full(|full),
+        .empty(empty),
+        .axis_tvalid(eth_en),
+        .rd_en(rd_en),
+        .addr(addr),
+        .tx_done(tx_done),
+        .axis_tlast(eth_data_tlast),
+        .axis_tready(eth_tready),
+        .axis_tvalid_hdr(hdr_tvalid)
     );
 
-    udp_tx_top udp_tx
+    logic m_udp_hdr_valid, m_udp_payload_axis_tvalid, m_udp_payload_axis_tlast, m_udp_payload_axis_tuser;
+    logic [15:0] m_udp_source_port, m_udp_dest_port, m_udp_length, m_udp_checksum;
+    logic [7:0] m_udp_payload_axis_tdata;
+
+    eth eth_i
     (
-        .clk_125m(clk_125m),
-        .clk_125m90(clk_125m90),
+        .gtx_clk(clk_125m),
+        .gtx_clk90(clk_125m90),
+        .gtx_rst(rst_125m),
+        .logic_clk(clk_125m),
+        .logic_rst(rst_125m),
 
-        .udp_tx_valid(eth_en),
-        .udp_tx_data(eth_data),
-        .udp_tx_busy(),
+        /*
+         * RGMII interface
+         */
+        .rgmii_rx_clk(eth_rxck),                                // Input
+        .rgmii_rxd(eth_rxd),                                    // Input [3:0]
+        .rgmii_rx_ctl(eth_rxctl),                               // Input
 
-        .eth_txd(eth_txd),
-        .ETH_TX_EN(ETH_TX_EN),
-        .eth_txck(eth_txck),
-        .ETH_PHYRST_N(ETH_PHYRST_N)
+        .rgmii_tx_clk(eth_txck),                                // Output
+        .rgmii_txd(eth_txd),                                    // Output [3:0]
+        .rgmii_tx_ctl(ETH_TX_EN),                               // Output
+
+        .tx_udp_payload_axis_tdata(eth_data),                   // Input [7:0]
+        .tx_udp_payload_axis_tvalid(eth_en),                 // Input
+        .tx_udp_payload_axis_tready(eth_tready),                          // Output
+        .tx_udp_payload_axis_tlast(eth_data_tlast),             // Input
+        .tx_udp_payload_axis_tuser(1'b0),                       // Input
+        .s_udp_hdr_valid(hdr_tvalid),
+
+        /*
+         * UDP frame output
+         */
+        .udp_rx_ready(1'b1),                                    // Input
+        .udp_hdr_valid(m_udp_hdr_valid),                        // Output
+        .udp_source_port(m_udp_source_port),                    // Output [15:0]
+        .udp_dest_port(m_udp_dest_port),                        // Output [15:0]
+        .udp_length(m_udp_length),                              // Output [15:0]
+        .udp_checksum(m_udp_checksum),                          // Output [15:0]
+        .rx_udp_payload_axis_tdata(m_udp_payload_axis_tdata),   // Output [7:0]
+        .rx_udp_payload_axis_tvalid(m_udp_payload_axis_tvalid), // Output
+        .rx_udp_payload_axis_tlast(m_udp_payload_axis_tlast),   // Output
+        .rx_udp_payload_axis_tuser(m_udp_payload_axis_tuser),   // Output
+
+        /*
+         * TX Debug
+         */
+        .tx_error_underflow(),
+        .tx_fifo_overflow(),
+        .tx_fifo_bad_frame(),
+        .tx_fifo_good_frame(),
+        .tx_done(tx_done)
     );
 
     always_comb begin
@@ -164,6 +330,31 @@ module bufferTB( );
             1:
             begin
                 eth_data = dout2;
+            end
+
+            3'b010:
+            begin
+                eth_data = dout3;
+            end
+
+            3'b011:
+            begin
+                eth_data = dout4;
+            end
+
+            3'b100:
+            begin
+                eth_data = dout7;
+            end
+
+            3'b101:
+            begin
+                eth_data = dout8;
+            end
+
+            default:
+            begin
+                eth_data = 8'b00000000;
             end
         endcase
     end
@@ -192,10 +383,18 @@ module bufferTB( );
     initial begin
         adc1 = 0;
         adc2 = 0;
+        adc3 = 0;
+        adc4 = 0;
+        adc7 = 0;
+        adc8 = 0;
         forever begin
             @(posedge adc_clk);
             adc1 = adc1 + 1;
             adc2 = adc2 + 1;
+            adc3 = adc3 + 1;
+            adc4 = adc4 + 1;
+            adc7 = adc7 + 1;
+            adc8 = adc8 + 1;
         end
     end
 

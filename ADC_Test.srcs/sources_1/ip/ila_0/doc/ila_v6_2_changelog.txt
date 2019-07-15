@@ -1,3 +1,12 @@
+2019.1:
+ * Version 6.2 (Rev. 9)
+ * General: Updated the waivers for CDC
+ * Revision change in one or more subcores
+
+2018.3.1:
+ * Version 6.2 (Rev. 8)
+ * No changes
+
 2018.3:
  * Version 6.2 (Rev. 8)
  * General: Supported devices and production status are now determined automatically, to simplify support for future devices
@@ -127,7 +136,7 @@
  * Version 2.0
  * Native Vivado Release
 
-(c) Copyright 2000 - 2018 Xilinx, Inc. All rights reserved.
+(c) Copyright 2000 - 2019 Xilinx, Inc. All rights reserved.
 
 This file contains confidential and proprietary information
 of Xilinx, Inc. and is protected under U.S. and

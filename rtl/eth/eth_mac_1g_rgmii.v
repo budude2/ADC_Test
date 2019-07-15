@@ -87,6 +87,7 @@ module eth_mac_1g_rgmii #
      * Status
      */
     output wire        tx_error_underflow,
+    output wire        tx_done,
     output wire        rx_error_bad_frame,
     output wire        rx_error_bad_fcs,
     output wire [1:0]  speed,
@@ -147,7 +148,7 @@ always @(posedge gtx_clk) begin
         mii_select_reg <= 1'b0;
     end else begin
         rx_speed_count_1 <= rx_speed_count_1 + 1;
-        
+
         if (rx_prescale_sync[1] ^ rx_prescale_sync[2]) begin
             rx_speed_count_2 <= rx_speed_count_2 + 1;
         end
@@ -241,6 +242,7 @@ eth_mac_1g_inst (
     .rx_mii_select(rx_mii_select_sync[1]),
     .tx_mii_select(tx_mii_select_sync[1]),
     .tx_error_underflow(tx_error_underflow),
+    .tx_done(tx_done),
     .rx_error_bad_frame(rx_error_bad_frame),
     .rx_error_bad_fcs(rx_error_bad_fcs),
     .ifg_delay(ifg_delay)

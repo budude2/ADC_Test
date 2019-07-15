@@ -16,10 +16,13 @@ module adc_buffer (
 
 	input logic dout_clk,
 	input logic dout_rst_n,
+    input logic axis_tready,
+    input logic tx_done,
 
 	output logic [7:0] dout,
 	output logic dout_valid,
-    output logic axis_tlast
+    output logic axis_tlast,
+    output logic axis_tvalid_hdr
 );
 	// Clock domain crossing
 	logic adc1_valid, adc2_valid, adc3_valid, adc4_valid, adc7_valid, adc8_valid;
@@ -137,7 +140,7 @@ module adc_buffer (
         .din(adc1_125m),
         .full(full[0]),
 
-        .rd_en(rd_en[0]),
+        .rd_en(rd_en[0] & axis_tready),
         .dout(dout1),
         .empty(empty[0])
     );
@@ -151,7 +154,7 @@ module adc_buffer (
         .din(adc2_125m),
         .full(full[1]),
 
-        .rd_en(rd_en[1]),
+        .rd_en(rd_en[1] & axis_tready),
         .dout(dout2),
         .empty(empty[1])
     );
@@ -165,7 +168,7 @@ module adc_buffer (
         .din(adc3_125m),
         .full(full[2]),
 
-        .rd_en(rd_en[2]),
+        .rd_en(rd_en[2] & axis_tready),
         .dout(dout3),
         .empty(empty[2])
     );
@@ -179,7 +182,7 @@ module adc_buffer (
         .din(adc4_125m),
         .full(full[3]),
 
-        .rd_en(rd_en[3]),
+        .rd_en(rd_en[3] & axis_tready),
         .dout(dout4),
         .empty(empty[3])
     );
@@ -193,7 +196,7 @@ module adc_buffer (
         .din(adc7_125m),
         .full(full[4]),
 
-        .rd_en(rd_en[4]),
+        .rd_en(rd_en[4] & axis_tready),
         .dout(dout7),
         .empty(empty[4])
     );
@@ -207,26 +210,27 @@ module adc_buffer (
         .din(adc8_125m),
         .full(full[5]),
 
-        .rd_en(rd_en[5]),
+        .rd_en(rd_en[5] & axis_tready),
         .dout(dout8),
         .empty(empty[5])
     );
 
-    readController readController
+    readController2 readController
     (
         .clk(dout_clk),
         .rstn(dout_rst_n),
 
         .full(|full),
-
         .empty(empty),
 
-        .eth_en(dout_valid),
         .rd_en(rd_en),
-
         .addr(addr),
 
-        .axis_tlast(axis_tlast)
+        .tx_done(tx_done),
+        .axis_tvalid(dout_valid),
+        .axis_tready(axis_tready),
+        .axis_tlast(axis_tlast),
+        .axis_tvalid_hdr(axis_tvalid_hdr)
     );
 
     always_comb begin

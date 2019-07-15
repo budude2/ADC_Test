@@ -1,0 +1,14 @@
+[Version]
+Version=10.5
+[Designs]
+ADC_Test=ADC_Test.adf
+[Settings]
+Active=ADC_Test
+[Expand]
+adc_test=1
+[Browser]
+sort=order
+mode=none
+[Order]
+order=1
+macro=

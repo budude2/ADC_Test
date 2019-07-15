@@ -1,0 +1,24 @@
+# Design Explorer: Shortcut to "C:\Users\xtjac\Documents\ADC_Test\ADC_Test.sim\sim_1\behav\activehdl\ADC_Test\ADC_Test.aws" design added.
+# Warning: ULM_0039: Cannot load library configuration file "./../" linked in "C:\Users\xtjac\Documents\ADC_Test\ADC_Test.sim\sim_1\behav\activehdl\ADC_Test\library.cfg".
+vmap xil_defaultlib C:/Users/xtjac/Documents/ADC_Test/ADC_Test.sim/sim_1/behav/activehdl/activehdl/xil_defaultlib
+# AMAP: Error: Library: "C:/Users/xtjac/Documents/ADC_Test/ADC_Test.sim/sim_1/behav/activehdl/activehdl/xil_defaultlib\xil_defaultlib.lib" does not exist.
+quiet off
+asim -asdb +access +r -L unisims_ver -L unimacro_ver -L secureip -L xil_defaultlib -L fifo_generator_v13_2_4 -O5 -L xpm -dbg +access +r xil_defaultlib.bufferTB xil_defaultlib.glbl
+# Error: VSIM: cannot select specified top-level
+log -rec *
+# 0 signal(s) traced.
+log /glbl/GSR
+# 0 signal(s) traced.
+wave *
+# Error: Accelerated Waveform: Simulation database is not connected. Initialize simulation or load simulation database by opening waveform file (AWC, ASDB).
+# Error: Simulation not initialized.
+#     while executing
+# "error "Simulation not initialized.""
+#     (procedure "run" line 6)
+#     invoked from within
+# "run 1000ns"
+#     (file "C:/Users/xtjac/Documents/ADC_Test/ADC_Test.sim/sim_1/behav/activehdl/bufferTB_simulate.do" line 26)
+#     invoked from within
+# "source {C:/Users/xtjac/Documents/ADC_Test/ADC_Test.sim/sim_1/behav/activehdl/bufferTB_simulate.do}"
+#     invoked from within
+# "interp eval $slave "source $source_file""

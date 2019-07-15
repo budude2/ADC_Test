@@ -1,0 +1,215 @@
+# do {bufferTB_simulate.do}
+# //  ModelSim PE Student Edition 10.4a Apr  7 2015 
+# //
+# //  Copyright 1991-2015 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# // NOT FOR CORPORATE OR PRODUCTION USE.
+# // THE ModelSim PE Student Edition IS NOT A SUPPORTED PRODUCT.
+# // FOR HIGHER EDUCATION PURPOSES ONLY
+# //
+# vsim -do "do {bufferTB_simulate.do}" -l simulate.log 
+# Start time: 10:22:53 on Jul 10,2019
+# Loading sv_std.std
+# Loading xil_defaultlib.bufferTB
+# Loading xil_defaultlib.clk_wiz_0
+# Loading xil_defaultlib.clk_wiz_0_clk_wiz_0_clk_wiz
+# Loading unisims_ver.BUFG
+# Loading unisims_ver.IBUFDS
+# Loading unisims_ver.MMCME2_ADV
+# Loading xil_defaultlib.rstBridge
+# Loading xil_defaultlib.adc_cdc
+# Loading xil_defaultlib.adc_fifo
+# Loading xil_defaultlib.adc_fifo_fifo_generator_v13_2_3
+# Loading unisims_ver.GND
+# Loading unisims_ver.VCC
+# Loading xil_defaultlib.adc_fifo_fifo_generator_v13_2_3_synth
+# Loading xil_defaultlib.adc_fifo_fifo_generator_top
+# Loading xil_defaultlib.adc_fifo_fifo_generator_ramfifo
+# Loading xil_defaultlib.adc_fifo_clk_x_pntrs
+# Loading unisims_ver.LUT6
+# Loading xil_defaultlib.adc_fifo_xpm_cdc_gray
+# Loading unisims_ver.FDRE
+# Loading unisims_ver.LUT4
+# Loading unisims_ver.LUT3
+# Loading unisims_ver.LUT2
+# Loading xil_defaultlib.adc_fifo_xpm_cdc_gray__2
+# Loading xil_defaultlib.adc_fifo_rd_logic
+# Loading xil_defaultlib.adc_fifo_rd_fwft
+# Loading unisims_ver.LUT5
+# Loading unisims_ver.FDPE
+# Loading unisims_ver.FDCE
+# Loading xil_defaultlib.adc_fifo_rd_status_flags_as
+# Loading xil_defaultlib.adc_fifo_rd_bin_cntr
+# Loading unisims_ver.LUT1
+# Loading xil_defaultlib.adc_fifo_wr_logic
+# Loading xil_defaultlib.adc_fifo_wr_status_flags_as
+# Loading xil_defaultlib.adc_fifo_wr_bin_cntr
+# Loading xil_defaultlib.adc_fifo_memory
+# Loading xil_defaultlib.adc_fifo_blk_mem_gen_v8_4_2
+# Loading xil_defaultlib.adc_fifo_blk_mem_gen_v8_4_2_synth
+# Loading xil_defaultlib.adc_fifo_blk_mem_gen_top
+# Loading xil_defaultlib.adc_fifo_blk_mem_gen_generic_cstr
+# Loading xil_defaultlib.adc_fifo_blk_mem_gen_prim_width
+# Loading xil_defaultlib.adc_fifo_blk_mem_gen_prim_wrapper
+# Loading unisims_ver.RAMB18E1
+# Loading xil_defaultlib.adc_fifo_reset_blk_ramfifo
+# Loading xil_defaultlib.writeController
+# Loading xil_defaultlib.widthConverter
+# Loading xil_defaultlib.fifo_generator_0
+# Loading xil_defaultlib.fifo_generator_0_fifo_generator_v13_2_3
+# Loading xil_defaultlib.fifo_generator_0_fifo_generator_v13_2_3_synth
+# Loading xil_defaultlib.fifo_generator_0_fifo_generator_top
+# Loading xil_defaultlib.fifo_generator_0_fifo_generator_ramfifo
+# Loading xil_defaultlib.fifo_generator_0_rd_logic
+# Loading xil_defaultlib.fifo_generator_0_rd_fwft
+# Loading unisims_ver.FDSE
+# Loading xil_defaultlib.fifo_generator_0_rd_status_flags_ss
+# Loading xil_defaultlib.fifo_generator_0_compare
+# Loading unisims_ver.CARRY4
+# Loading xil_defaultlib.fifo_generator_0_compare_1
+# Loading xil_defaultlib.fifo_generator_0_rd_bin_cntr
+# Loading xil_defaultlib.fifo_generator_0_wr_logic
+# Loading xil_defaultlib.fifo_generator_0_wr_status_flags_ss
+# Loading xil_defaultlib.fifo_generator_0_compare__parameterized0
+# Loading xil_defaultlib.fifo_generator_0_compare__parameterized0_0
+# Loading xil_defaultlib.fifo_generator_0_wr_bin_cntr
+# Loading xil_defaultlib.fifo_generator_0_memory
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_v8_4_2
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_v8_4_2_synth
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_top
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_generic_cstr
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_mux__parameterized0
+# Loading unisims_ver.MUXF8
+# Loading unisims_ver.MUXF7
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_width
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_wrapper
+# Loading unisims_ver.RAMB36E1
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_width__parameterized9
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_wrapper__parameterized9
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_width__parameterized10
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_wrapper__parameterized10
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_width__parameterized11
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_wrapper__parameterized11
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_width__parameterized12
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_wrapper__parameterized12
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_width__parameterized13
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_wrapper__parameterized13
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_width__parameterized14
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_wrapper__parameterized14
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_width__parameterized0
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_wrapper__parameterized0
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_width__parameterized1
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_wrapper__parameterized1
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_width__parameterized2
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_wrapper__parameterized2
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_width__parameterized3
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_wrapper__parameterized3
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_width__parameterized4
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_wrapper__parameterized4
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_width__parameterized5
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_wrapper__parameterized5
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_width__parameterized6
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_wrapper__parameterized6
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_width__parameterized7
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_wrapper__parameterized7
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_width__parameterized8
+# Loading xil_defaultlib.fifo_generator_0_blk_mem_gen_prim_wrapper__parameterized8
+# Loading xil_defaultlib.readController
+# Loading xil_defaultlib.eth
+# Loading xil_defaultlib.eth_mac_1g_rgmii_fifo
+# Loading xil_defaultlib.eth_mac_1g_rgmii
+# Loading xil_defaultlib.rgmii_phy_if
+# Loading xil_defaultlib.ssio_ddr_in
+# Loading xil_defaultlib.iddr
+# Loading xil_defaultlib.oddr
+# Loading xil_defaultlib.eth_mac_1g
+# Loading xil_defaultlib.axis_gmii_rx
+# Loading xil_defaultlib.lfsr
+# Loading xil_defaultlib.axis_gmii_tx
+# Loading xil_defaultlib.axis_async_fifo
+# Loading xil_defaultlib.udp_rx
+# Loading xil_defaultlib.eth_axis_rx
+# Loading xil_defaultlib.ip_eth_rx
+# Loading xil_defaultlib.udp_ip_rx
+# Loading xil_defaultlib.udp_tx
+# Loading xil_defaultlib.udp_ip_tx
+# Loading xil_defaultlib.ip_eth_tx
+# Loading xil_defaultlib.eth_axis_tx
+# Loading xil_defaultlib.glbl
+# Loading unisims_ver.RB18_INTERNAL_VLOG
+# Loading unisims_ver.RB36_INTERNAL_VLOG
+# Loading unisims_ver.IDDR
+# Loading unisims_ver.BUFIO
+# Loading unisims_ver.BUFR
+# Loading unisims_ver.ODDR
+# Loading unisims_ver.x_lut3_mux8
+# Loading unisims_ver.x_lut2_mux4
+# Loading unisims_ver.x_lut1_mux2
+# ** Warning: (vsim-3017) ../../../../sim/bufferTB.sv(271): [TFMPC] - Too few port connections. Expected 30, found 26.
+#    Time: 0 ps  Iteration: 0  Instance: /bufferTB/eth_i File: ../../../../rtl/eth/eth.sv
+# ** Warning: (vsim-3722) ../../../../sim/bufferTB.sv(271): [TFMPC] - Missing connection for port 'tx_error_underflow'.
+# ** Warning: (vsim-3722) ../../../../sim/bufferTB.sv(271): [TFMPC] - Missing connection for port 'tx_fifo_overflow'.
+# ** Warning: (vsim-3722) ../../../../sim/bufferTB.sv(271): [TFMPC] - Missing connection for port 'tx_fifo_bad_frame'.
+# ** Warning: (vsim-3722) ../../../../sim/bufferTB.sv(271): [TFMPC] - Missing connection for port 'tx_fifo_good_frame'.
+# ** Warning: (vsim-3017) ../../../../rtl/eth/eth_mac_1g_rgmii.v(219): [TFMPC] - Too few port connections. Expected 34, found 27.
+#    Time: 0 ps  Iteration: 0  Instance: /bufferTB/eth_i/eth_mac_1g_rgmii_fifo_i/eth_mac_1g_rgmii_inst/eth_mac_1g_inst File: ../../../../rtl/eth/eth_mac_1g.v
+# ** Warning: (vsim-3722) ../../../../rtl/eth/eth_mac_1g_rgmii.v(219): [TFMPC] - Missing connection for port 'tx_ptp_ts'.
+# ** Warning: (vsim-3722) ../../../../rtl/eth/eth_mac_1g_rgmii.v(219): [TFMPC] - Missing connection for port 'rx_ptp_ts'.
+# ** Warning: (vsim-3722) ../../../../rtl/eth/eth_mac_1g_rgmii.v(219): [TFMPC] - Missing connection for port 'tx_axis_ptp_ts'.
+# ** Warning: (vsim-3722) ../../../../rtl/eth/eth_mac_1g_rgmii.v(219): [TFMPC] - Missing connection for port 'tx_axis_ptp_ts_tag'.
+# ** Warning: (vsim-3722) ../../../../rtl/eth/eth_mac_1g_rgmii.v(219): [TFMPC] - Missing connection for port 'tx_axis_ptp_ts_valid'.
+# ** Warning: (vsim-3722) ../../../../rtl/eth/eth_mac_1g_rgmii.v(219): [TFMPC] - Missing connection for port 'tx_start_packet'.
+# ** Warning: (vsim-3722) ../../../../rtl/eth/eth_mac_1g_rgmii.v(219): [TFMPC] - Missing connection for port 'rx_start_packet'.
+# ** Warning: Design size of 19986 statements or 3081 leaf instances exceeds ModelSim PE Student Edition recommended capacity.
+# Expect performance to be quite adversely affected.
+# 1
+# 1
+# .main_pane.wave.interior.cs.body.pw.wf
+# .main_pane.structure.interior.cs.body.struct
+# .main_pane.objects.interior.cs.body.tree
+# Error opening C:/Users/xtjac/Documents/ADC_Test/ADC_Test.sim/sim_1/sim/bufferTB.sv
+# Path name 'C:/Users/xtjac/Documents/ADC_Test/ADC_Test.sim/sim_1/sim/bufferTB.sv' doesn't exist.
+do C:/Users/xtjac/Documents/ADC_Test/ADC_Test.sim/sim_1/behav/modelsim/wave.do
+add wave -position end  sim:/bufferTB/eth_i/udp_tx_i/eth_axis_tx_i/state_reg
+add wave -position 35  sim:/bufferTB/eth_i/udp_tx_i/ip_eth_tx_i/state_reg
+add wave -position 36  sim:/bufferTB/eth_i/udp_tx_i/udp_ip_tx_i/state_reg
+add wave -position 37  sim:/bufferTB/eth_i/eth_mac_1g_rgmii_fifo_i/eth_mac_1g_rgmii_inst/eth_mac_1g_inst/axis_gmii_tx_inst/state_reg
+write format wave -window .main_pane.wave.interior.cs.body.pw.wf C:/Users/xtjac/Documents/ADC_Test/ADC_Test.sim/sim_1/behav/modelsim/wave.do
+restart
+# ** Warning: (vsim-3017) ../../../../sim/bufferTB.sv(271): [TFMPC] - Too few port connections. Expected 30, found 26.
+#    Time: 0 ps  Iteration: 0  Instance: /bufferTB/eth_i File: ../../../../rtl/eth/eth.sv
+# ** Warning: (vsim-3722) ../../../../sim/bufferTB.sv(271): [TFMPC] - Missing connection for port 'tx_error_underflow'.
+# ** Warning: (vsim-3722) ../../../../sim/bufferTB.sv(271): [TFMPC] - Missing connection for port 'tx_fifo_overflow'.
+# ** Warning: (vsim-3722) ../../../../sim/bufferTB.sv(271): [TFMPC] - Missing connection for port 'tx_fifo_bad_frame'.
+# ** Warning: (vsim-3722) ../../../../sim/bufferTB.sv(271): [TFMPC] - Missing connection for port 'tx_fifo_good_frame'.
+# ** Warning: (vsim-3017) ../../../../rtl/eth/eth_mac_1g_rgmii.v(219): [TFMPC] - Too few port connections. Expected 34, found 27.
+#    Time: 0 ps  Iteration: 0  Instance: /bufferTB/eth_i/eth_mac_1g_rgmii_fifo_i/eth_mac_1g_rgmii_inst/eth_mac_1g_inst File: ../../../../rtl/eth/eth_mac_1g.v
+# ** Warning: (vsim-3722) ../../../../rtl/eth/eth_mac_1g_rgmii.v(219): [TFMPC] - Missing connection for port 'tx_ptp_ts'.
+# ** Warning: (vsim-3722) ../../../../rtl/eth/eth_mac_1g_rgmii.v(219): [TFMPC] - Missing connection for port 'rx_ptp_ts'.
+# ** Warning: (vsim-3722) ../../../../rtl/eth/eth_mac_1g_rgmii.v(219): [TFMPC] - Missing connection for port 'tx_axis_ptp_ts'.
+# ** Warning: (vsim-3722) ../../../../rtl/eth/eth_mac_1g_rgmii.v(219): [TFMPC] - Missing connection for port 'tx_axis_ptp_ts_tag'.
+# ** Warning: (vsim-3722) ../../../../rtl/eth/eth_mac_1g_rgmii.v(219): [TFMPC] - Missing connection for port 'tx_axis_ptp_ts_valid'.
+# ** Warning: (vsim-3722) ../../../../rtl/eth/eth_mac_1g_rgmii.v(219): [TFMPC] - Missing connection for port 'tx_start_packet'.
+# ** Warning: (vsim-3722) ../../../../rtl/eth/eth_mac_1g_rgmii.v(219): [TFMPC] - Missing connection for port 'rx_start_packet'.
+# ** Warning: Design size of 262 statements or 3081 leaf instances exceeds ModelSim PE Student Edition recommended capacity.
+# Expect performance to be adversely affected.
+write format wave -window .main_pane.wave.interior.cs.body.pw.wf C:/Users/xtjac/Documents/ADC_Test/ADC_Test.sim/sim_1/behav/modelsim/wave.do
+run
+run
+add wave -position 38  sim:/bufferTB/eth_i/udp_rx_i/busy
+run
+run
+run
+run
+# End time: 11:41:55 on Jul 10,2019, Elapsed time: 1:19:02
+# Errors: 1, Warnings: 28

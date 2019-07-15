@@ -19,11 +19,13 @@ module eth
         output logic [3:0]  rgmii_txd,
         output logic        rgmii_tx_ctl,
 
+
         input logic [7:0]   tx_udp_payload_axis_tdata,
         input logic         tx_udp_payload_axis_tvalid,
         output logic        tx_udp_payload_axis_tready,
         input logic         tx_udp_payload_axis_tlast,
         input logic         tx_udp_payload_axis_tuser,
+        input logic         s_udp_hdr_valid,
 
         /*
          * UDP frame output
@@ -37,13 +39,22 @@ module eth
         output logic [7:0]      rx_udp_payload_axis_tdata,
         output logic            rx_udp_payload_axis_tvalid,
         output logic            rx_udp_payload_axis_tlast,
-        output logic            rx_udp_payload_axis_tuser
+        output logic            rx_udp_payload_axis_tuser,
+
+        /*
+         * TX Debug
+         */
+        output logic tx_error_underflow,
+        output logic tx_fifo_overflow,
+        output logic tx_fifo_bad_frame,
+        output logic tx_fifo_good_frame,
+        output logic tx_done
     );
 
     logic [7:0] rx_axis_tdata;
     logic rx_axis_tvalid, rx_axis_tlast, rx_axis_tuser, rx_error_bad_frame, rx_axis_tready;
     logic [7:0] tx_axis_tdata;
-    logic tx_axis_tvalid, tx_axis_tlast, tx_axis_tuser, tx_error_bad_frame, tx_axis_tready;
+    logic tx_axis_tvalid, tx_axis_tlast, tx_axis_tuser, tx_axis_tready;
     logic [1:0] speed;
 
     eth_mac_1g_rgmii_fifo #
@@ -63,7 +74,7 @@ module eth
         .USE_CLK90("TRUE"),
         .ENABLE_PADDING(1),
         .MIN_FRAME_LENGTH(8),
-        .TX_FIFO_ADDR_WIDTH(12),
+        .TX_FIFO_ADDR_WIDTH(15),
         .TX_FRAME_FIFO(1),
         .TX_DROP_BAD_FRAME(1),
         .TX_DROP_WHEN_FULL(0),
@@ -109,10 +120,11 @@ module eth
         /*
          * Status
          */
-        .tx_error_underflow(),
-        .tx_fifo_overflow(),
-        .tx_fifo_bad_frame(),
-        .tx_fifo_good_frame(),
+        .tx_error_underflow(tx_error_underflow),
+        .tx_fifo_overflow(tx_fifo_overflow),
+        .tx_fifo_bad_frame(tx_fifo_bad_frame),
+        .tx_fifo_good_frame(tx_fifo_good_frame),
+        .tx_done(tx_done),
         .rx_error_bad_frame(rx_error_bad_frame),
         .rx_error_bad_fcs(),
         .rx_fifo_overflow(),
@@ -123,7 +135,7 @@ module eth
         /*
          * Configuration
          */
-        .ifg_delay(1)
+        .ifg_delay(8'h01)
     );
 
     assign ETH_PHYRST_N = 1'b1;
@@ -198,7 +210,7 @@ module eth
         /*
          * UDP frame input
          */
-        .s_udp_hdr_valid(1'b1),                                 // Input
+        .s_udp_hdr_valid(s_udp_hdr_valid),                                 // Input
         .s_udp_hdr_ready(),                                     // Output
         .s_eth_dest_mac(48'hFFFFFFFFFFFF),                      // Input [47:0]
         .s_eth_src_mac(48'hDEADBEEF0123),                       // Input [47:0]
@@ -213,11 +225,11 @@ module eth
         .s_ip_ttl(8'h40),                                       // Input [7:0]
         .s_ip_protocol(8'h11),                                  // Input [7:0]
         .s_ip_header_checksum(16'h0000),                        // Input [15:0]
-        .s_ip_source_ip(32'h7F000001),                          // Input [31:0]
+        .s_ip_source_ip(32'hC0A40140),                          // Input [31:0]
         .s_ip_dest_ip(32'hFFFFFFFF),                            // Input [31:0]
         .s_udp_source_port(16'h1000),                           // Input [15:0]
         .s_udp_dest_port(16'h1000),                             // Input [15:0]
-        .s_udp_length(16'h0200),                                // Input [15:0]
+        .s_udp_length(16'h0408),                                // Input [15:0]
         .s_udp_checksum(16'h0000),                              // Input [15:0]
 
         .s_udp_payload_axis_tdata(tx_udp_payload_axis_tdata),   // Input [7:0]

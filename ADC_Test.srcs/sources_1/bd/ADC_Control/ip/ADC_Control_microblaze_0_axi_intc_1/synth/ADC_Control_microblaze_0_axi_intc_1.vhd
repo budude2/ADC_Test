@@ -47,14 +47,14 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: xilinx.com:ip:axi_intc:4.1
--- IP Revision: 12
+-- IP Revision: 13
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-LIBRARY axi_intc_v4_1_12;
-USE axi_intc_v4_1_12.axi_intc;
+LIBRARY axi_intc_v4_1_13;
+USE axi_intc_v4_1_13.axi_intc;
 
 ENTITY ADC_Control_microblaze_0_axi_intc_1 IS
   PORT (
@@ -150,12 +150,12 @@ ARCHITECTURE ADC_Control_microblaze_0_axi_intc_1_arch OF ADC_Control_microblaze_
     );
   END COMPONENT axi_intc;
   ATTRIBUTE X_CORE_INFO : STRING;
-  ATTRIBUTE X_CORE_INFO OF ADC_Control_microblaze_0_axi_intc_1_arch: ARCHITECTURE IS "axi_intc,Vivado 2018.3";
+  ATTRIBUTE X_CORE_INFO OF ADC_Control_microblaze_0_axi_intc_1_arch: ARCHITECTURE IS "axi_intc,Vivado 2019.1";
   ATTRIBUTE CHECK_LICENSE_TYPE : STRING;
   ATTRIBUTE CHECK_LICENSE_TYPE OF ADC_Control_microblaze_0_axi_intc_1_arch : ARCHITECTURE IS "ADC_Control_microblaze_0_axi_intc_1,axi_intc,{}";
   ATTRIBUTE CORE_GENERATION_INFO : STRING;
-  ATTRIBUTE CORE_GENERATION_INFO OF ADC_Control_microblaze_0_axi_intc_1_arch: ARCHITECTURE IS "ADC_Control_microblaze_0_axi_intc_1,axi_intc,{x_ipProduct=Vivado 2018.3,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=axi_intc,x_ipVersion=4.1,x_ipCoreRevision=12,x_ipLanguage=VERILOG,x_ipSimLanguage=MIXED,C_FAMILY=kintex7,C_INSTANCE=ADC_Control_microblaze_0_axi_intc_1,C_S_AXI_ADDR_WIDTH=9,C_S_AXI_DATA_WIDTH=32,C_NUM_INTR_INPUTS=1,C_NUM_SW_INTR=0,C_KIND_OF_INTR=0xfffffffd,C_KIND_OF_EDGE=0xFFFFFFFF,C_KIND_OF_LVL=0xFFFFFFFF,C_ASYNC_INTR=0xFFFFFFFE,C_NUM_SYNC_FF=2,C_ADDR_WIDTH=32,C_IVAR_RESET_VALUE" & 
-"=0x0000000000000010,C_ENABLE_ASYNC=0,C_HAS_IPR=1,C_HAS_SIE=1,C_HAS_CIE=1,C_HAS_IVR=1,C_HAS_ILR=0,C_IRQ_IS_LEVEL=1,C_IRQ_ACTIVE=0x1,C_DISABLE_SYNCHRONIZERS=0,C_MB_CLK_NOT_CONNECTED=1,C_HAS_FAST=1,C_EN_CASCADE_MODE=0,C_CASCADE_MASTER=0}";
+  ATTRIBUTE CORE_GENERATION_INFO OF ADC_Control_microblaze_0_axi_intc_1_arch: ARCHITECTURE IS "ADC_Control_microblaze_0_axi_intc_1,axi_intc,{x_ipProduct=Vivado 2019.1,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=axi_intc,x_ipVersion=4.1,x_ipCoreRevision=13,x_ipLanguage=VERILOG,x_ipSimLanguage=MIXED,C_FAMILY=kintex7,C_INSTANCE=ADC_Control_microblaze_0_axi_intc_1,C_S_AXI_ADDR_WIDTH=9,C_S_AXI_DATA_WIDTH=32,C_NUM_INTR_INPUTS=1,C_NUM_SW_INTR=0,C_KIND_OF_INTR=0xfffffffd,C_KIND_OF_EDGE=0xFFFFFFFF,C_KIND_OF_LVL=0xFFFFFFFF,C_ASYNC_INTR=0xFFFFFFFE,C_NUM_SYNC_FF=2,C_ADDR_WIDTH=32,C_IVAR_RESET_VALUE" & 
+"=0x0000000000000010,C_ENABLE_ASYNC=0,C_HAS_IPR=1,C_HAS_SIE=1,C_HAS_CIE=1,C_HAS_IVR=1,C_HAS_ILR=0,C_IRQ_IS_LEVEL=1,C_IRQ_ACTIVE=0x1,C_DISABLE_SYNCHRONIZERS=1,C_MB_CLK_NOT_CONNECTED=1,C_HAS_FAST=1,C_EN_CASCADE_MODE=0,C_CASCADE_MASTER=0}";
   ATTRIBUTE X_INTERFACE_INFO : STRING;
   ATTRIBUTE X_INTERFACE_PARAMETER : STRING;
   ATTRIBUTE X_INTERFACE_INFO OF interrupt_address: SIGNAL IS "xilinx.com:interface:mbinterrupt:1.0 interrupt ADDRESS";
@@ -215,7 +215,7 @@ BEGIN
       C_HAS_ILR => 0,
       C_IRQ_IS_LEVEL => 1,
       C_IRQ_ACTIVE => '1',
-      C_DISABLE_SYNCHRONIZERS => 0,
+      C_DISABLE_SYNCHRONIZERS => 1,
       C_MB_CLK_NOT_CONNECTED => 1,
       C_HAS_FAST => 1,
       C_EN_CASCADE_MODE => 0,

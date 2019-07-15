@@ -47,14 +47,14 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: xilinx.com:ip:microblaze:11.0
--- IP Revision: 0
+-- IP Revision: 1
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-LIBRARY microblaze_v11_0_0;
-USE microblaze_v11_0_0.MicroBlaze;
+LIBRARY microblaze_v11_0_1;
+USE microblaze_v11_0_1.MicroBlaze;
 
 ENTITY ADC_Control_microblaze_0_1 IS
   PORT (

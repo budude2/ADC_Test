@@ -20,7 +20,7 @@ set script_folder [_tcl::get_script_folder]
 ################################################################
 # Check if script is running in correct Vivado version.
 ################################################################
-set scripts_vivado_version 2018.3
+set scripts_vivado_version 2019.1
 set current_vivado_version [version -short]
 
 if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
@@ -157,7 +157,9 @@ proc create_hier_cell_microblaze_0_local_memory { parentCell nameHier } {
 
   # Create interface pins
   create_bd_intf_pin -mode MirroredMaster -vlnv xilinx.com:interface:lmb_rtl:1.0 DLMB
+
   create_bd_intf_pin -mode MirroredMaster -vlnv xilinx.com:interface:lmb_rtl:1.0 ILMB
+
 
   # Create pins
   create_bd_pin -dir I -type clk LMB_Clk
@@ -244,6 +246,7 @@ proc create_root_design { parentCell } {
 
   # Create interface ports
   set usb_uart [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:uart_rtl:1.0 usb_uart ]
+
 
   # Create ports
   set ADC_CSB1 [ create_bd_port -dir O -from 0 -to 0 ADC_CSB1 ]

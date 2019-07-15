@@ -203,6 +203,8 @@ module top
         .aligned(aligned)
     );
 
+    logic eth_tready, udp_hdr_valid, tx_done;
+
     adc_buffer adc_buffer (
         .start_buff(aligned & tick),
         //.start_buff(aligned),
@@ -223,10 +225,14 @@ module top
 
         .dout(eth_data),
         .dout_valid(eth_valid),
-        .axis_tlast(eth_data_tlast)
+        .tx_done(tx_done),
+        .axis_tlast(eth_data_tlast),
+        .axis_tready(eth_tready),
+        .axis_tvalid_hdr(udp_hdr_valid)
     );
 
-    logic m_udp_hdr_valid, m_udp_payload_axis_tvalid, m_udp_payload_axis_tlast, m_udp_payload_axis_tuser, eth_tready;
+    logic m_udp_hdr_valid, m_udp_payload_axis_tvalid, m_udp_payload_axis_tlast, m_udp_payload_axis_tuser;
+    logic tx_error_underflow, tx_fifo_overflow, tx_fifo_bad_frame, tx_fifo_good_frame;
     logic [15:0] m_udp_source_port, m_udp_dest_port, m_udp_length, m_udp_checksum;
     logic [7:0] m_udp_payload_axis_tdata;
 
@@ -254,6 +260,7 @@ module top
         .tx_udp_payload_axis_tready(eth_tready),                          // Output
         .tx_udp_payload_axis_tlast(eth_data_tlast),             // Input
         .tx_udp_payload_axis_tuser(1'b0),                       // Input
+        .s_udp_hdr_valid(udp_hdr_valid),
 
         /*
          * UDP frame output
@@ -267,7 +274,13 @@ module top
         .rx_udp_payload_axis_tdata(m_udp_payload_axis_tdata),   // Output [7:0]
         .rx_udp_payload_axis_tvalid(m_udp_payload_axis_tvalid), // Output
         .rx_udp_payload_axis_tlast(m_udp_payload_axis_tlast),   // Output
-        .rx_udp_payload_axis_tuser(m_udp_payload_axis_tuser)    // Output
+        .rx_udp_payload_axis_tuser(m_udp_payload_axis_tuser),   // Output
+
+        .tx_error_underflow(tx_error_underflow),
+        .tx_fifo_overflow(tx_fifo_overflow),
+        .tx_fifo_bad_frame(tx_fifo_bad_frame),
+        .tx_fifo_good_frame(tx_fifo_good_frame),
+        .tx_done(tx_done)
     );
 
     assign ETH_PHYRST_N = 1'b1;
@@ -279,7 +292,11 @@ module top
         .probe0(eth_data),  // input wire [7:0]  probe5
         .probe1(eth_valid), // input wire [0:0]  probe6
         .probe2(eth_tready),  // input wire [0:0]  probe7
-        .probe3(eth_data_tlast)   // input wire [0:0]  probe8
+        .probe3(eth_data_tlast),  // input wire [0:0]  probe8
+        .probe4(tx_error_underflow),
+        .probe5(tx_fifo_overflow),
+        .probe6(tx_fifo_bad_frame),
+        .probe7(tx_fifo_good_frame)
 );
 
 

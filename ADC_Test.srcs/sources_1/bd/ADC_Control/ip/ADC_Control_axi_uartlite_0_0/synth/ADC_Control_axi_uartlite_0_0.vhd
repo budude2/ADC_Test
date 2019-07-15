@@ -47,14 +47,14 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: xilinx.com:ip:axi_uartlite:2.0
--- IP Revision: 22
+-- IP Revision: 23
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-LIBRARY axi_uartlite_v2_0_22;
-USE axi_uartlite_v2_0_22.axi_uartlite;
+LIBRARY axi_uartlite_v2_0_23;
+USE axi_uartlite_v2_0_23.axi_uartlite;
 
 ENTITY ADC_Control_axi_uartlite_0_0 IS
   PORT (
@@ -123,11 +123,11 @@ ARCHITECTURE ADC_Control_axi_uartlite_0_0_arch OF ADC_Control_axi_uartlite_0_0 I
     );
   END COMPONENT axi_uartlite;
   ATTRIBUTE X_CORE_INFO : STRING;
-  ATTRIBUTE X_CORE_INFO OF ADC_Control_axi_uartlite_0_0_arch: ARCHITECTURE IS "axi_uartlite,Vivado 2018.3";
+  ATTRIBUTE X_CORE_INFO OF ADC_Control_axi_uartlite_0_0_arch: ARCHITECTURE IS "axi_uartlite,Vivado 2019.1";
   ATTRIBUTE CHECK_LICENSE_TYPE : STRING;
   ATTRIBUTE CHECK_LICENSE_TYPE OF ADC_Control_axi_uartlite_0_0_arch : ARCHITECTURE IS "ADC_Control_axi_uartlite_0_0,axi_uartlite,{}";
   ATTRIBUTE CORE_GENERATION_INFO : STRING;
-  ATTRIBUTE CORE_GENERATION_INFO OF ADC_Control_axi_uartlite_0_0_arch: ARCHITECTURE IS "ADC_Control_axi_uartlite_0_0,axi_uartlite,{x_ipProduct=Vivado 2018.3,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=axi_uartlite,x_ipVersion=2.0,x_ipCoreRevision=22,x_ipLanguage=VERILOG,x_ipSimLanguage=MIXED,C_FAMILY=kintex7,C_S_AXI_ACLK_FREQ_HZ=100000000,C_S_AXI_ADDR_WIDTH=4,C_S_AXI_DATA_WIDTH=32,C_BAUDRATE=115200,C_DATA_BITS=8,C_USE_PARITY=0,C_ODD_PARITY=0}";
+  ATTRIBUTE CORE_GENERATION_INFO OF ADC_Control_axi_uartlite_0_0_arch: ARCHITECTURE IS "ADC_Control_axi_uartlite_0_0,axi_uartlite,{x_ipProduct=Vivado 2019.1,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=axi_uartlite,x_ipVersion=2.0,x_ipCoreRevision=23,x_ipLanguage=VERILOG,x_ipSimLanguage=MIXED,C_FAMILY=kintex7,C_S_AXI_ACLK_FREQ_HZ=100000000,C_S_AXI_ADDR_WIDTH=4,C_S_AXI_DATA_WIDTH=32,C_BAUDRATE=115200,C_DATA_BITS=8,C_USE_PARITY=0,C_ODD_PARITY=0}";
   ATTRIBUTE X_INTERFACE_INFO : STRING;
   ATTRIBUTE X_INTERFACE_PARAMETER : STRING;
   ATTRIBUTE X_INTERFACE_INFO OF tx: SIGNAL IS "xilinx.com:interface:uart:1.0 UART TxD";

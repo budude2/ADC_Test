@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="944251910001fs"></ZoomEndTime>
-      <Cursor1Time time="944251910000fs"></Cursor1Time>
+      <ZoomStartTime time="271020400000fs"></ZoomStartTime>
+      <ZoomEndTime time="271259400001fs"></ZoomEndTime>
+      <Cursor1Time time="271149600000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="99"></NameColumnWidth>
-      <ValueColumnWidth column_width="58"></ValueColumnWidth>
+      <NameColumnWidth column_width="242"></NameColumnWidth>
+      <ValueColumnWidth column_width="164"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="50" />
+   <WVObjectSize size="55" />
    <wvobject fp_name="/bufferTB/tick" type="logic">
       <obj_property name="ElementShortName">tick</obj_property>
       <obj_property name="ObjectShortName">tick</obj_property>
@@ -28,73 +28,17 @@
       <obj_property name="ElementShortName">cpu_resetn</obj_property>
       <obj_property name="ObjectShortName">cpu_resetn</obj_property>
    </wvobject>
-   <wvobject type="divider" fp_name="divider84">
-      <obj_property name="label">CDC 1</obj_property>
-      <obj_property name="DisplayName">label</obj_property>
-   </wvobject>
-   <wvobject fp_name="/bufferTB/adc1_cdc/empty" type="logic">
-      <obj_property name="ElementShortName">empty</obj_property>
-      <obj_property name="ObjectShortName">empty</obj_property>
-   </wvobject>
-   <wvobject fp_name="/bufferTB/adc1_cdc/full" type="logic">
-      <obj_property name="ElementShortName">full</obj_property>
-      <obj_property name="ObjectShortName">full</obj_property>
-   </wvobject>
-   <wvobject fp_name="/bufferTB/adc1_cdc/FIFO/wr_en" type="logic">
-      <obj_property name="ElementShortName">wr_en</obj_property>
-      <obj_property name="ObjectShortName">wr_en</obj_property>
-   </wvobject>
-   <wvobject fp_name="/bufferTB/adc1_cdc/dout_valid" type="logic">
-      <obj_property name="ElementShortName">dout_valid</obj_property>
-      <obj_property name="ObjectShortName">dout_valid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/bufferTB/adc1_cdc/dout" type="array">
-      <obj_property name="ElementShortName">dout[15:0]</obj_property>
-      <obj_property name="ObjectShortName">dout[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/bufferTB/adc1_cdc/din" type="array">
-      <obj_property name="ElementShortName">din[15:0]</obj_property>
-      <obj_property name="ObjectShortName">din[15:0]</obj_property>
-   </wvobject>
-   <wvobject type="divider" fp_name="divider127">
-      <obj_property name="label">CDC 2</obj_property>
-      <obj_property name="DisplayName">label</obj_property>
-   </wvobject>
-   <wvobject fp_name="/bufferTB/adc2_cdc/empty" type="logic">
-      <obj_property name="ElementShortName">empty</obj_property>
-      <obj_property name="ObjectShortName">empty</obj_property>
-   </wvobject>
-   <wvobject fp_name="/bufferTB/adc2_cdc/full" type="logic">
-      <obj_property name="ElementShortName">full</obj_property>
-      <obj_property name="ObjectShortName">full</obj_property>
-   </wvobject>
-   <wvobject fp_name="/bufferTB/adc2_cdc/FIFO/wr_en" type="logic">
-      <obj_property name="ElementShortName">wr_en</obj_property>
-      <obj_property name="ObjectShortName">wr_en</obj_property>
-   </wvobject>
-   <wvobject fp_name="/bufferTB/adc2_cdc/dout_valid" type="logic">
-      <obj_property name="ElementShortName">dout_valid</obj_property>
-      <obj_property name="ObjectShortName">dout_valid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/bufferTB/adc2_cdc/dout" type="array">
-      <obj_property name="ElementShortName">dout[15:0]</obj_property>
-      <obj_property name="ObjectShortName">dout[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/bufferTB/adc2_cdc/din" type="array">
-      <obj_property name="ElementShortName">din[15:0]</obj_property>
-      <obj_property name="ObjectShortName">din[15:0]</obj_property>
-   </wvobject>
    <wvobject type="divider" fp_name="divider96">
       <obj_property name="label">BUF 1</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
-   <wvobject fp_name="/bufferTB/adc1_buffer/rst" type="logic">
-      <obj_property name="ElementShortName">rst</obj_property>
-      <obj_property name="ObjectShortName">rst</obj_property>
-   </wvobject>
    <wvobject fp_name="/bufferTB/adc1_buffer/wr_en" type="logic">
       <obj_property name="ElementShortName">wr_en</obj_property>
       <obj_property name="ObjectShortName">wr_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bufferTB/adc1_buffer/rd_en" type="logic">
+      <obj_property name="ElementShortName">rd_en</obj_property>
+      <obj_property name="ObjectShortName">rd_en</obj_property>
    </wvobject>
    <wvobject fp_name="/bufferTB/adc1_buffer/din" type="array">
       <obj_property name="ElementShortName">din[15:0]</obj_property>
@@ -116,13 +60,13 @@
       <obj_property name="label">BUF 2</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
-   <wvobject fp_name="/bufferTB/adc2_buffer/rst" type="logic">
-      <obj_property name="ElementShortName">rst</obj_property>
-      <obj_property name="ObjectShortName">rst</obj_property>
-   </wvobject>
    <wvobject fp_name="/bufferTB/adc2_buffer/wr_en" type="logic">
       <obj_property name="ElementShortName">wr_en</obj_property>
       <obj_property name="ObjectShortName">wr_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bufferTB/adc2_buffer/rd_en" type="logic">
+      <obj_property name="ElementShortName">rd_en</obj_property>
+      <obj_property name="ObjectShortName">rd_en</obj_property>
    </wvobject>
    <wvobject fp_name="/bufferTB/adc2_buffer/din" type="array">
       <obj_property name="ElementShortName">din[15:0]</obj_property>
@@ -137,6 +81,34 @@
       <obj_property name="ObjectShortName">full</obj_property>
    </wvobject>
    <wvobject fp_name="/bufferTB/adc2_buffer/empty" type="logic">
+      <obj_property name="ElementShortName">empty</obj_property>
+      <obj_property name="ObjectShortName">empty</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider86">
+      <obj_property name="label">BUF 3</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bufferTB/adc3_buffer/wr_en" type="logic">
+      <obj_property name="ElementShortName">wr_en</obj_property>
+      <obj_property name="ObjectShortName">wr_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bufferTB/adc3_buffer/rd_en" type="logic">
+      <obj_property name="ElementShortName">rd_en</obj_property>
+      <obj_property name="ObjectShortName">rd_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bufferTB/adc3_buffer/din" type="array">
+      <obj_property name="ElementShortName">din[15:0]</obj_property>
+      <obj_property name="ObjectShortName">din[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bufferTB/adc3_buffer/dout" type="array">
+      <obj_property name="ElementShortName">dout[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dout[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bufferTB/adc3_buffer/full" type="logic">
+      <obj_property name="ElementShortName">full</obj_property>
+      <obj_property name="ObjectShortName">full</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bufferTB/adc3_buffer/empty" type="logic">
       <obj_property name="ElementShortName">empty</obj_property>
       <obj_property name="ObjectShortName">empty</obj_property>
    </wvobject>
@@ -168,56 +140,105 @@
       <obj_property name="ElementShortName">full</obj_property>
       <obj_property name="ObjectShortName">full</obj_property>
    </wvobject>
-   <wvobject fp_name="/bufferTB/readController/empty1" type="logic">
-      <obj_property name="ElementShortName">empty1</obj_property>
-      <obj_property name="ObjectShortName">empty1</obj_property>
+   <wvobject fp_name="/bufferTB/readController/empty" type="array">
+      <obj_property name="ElementShortName">empty[5:0]</obj_property>
+      <obj_property name="ObjectShortName">empty[5:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/bufferTB/readController/empty2" type="logic">
-      <obj_property name="ElementShortName">empty2</obj_property>
-      <obj_property name="ObjectShortName">empty2</obj_property>
+   <wvobject fp_name="/bufferTB/readController/rd_en" type="array">
+      <obj_property name="ElementShortName">rd_en[5:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_en[5:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/bufferTB/readController/rd_en1" type="logic">
-      <obj_property name="ElementShortName">rd_en1</obj_property>
-      <obj_property name="ObjectShortName">rd_en1</obj_property>
+   <wvobject fp_name="/bufferTB/readController/addr" type="array">
+      <obj_property name="ElementShortName">addr[2:0]</obj_property>
+      <obj_property name="ObjectShortName">addr[2:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/bufferTB/readController/rd_en2" type="logic">
-      <obj_property name="ElementShortName">rd_en2</obj_property>
-      <obj_property name="ObjectShortName">rd_en2</obj_property>
+   <wvobject fp_name="/bufferTB/readController/axis_tvalid_hdr" type="logic">
+      <obj_property name="ElementShortName">axis_tvalid_hdr</obj_property>
+      <obj_property name="ObjectShortName">axis_tvalid_hdr</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bufferTB/readController/axis_tready" type="logic">
+      <obj_property name="ElementShortName">axis_tready</obj_property>
+      <obj_property name="ObjectShortName">axis_tready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bufferTB/readController/axis_tlast" type="logic">
+      <obj_property name="ElementShortName">axis_tlast</obj_property>
+      <obj_property name="ObjectShortName">axis_tlast</obj_property>
    </wvobject>
    <wvobject fp_name="/bufferTB/readController/curr_state" type="array">
-      <obj_property name="ElementShortName">curr_state[2:0]</obj_property>
-      <obj_property name="ObjectShortName">curr_state[2:0]</obj_property>
+      <obj_property name="ElementShortName">curr_state[7:0]</obj_property>
+      <obj_property name="ObjectShortName">curr_state[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bufferTB/readController/curr_count" type="array">
+      <obj_property name="ElementShortName">curr_count[15:0]</obj_property>
+      <obj_property name="ObjectShortName">curr_count[15:0]</obj_property>
    </wvobject>
    <wvobject type="divider" fp_name="divider140">
       <obj_property name="label">Eth</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
-   <wvobject fp_name="/bufferTB/udp_tx/udp_tx_valid" type="logic">
-      <obj_property name="ElementShortName">udp_tx_valid</obj_property>
-      <obj_property name="ObjectShortName">udp_tx_valid</obj_property>
+   <wvobject fp_name="/bufferTB/eth_data" type="array">
+      <obj_property name="ElementShortName">eth_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">eth_data[7:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/bufferTB/udp_tx/udp_tx_data" type="array">
-      <obj_property name="ElementShortName">udp_tx_data[7:0]</obj_property>
-      <obj_property name="ObjectShortName">udp_tx_data[7:0]</obj_property>
+   <wvobject fp_name="/bufferTB/eth_en" type="logic">
+      <obj_property name="ElementShortName">eth_en</obj_property>
+      <obj_property name="ObjectShortName">eth_en</obj_property>
    </wvobject>
-   <wvobject fp_name="/bufferTB/udp_tx/udp_tx_busy" type="logic">
-      <obj_property name="ElementShortName">udp_tx_busy</obj_property>
-      <obj_property name="ObjectShortName">udp_tx_busy</obj_property>
+   <wvobject fp_name="/bufferTB/hdr_tvalid" type="logic">
+      <obj_property name="ElementShortName">hdr_tvalid</obj_property>
+      <obj_property name="ObjectShortName">hdr_tvalid</obj_property>
    </wvobject>
-   <wvobject fp_name="/bufferTB/udp_tx/ETH_TX_EN" type="logic">
-      <obj_property name="ElementShortName">ETH_TX_EN</obj_property>
-      <obj_property name="ObjectShortName">ETH_TX_EN</obj_property>
+   <wvobject fp_name="/bufferTB/eth_tready" type="logic">
+      <obj_property name="ElementShortName">eth_tready</obj_property>
+      <obj_property name="ObjectShortName">eth_tready</obj_property>
    </wvobject>
-   <wvobject fp_name="/bufferTB/udp_tx/eth_txd" type="array">
-      <obj_property name="ElementShortName">eth_txd[3:0]</obj_property>
-      <obj_property name="ObjectShortName">eth_txd[3:0]</obj_property>
+   <wvobject fp_name="/bufferTB/eth_data_tlast" type="logic">
+      <obj_property name="ElementShortName">eth_data_tlast</obj_property>
+      <obj_property name="ObjectShortName">eth_data_tlast</obj_property>
    </wvobject>
-   <wvobject fp_name="/bufferTB/udp_tx/eth_txck" type="logic">
+   <wvobject type="divider" fp_name="divider116">
+      <obj_property name="label">Eth Status</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bufferTB/eth_i/tx_error_underflow" type="logic">
+      <obj_property name="ElementShortName">tx_error_underflow</obj_property>
+      <obj_property name="ObjectShortName">tx_error_underflow</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bufferTB/eth_i/tx_fifo_bad_frame" type="logic">
+      <obj_property name="ElementShortName">tx_fifo_bad_frame</obj_property>
+      <obj_property name="ObjectShortName">tx_fifo_bad_frame</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bufferTB/eth_i/tx_fifo_good_frame" type="logic">
+      <obj_property name="ElementShortName">tx_fifo_good_frame</obj_property>
+      <obj_property name="ObjectShortName">tx_fifo_good_frame</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bufferTB/eth_i/tx_fifo_overflow" type="logic">
+      <obj_property name="ElementShortName">tx_fifo_overflow</obj_property>
+      <obj_property name="ObjectShortName">tx_fifo_overflow</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider105">
+      <obj_property name="label">Eth Interface</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bufferTB/eth_txck" type="logic">
       <obj_property name="ElementShortName">eth_txck</obj_property>
       <obj_property name="ObjectShortName">eth_txck</obj_property>
    </wvobject>
-   <wvobject fp_name="/bufferTB/udp_tx/ETH_PHYRST_N" type="logic">
-      <obj_property name="ElementShortName">ETH_PHYRST_N</obj_property>
-      <obj_property name="ObjectShortName">ETH_PHYRST_N</obj_property>
+   <wvobject fp_name="/bufferTB/eth_txd" type="array">
+      <obj_property name="ElementShortName">eth_txd[3:0]</obj_property>
+      <obj_property name="ObjectShortName">eth_txd[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bufferTB/ETH_TX_EN" type="logic">
+      <obj_property name="ElementShortName">ETH_TX_EN</obj_property>
+      <obj_property name="ObjectShortName">ETH_TX_EN</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bufferTB/eth_i/eth_mac_1g_rgmii_fifo_i/eth_mac_1g_rgmii_inst/eth_mac_1g_inst/axis_gmii_tx_inst/tx_done" type="logic">
+      <obj_property name="ElementShortName">tx_done</obj_property>
+      <obj_property name="ObjectShortName">tx_done</obj_property>
+   </wvobject>
+   <wvobject fp_name="/bufferTB/eth_i/eth_mac_1g_rgmii_fifo_i/eth_mac_1g_rgmii_inst/eth_mac_1g_inst/axis_gmii_tx_inst/state_reg" type="array">
+      <obj_property name="ElementShortName">state_reg[2:0]</obj_property>
+      <obj_property name="ObjectShortName">state_reg[2:0]</obj_property>
    </wvobject>
 </wave_config>

@@ -1,16 +1,4 @@
 # compile vhdl design source files
-vhdl xil_defaultlib  \
-"../../../../rtl/eth/buffer_count_and_checksum_data.vhd" \
-"../../../../rtl/eth/ethernet_add_header.vhd" \
-"../../../../rtl/eth/ip_add_header.vhd" \
-"../../../../rtl/eth/reset_controller.vhd" \
-"../../../../rtl/eth/transport_commit_buffer.vhd" \
-"../../../../rtl/eth/tx_add_crc32.vhd" \
-"../../../../rtl/eth/tx_add_preamble.vhd" \
-"../../../../rtl/eth/tx_interface.vhd" \
-"../../../../rtl/eth/tx_rgmii.vhd" \
-"../../../../rtl/eth/udp_add_udp_header.vhd" \
-"../../../../rtl/eth/udp_tx_packet.vhd" \
 
 # Do not sort compile order
 nosort

@@ -173,7 +173,19 @@ set_property -dict {PACKAGE_PIN AD12 IOSTANDARD LVDS} [get_ports SysRefClk_p]
 # The end
 
 set_max_delay -datapath_only -from [get_pins enCDC/Q_a_reg/C] -to [get_pins enCDC/D_a_reg/D] 8.000
-# set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
-# set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
-# set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]
-# connect_debug_port dbg_hub/clk [get_nets adc_clk]
+
+set_property ASYNC_REG true [get_cells -hier -regexp {.*/(rx|tx)_rst_reg_reg\[\d\]} -filter {PARENT == eth_i/eth_mac_1g_rgmii_fifo_i/eth_mac_1g_rgmii_inst/rgmii_phy_if_inst}]
+set_false_path -to [get_pins -of_objects [get_cells -hier -regexp {.*/(rx|tx)_rst_reg_reg\[\d\]} -filter {PARENT == eth_i/eth_mac_1g_rgmii_fifo_i/eth_mac_1g_rgmii_inst/rgmii_phy_if_inst}] -filter {IS_PRESET || IS_RESET}]
+set_property ASYNC_REG true [get_cells {eth_i/eth_mac_1g_rgmii_fifo_i/eth_mac_1g_rgmii_inst/rgmii_phy_if_inst/clk_oddr_inst/oddr[0].oddr_inst}]
+set_max_delay -datapath_only -from [get_cells eth_i/eth_mac_1g_rgmii_fifo_i/eth_mac_1g_rgmii_inst/rgmii_phy_if_inst/rgmii_tx_clk_1_reg] -to [get_cells {eth_i/eth_mac_1g_rgmii_fifo_i/eth_mac_1g_rgmii_inst/rgmii_phy_if_inst/clk_oddr_inst/oddr[0].oddr_inst}] 2.000
+set_max_delay -datapath_only -from [get_cells eth_i/eth_mac_1g_rgmii_fifo_i/eth_mac_1g_rgmii_inst/rgmii_phy_if_inst/rgmii_tx_clk_2_reg] -to [get_cells {eth_i/eth_mac_1g_rgmii_fifo_i/eth_mac_1g_rgmii_inst/rgmii_phy_if_inst/clk_oddr_inst/oddr[0].oddr_inst}] 2.000
+set_property ASYNC_REG true [get_cells -hier -regexp {.*/tx_sync_reg_[1234]_reg\[\d+\]} -filter {PARENT == eth_i/eth_mac_1g_rgmii_fifo_i}]
+set_max_delay -datapath_only -from [get_cells {eth_i/eth_mac_1g_rgmii_fifo_i/tx_sync_reg_1_reg[*]}] -to [get_cells {eth_i/eth_mac_1g_rgmii_fifo_i/tx_sync_reg_2_reg[*]}] 8.000
+set_property ASYNC_REG true [get_cells -hier -regexp {.*/tx_mii_select_sync_reg\[\d\]} -filter {PARENT == eth_i/eth_mac_1g_rgmii_fifo_i/eth_mac_1g_rgmii_inst}]
+set_max_delay -datapath_only -from [get_cells eth_i/eth_mac_1g_rgmii_fifo_i/eth_mac_1g_rgmii_inst/mii_select_reg_reg] -to [get_cells {eth_i/eth_mac_1g_rgmii_fifo_i/eth_mac_1g_rgmii_inst/tx_mii_select_sync_reg[0]}] 8.000
+set_property ASYNC_REG true [get_cells -hier -regexp {.*/rx_prescale_sync_reg\[\d\]} -filter {PARENT == eth_i/eth_mac_1g_rgmii_fifo_i/eth_mac_1g_rgmii_inst}]
+set_max_delay -datapath_only -from [get_cells {eth_i/eth_mac_1g_rgmii_fifo_i/eth_mac_1g_rgmii_inst/rx_prescale_reg[2]}] -to [get_cells {eth_i/eth_mac_1g_rgmii_fifo_i/eth_mac_1g_rgmii_inst/rx_prescale_sync_reg[0]}] 8.000
+set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
+set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
+set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]
+connect_debug_port dbg_hub/clk [get_nets clk_125m]

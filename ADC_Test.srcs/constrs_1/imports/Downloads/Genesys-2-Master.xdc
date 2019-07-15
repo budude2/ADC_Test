@@ -81,7 +81,7 @@ set_property -dict {PACKAGE_PIN AK11 IOSTANDARD LVCMOS15} [get_ports {eth_txd[1]
 set_property -dict {PACKAGE_PIN AJ11 IOSTANDARD LVCMOS15} [get_ports {eth_txd[2]}]
 set_property -dict {PACKAGE_PIN AK10 IOSTANDARD LVCMOS15} [get_ports {eth_txd[3]}]
 set_property -dict {PACKAGE_PIN AK14 IOSTANDARD LVCMOS15} [get_ports ETH_TX_EN]
-create_clock -add -name eth_rx_clk_pin -period 8.00 -waveform {0 4} [get_ports {eth_rxck}];
+create_clock -period 8.000 -name eth_rx_clk_pin -waveform {0.000 4.000} -add [get_ports eth_rxck]
 
 ## PMOD Header JA
 #set_property -dict { PACKAGE_PIN U28   IOSTANDARD LVCMOS33 } [get_ports { ja[0] }]; #IO_L13N_T2_MRCC_14 Sch=ja_n[1]
@@ -366,5 +366,6 @@ set_property -dict {PACKAGE_PIN L17 IOSTANDARD LVCMOS18} [get_ports SDIO]
 
 set_property CFGBVS VCCO [current_design]
 set_property CONFIG_VOLTAGE 3.3 [current_design]
+
 
 
