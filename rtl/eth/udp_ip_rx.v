@@ -158,38 +158,38 @@ reg store_udp_checksum_0;
 reg store_udp_checksum_1;
 reg store_last_word;
 
-reg [2:0] hdr_ptr_reg = 3'd0, hdr_ptr_next;
-reg [15:0] word_count_reg = 16'd0, word_count_next;
+reg [2:0] hdr_ptr_reg               = 3'd0, hdr_ptr_next;
+reg [15:0] word_count_reg           = 16'd0, word_count_next;
 
-reg [7:0] last_word_data_reg = 8'd0;
+reg [7:0] last_word_data_reg        = 8'd0;
 
-reg m_udp_hdr_valid_reg = 1'b0, m_udp_hdr_valid_next;
-reg [47:0] m_eth_dest_mac_reg = 48'd0;
-reg [47:0] m_eth_src_mac_reg = 48'd0;
-reg [15:0] m_eth_type_reg = 16'd0;
-reg [3:0] m_ip_version_reg = 4'd0;
-reg [3:0] m_ip_ihl_reg = 4'd0;
-reg [5:0] m_ip_dscp_reg = 6'd0;
-reg [1:0] m_ip_ecn_reg = 2'd0;
-reg [15:0] m_ip_length_reg = 16'd0;
-reg [15:0] m_ip_identification_reg = 16'd0;
-reg [2:0] m_ip_flags_reg = 3'd0;
+reg m_udp_hdr_valid_reg             = 1'b0, m_udp_hdr_valid_next;
+reg [47:0] m_eth_dest_mac_reg       = 48'd0;
+reg [47:0] m_eth_src_mac_reg        = 48'd0;
+reg [15:0] m_eth_type_reg           = 16'd0;
+reg [3:0] m_ip_version_reg          = 4'd0;
+reg [3:0] m_ip_ihl_reg              = 4'd0;
+reg [5:0] m_ip_dscp_reg             = 6'd0;
+reg [1:0] m_ip_ecn_reg              = 2'd0;
+reg [15:0] m_ip_length_reg          = 16'd0;
+reg [15:0] m_ip_identification_reg  = 16'd0;
+reg [2:0] m_ip_flags_reg            = 3'd0;
 reg [12:0] m_ip_fragment_offset_reg = 13'd0;
-reg [7:0] m_ip_ttl_reg = 8'd0;
-reg [7:0] m_ip_protocol_reg = 8'd0;
+reg [7:0] m_ip_ttl_reg              = 8'd0;
+reg [7:0] m_ip_protocol_reg         = 8'd0;
 reg [15:0] m_ip_header_checksum_reg = 16'd0;
-reg [31:0] m_ip_source_ip_reg = 32'd0;
-reg [31:0] m_ip_dest_ip_reg = 32'd0;
-reg [15:0] m_udp_source_port_reg = 16'd0;
-reg [15:0] m_udp_dest_port_reg = 16'd0;
-reg [15:0] m_udp_length_reg = 16'd0;
-reg [15:0] m_udp_checksum_reg = 16'd0;
+reg [31:0] m_ip_source_ip_reg       = 32'd0;
+reg [31:0] m_ip_dest_ip_reg         = 32'd0;
+reg [15:0] m_udp_source_port_reg    = 16'd0;
+reg [15:0] m_udp_dest_port_reg      = 16'd0;
+reg [15:0] m_udp_length_reg         = 16'd0;
+reg [15:0] m_udp_checksum_reg       = 16'd0;
 
-reg s_ip_hdr_ready_reg = 1'b0, s_ip_hdr_ready_next;
+reg s_ip_hdr_ready_reg           = 1'b0, s_ip_hdr_ready_next;
 reg s_ip_payload_axis_tready_reg = 1'b0, s_ip_payload_axis_tready_next;
 
-reg busy_reg = 1'b0;
-reg error_header_early_termination_reg = 1'b0, error_header_early_termination_next;
+reg busy_reg                            = 1'b0;
+reg error_header_early_termination_reg  = 1'b0, error_header_early_termination_next;
 reg error_payload_early_termination_reg = 1'b0, error_payload_early_termination_next;
 
 // internal datapath
@@ -200,65 +200,65 @@ reg       m_udp_payload_axis_tlast_int;
 reg       m_udp_payload_axis_tuser_int;
 wire      m_udp_payload_axis_tready_int_early;
 
-assign s_ip_hdr_ready = s_ip_hdr_ready_reg;
+assign s_ip_hdr_ready           = s_ip_hdr_ready_reg;
 assign s_ip_payload_axis_tready = s_ip_payload_axis_tready_reg;
 
-assign m_udp_hdr_valid = m_udp_hdr_valid_reg;
-assign m_eth_dest_mac = m_eth_dest_mac_reg;
-assign m_eth_src_mac = m_eth_src_mac_reg;
-assign m_eth_type = m_eth_type_reg;
-assign m_ip_version = m_ip_version_reg;
-assign m_ip_ihl = m_ip_ihl_reg;
-assign m_ip_dscp = m_ip_dscp_reg;
-assign m_ip_ecn = m_ip_ecn_reg;
-assign m_ip_length = m_ip_length_reg;
-assign m_ip_identification = m_ip_identification_reg;
-assign m_ip_flags = m_ip_flags_reg;
+assign m_udp_hdr_valid      = m_udp_hdr_valid_reg;
+assign m_eth_dest_mac       = m_eth_dest_mac_reg;
+assign m_eth_src_mac        = m_eth_src_mac_reg;
+assign m_eth_type           = m_eth_type_reg;
+assign m_ip_version         = m_ip_version_reg;
+assign m_ip_ihl             = m_ip_ihl_reg;
+assign m_ip_dscp            = m_ip_dscp_reg;
+assign m_ip_ecn             = m_ip_ecn_reg;
+assign m_ip_length          = m_ip_length_reg;
+assign m_ip_identification  = m_ip_identification_reg;
+assign m_ip_flags           = m_ip_flags_reg;
 assign m_ip_fragment_offset = m_ip_fragment_offset_reg;
-assign m_ip_ttl = m_ip_ttl_reg;
-assign m_ip_protocol = m_ip_protocol_reg;
+assign m_ip_ttl             = m_ip_ttl_reg;
+assign m_ip_protocol        = m_ip_protocol_reg;
 assign m_ip_header_checksum = m_ip_header_checksum_reg;
-assign m_ip_source_ip = m_ip_source_ip_reg;
-assign m_ip_dest_ip = m_ip_dest_ip_reg;
-assign m_udp_source_port = m_udp_source_port_reg;
-assign m_udp_dest_port = m_udp_dest_port_reg;
-assign m_udp_length = m_udp_length_reg;
-assign m_udp_checksum = m_udp_checksum_reg;
+assign m_ip_source_ip       = m_ip_source_ip_reg;
+assign m_ip_dest_ip         = m_ip_dest_ip_reg;
+assign m_udp_source_port    = m_udp_source_port_reg;
+assign m_udp_dest_port      = m_udp_dest_port_reg;
+assign m_udp_length         = m_udp_length_reg;
+assign m_udp_checksum       = m_udp_checksum_reg;
 
-assign busy = busy_reg;
-assign error_header_early_termination = error_header_early_termination_reg;
+assign busy                            = busy_reg;
+assign error_header_early_termination  = error_header_early_termination_reg;
 assign error_payload_early_termination = error_payload_early_termination_reg;
 
 always @* begin
-    state_next = STATE_IDLE;
+    state_next                           = STATE_IDLE;
 
-    s_ip_hdr_ready_next = 1'b0;
-    s_ip_payload_axis_tready_next = 1'b0;
+    s_ip_hdr_ready_next                  = 1'b0;
+    s_ip_payload_axis_tready_next        = 1'b0;
 
-    store_ip_hdr = 1'b0;
-    store_udp_source_port_0 = 1'b0;
-    store_udp_source_port_1 = 1'b0;
-    store_udp_dest_port_0 = 1'b0;
-    store_udp_dest_port_1 = 1'b0;
-    store_udp_length_0 = 1'b0;
-    store_udp_length_1 = 1'b0;
-    store_udp_checksum_0 = 1'b0;
-    store_udp_checksum_1 = 1'b0;
+    store_ip_hdr                         = 1'b0;
+    store_udp_source_port_0              = 1'b0;
+    store_udp_source_port_1              = 1'b0;
+    store_udp_dest_port_0                = 1'b0;
+    store_udp_dest_port_1                = 1'b0;
+    store_udp_length_0                   = 1'b0;
+    store_udp_length_1                   = 1'b0;
+    store_udp_checksum_0                 = 1'b0;
+    store_udp_checksum_1                 = 1'b0;
 
-    store_last_word = 1'b0;
+    store_last_word                      = 1'b0;
 
-    hdr_ptr_next = hdr_ptr_reg;
-    word_count_next = word_count_reg;
+    hdr_ptr_next                         = hdr_ptr_reg;
+    word_count_next                      = word_count_reg;
 
-    m_udp_hdr_valid_next = m_udp_hdr_valid_reg && !m_udp_hdr_ready;
+    m_udp_hdr_valid_next                 = m_udp_hdr_valid_reg && !m_udp_hdr_ready;
 
-    error_header_early_termination_next = 1'b0;
+    error_header_early_termination_next  = 1'b0;
     error_payload_early_termination_next = 1'b0;
 
-    m_udp_payload_axis_tdata_int = 8'd0;
-    m_udp_payload_axis_tvalid_int = 1'b0;
-    m_udp_payload_axis_tlast_int = 1'b0;
-    m_udp_payload_axis_tuser_int = 1'b0;
+    m_udp_payload_axis_tdata_int         = 8'd0;
+    m_udp_payload_axis_tvalid_int        = 1'b0;
+    m_udp_payload_axis_tlast_int         = 1'b0;
+    m_udp_payload_axis_tuser_int         = 1'b0;
 
     case (state_reg)
         STATE_IDLE: begin
@@ -288,11 +288,11 @@ always @* begin
                 case (hdr_ptr_reg)
                     3'h0: store_udp_source_port_1 = 1'b1;
                     3'h1: store_udp_source_port_0 = 1'b1;
-                    3'h2: store_udp_dest_port_1 = 1'b1;
-                    3'h3: store_udp_dest_port_0 = 1'b1;
-                    3'h4: store_udp_length_1 = 1'b1;
-                    3'h5: store_udp_length_0 = 1'b1;
-                    3'h6: store_udp_checksum_1 = 1'b1;
+                    3'h2: store_udp_dest_port_1   = 1'b1;
+                    3'h3: store_udp_dest_port_0   = 1'b1;
+                    3'h4: store_udp_length_1      = 1'b1;
+                    3'h5: store_udp_length_0      = 1'b1;
+                    3'h6: store_udp_checksum_1    = 1'b1;
                     3'h7: begin
                         store_udp_checksum_0 = 1'b1;
                         m_udp_hdr_valid_next = 1'b1;
@@ -317,10 +317,10 @@ always @* begin
             // read payload
             s_ip_payload_axis_tready_next = m_udp_payload_axis_tready_int_early;
 
-            m_udp_payload_axis_tdata_int = s_ip_payload_axis_tdata;
+            m_udp_payload_axis_tdata_int  = s_ip_payload_axis_tdata;
             m_udp_payload_axis_tvalid_int = s_ip_payload_axis_tvalid;
-            m_udp_payload_axis_tlast_int = s_ip_payload_axis_tlast;
-            m_udp_payload_axis_tuser_int = s_ip_payload_axis_tuser;
+            m_udp_payload_axis_tlast_int  = s_ip_payload_axis_tlast;
+            m_udp_payload_axis_tuser_int  = s_ip_payload_axis_tuser;
 
             if (s_ip_payload_axis_tready && s_ip_payload_axis_tvalid) begin
                 // word transfer through
@@ -351,10 +351,10 @@ always @* begin
             // read and discard until end of frame
             s_ip_payload_axis_tready_next = m_udp_payload_axis_tready_int_early;
 
-            m_udp_payload_axis_tdata_int = last_word_data_reg;
+            m_udp_payload_axis_tdata_int  = last_word_data_reg;
             m_udp_payload_axis_tvalid_int = s_ip_payload_axis_tvalid && s_ip_payload_axis_tlast;
-            m_udp_payload_axis_tlast_int = s_ip_payload_axis_tlast;
-            m_udp_payload_axis_tuser_int = s_ip_payload_axis_tuser;
+            m_udp_payload_axis_tlast_int  = s_ip_payload_axis_tlast;
+            m_udp_payload_axis_tuser_int  = s_ip_payload_axis_tuser;
 
             if (s_ip_payload_axis_tready && s_ip_payload_axis_tvalid) begin
                 if (s_ip_payload_axis_tlast) begin
@@ -416,22 +416,22 @@ always @(posedge clk) begin
 
     // datapath
     if (store_ip_hdr) begin
-        m_eth_dest_mac_reg <= s_eth_dest_mac;
-        m_eth_src_mac_reg <= s_eth_src_mac;
-        m_eth_type_reg <= s_eth_type;
-        m_ip_version_reg <= s_ip_version;
-        m_ip_ihl_reg <= s_ip_ihl;
-        m_ip_dscp_reg <= s_ip_dscp;
-        m_ip_ecn_reg <= s_ip_ecn;
-        m_ip_length_reg <= s_ip_length;
-        m_ip_identification_reg <= s_ip_identification;
-        m_ip_flags_reg <= s_ip_flags;
+        m_eth_dest_mac_reg       <= s_eth_dest_mac;
+        m_eth_src_mac_reg        <= s_eth_src_mac;
+        m_eth_type_reg           <= s_eth_type;
+        m_ip_version_reg         <= s_ip_version;
+        m_ip_ihl_reg             <= s_ip_ihl;
+        m_ip_dscp_reg            <= s_ip_dscp;
+        m_ip_ecn_reg             <= s_ip_ecn;
+        m_ip_length_reg          <= s_ip_length;
+        m_ip_identification_reg  <= s_ip_identification;
+        m_ip_flags_reg           <= s_ip_flags;
         m_ip_fragment_offset_reg <= s_ip_fragment_offset;
-        m_ip_ttl_reg <= s_ip_ttl;
-        m_ip_protocol_reg <= s_ip_protocol;
+        m_ip_ttl_reg             <= s_ip_ttl;
+        m_ip_protocol_reg        <= s_ip_protocol;
         m_ip_header_checksum_reg <= s_ip_header_checksum;
-        m_ip_source_ip_reg <= s_ip_source_ip;
-        m_ip_dest_ip_reg <= s_ip_dest_ip;
+        m_ip_source_ip_reg       <= s_ip_source_ip;
+        m_ip_dest_ip_reg         <= s_ip_dest_ip;
     end
 
     if (store_last_word) begin
@@ -440,12 +440,12 @@ always @(posedge clk) begin
 
     if (store_udp_source_port_0) m_udp_source_port_reg[ 7: 0] <= s_ip_payload_axis_tdata;
     if (store_udp_source_port_1) m_udp_source_port_reg[15: 8] <= s_ip_payload_axis_tdata;
-    if (store_udp_dest_port_0) m_udp_dest_port_reg[ 7: 0] <= s_ip_payload_axis_tdata;
-    if (store_udp_dest_port_1) m_udp_dest_port_reg[15: 8] <= s_ip_payload_axis_tdata;
-    if (store_udp_length_0) m_udp_length_reg[ 7: 0] <= s_ip_payload_axis_tdata;
-    if (store_udp_length_1) m_udp_length_reg[15: 8] <= s_ip_payload_axis_tdata;
-    if (store_udp_checksum_0) m_udp_checksum_reg[ 7: 0] <= s_ip_payload_axis_tdata;
-    if (store_udp_checksum_1) m_udp_checksum_reg[15: 8] <= s_ip_payload_axis_tdata;
+    if (store_udp_dest_port_0) m_udp_dest_port_reg[ 7: 0]     <= s_ip_payload_axis_tdata;
+    if (store_udp_dest_port_1) m_udp_dest_port_reg[15: 8]     <= s_ip_payload_axis_tdata;
+    if (store_udp_length_0) m_udp_length_reg[ 7: 0]           <= s_ip_payload_axis_tdata;
+    if (store_udp_length_1) m_udp_length_reg[15: 8]           <= s_ip_payload_axis_tdata;
+    if (store_udp_checksum_0) m_udp_checksum_reg[ 7: 0]       <= s_ip_payload_axis_tdata;
+    if (store_udp_checksum_1) m_udp_checksum_reg[15: 8]       <= s_ip_payload_axis_tdata;
 end
 
 // output datapath logic
@@ -480,7 +480,7 @@ always @* begin
     store_udp_payload_int_to_output = 1'b0;
     store_udp_payload_int_to_temp = 1'b0;
     store_udp_payload_axis_temp_to_output = 1'b0;
-    
+
     if (m_udp_payload_axis_tready_int_reg) begin
         // input is ready
         if (m_udp_payload_axis_tready || !m_udp_payload_axis_tvalid_reg) begin

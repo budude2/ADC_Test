@@ -119,27 +119,27 @@ reg gmii_rx_er_d3 = 1'b0;
 reg gmii_rx_er_d4 = 1'b0;
 
 reg [DATA_WIDTH-1:0] m_axis_tdata_reg = {DATA_WIDTH{1'b0}}, m_axis_tdata_next;
-reg m_axis_tvalid_reg = 1'b0, m_axis_tvalid_next;
-reg m_axis_tlast_reg = 1'b0, m_axis_tlast_next;
-reg m_axis_tuser_reg = 1'b0, m_axis_tuser_next;
+reg m_axis_tvalid_reg                 = 1'b0, m_axis_tvalid_next;
+reg m_axis_tlast_reg                  = 1'b0, m_axis_tlast_next;
+reg m_axis_tuser_reg                  = 1'b0, m_axis_tuser_next;
 
-reg start_packet_reg = 1'b0, start_packet_next;
+reg start_packet_reg    = 1'b0, start_packet_next;
 reg error_bad_frame_reg = 1'b0, error_bad_frame_next;
-reg error_bad_fcs_reg = 1'b0, error_bad_fcs_next;
+reg error_bad_fcs_reg   = 1'b0, error_bad_fcs_next;
 
 reg [PTP_TS_WIDTH-1:0] ptp_ts_reg = 0, ptp_ts_next;
 
 reg [31:0] crc_state = 32'hFFFFFFFF;
 wire [31:0] crc_next;
 
-assign m_axis_tdata = m_axis_tdata_reg;
+assign m_axis_tdata  = m_axis_tdata_reg;
 assign m_axis_tvalid = m_axis_tvalid_reg;
-assign m_axis_tlast = m_axis_tlast_reg;
-assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
+assign m_axis_tlast  = m_axis_tlast_reg;
+assign m_axis_tuser  = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
 
-assign start_packet = start_packet_reg;
+assign start_packet    = start_packet_reg;
 assign error_bad_frame = error_bad_frame_reg;
-assign error_bad_fcs = error_bad_fcs_reg;
+assign error_bad_fcs   = error_bad_fcs_reg;
 
 lfsr #(
     .LFSR_WIDTH(32),
@@ -158,21 +158,21 @@ eth_crc_8 (
 );
 
 always @* begin
-    state_next = STATE_IDLE;
+    state_next           = STATE_IDLE;
 
-    reset_crc = 1'b0;
-    update_crc = 1'b0;
+    reset_crc            = 1'b0;
+    update_crc           = 1'b0;
 
-    m_axis_tdata_next = {DATA_WIDTH{1'b0}};
-    m_axis_tvalid_next = 1'b0;
-    m_axis_tlast_next = 1'b0;
-    m_axis_tuser_next = 1'b0;
+    m_axis_tdata_next    = {DATA_WIDTH{1'b0}};
+    m_axis_tvalid_next   = 1'b0;
+    m_axis_tlast_next    = 1'b0;
+    m_axis_tuser_next    = 1'b0;
 
-    start_packet_next = 1'b0;
+    start_packet_next    = 1'b0;
     error_bad_frame_next = 1'b0;
-    error_bad_fcs_next = 1'b0;
+    error_bad_fcs_next   = 1'b0;
 
-    ptp_ts_next = ptp_ts_reg;
+    ptp_ts_next          = ptp_ts_reg;
 
     if (!clk_enable) begin
         // clock disabled - hold state
@@ -187,41 +187,44 @@ always @* begin
                 reset_crc = 1'b1;
 
                 if (gmii_rx_dv_d4 && !gmii_rx_er_d4 && gmii_rxd_d4 == ETH_SFD) begin
-                    ptp_ts_next = ptp_ts;
+                    ptp_ts_next       = ptp_ts;
                     start_packet_next = 1'b1;
-                    state_next = STATE_PAYLOAD;
+                    state_next        = STATE_PAYLOAD;
                 end else begin
                     state_next = STATE_IDLE;
                 end
             end
             STATE_PAYLOAD: begin
                 // read payload
-                update_crc = 1'b1;
+                update_crc         = 1'b1;
 
-                m_axis_tdata_next = gmii_rxd_d4;
+                m_axis_tdata_next  = gmii_rxd_d4;
                 m_axis_tvalid_next = 1'b1;
 
                 if (gmii_rx_dv_d4 && gmii_rx_er_d4) begin
                     // error
-                    m_axis_tlast_next = 1'b1;
-                    m_axis_tuser_next = 1'b1;
+                    m_axis_tlast_next    = 1'b1;
+                    m_axis_tuser_next    = 1'b1;
                     error_bad_frame_next = 1'b1;
-                    state_next = STATE_WAIT_LAST;
+                    state_next           = STATE_WAIT_LAST;
                 end else if (!gmii_rx_dv) begin
                     // end of packet
                     m_axis_tlast_next = 1'b1;
+
                     if (gmii_rx_er_d0 || gmii_rx_er_d1 || gmii_rx_er_d2 || gmii_rx_er_d3) begin
                         // error received in FCS bytes
-                        m_axis_tuser_next = 1'b1;
+                        m_axis_tuser_next    = 1'b1;
                         error_bad_frame_next = 1'b1;
+
                     end else if ({gmii_rxd_d0, gmii_rxd_d1, gmii_rxd_d2, gmii_rxd_d3} == ~crc_next) begin
                         // FCS good
                         m_axis_tuser_next = 1'b0;
+
                     end else begin
                         // FCS bad
-                        m_axis_tuser_next = 1'b1;
+                        m_axis_tuser_next    = 1'b1;
                         error_bad_frame_next = 1'b1;
-                        error_bad_fcs_next = 1'b1;
+                        error_bad_fcs_next   = 1'b1;
                     end
                     state_next = STATE_IDLE;
                 end else begin
@@ -243,32 +246,32 @@ end
 
 always @(posedge clk) begin
     if (rst) begin
-        state_reg <= STATE_IDLE;
+        state_reg           <= STATE_IDLE;
 
-        m_axis_tvalid_reg <= 1'b0;
+        m_axis_tvalid_reg   <= 1'b0;
 
-        start_packet_reg <= 1'b0;
+        start_packet_reg    <= 1'b0;
         error_bad_frame_reg <= 1'b0;
-        error_bad_fcs_reg <= 1'b0;
+        error_bad_fcs_reg   <= 1'b0;
 
-        crc_state <= 32'hFFFFFFFF;
+        crc_state           <= 32'hFFFFFFFF;
 
-        mii_locked <= 1'b0;
-        mii_odd <= 1'b0;
+        mii_locked          <= 1'b0;
+        mii_odd             <= 1'b0;
 
-        gmii_rx_dv_d0 <= 1'b0;
-        gmii_rx_dv_d1 <= 1'b0;
-        gmii_rx_dv_d2 <= 1'b0;
-        gmii_rx_dv_d3 <= 1'b0;
-        gmii_rx_dv_d4 <= 1'b0;
+        gmii_rx_dv_d0       <= 1'b0;
+        gmii_rx_dv_d1       <= 1'b0;
+        gmii_rx_dv_d2       <= 1'b0;
+        gmii_rx_dv_d3       <= 1'b0;
+        gmii_rx_dv_d4       <= 1'b0;
     end else begin
-        state_reg <= state_next;
+        state_reg           <= state_next;
 
-        m_axis_tvalid_reg <= m_axis_tvalid_next;
+        m_axis_tvalid_reg   <= m_axis_tvalid_next;
 
-        start_packet_reg <= start_packet_next;
+        start_packet_reg    <= start_packet_next;
         error_bad_frame_reg <= error_bad_frame_next;
-        error_bad_fcs_reg <= error_bad_fcs_next;
+        error_bad_fcs_reg   <= error_bad_fcs_next;
 
         // datapath
         if (reset_crc) begin
@@ -283,9 +286,10 @@ always @(posedge clk) begin
 
                 if (mii_locked) begin
                     mii_locked <= gmii_rx_dv;
+
                 end else if (gmii_rx_dv && {gmii_rxd[3:0], gmii_rxd_d0[7:4]} == ETH_SFD) begin
                     mii_locked <= 1'b1;
-                    mii_odd <= 1'b1;
+                    mii_odd    <= 1'b1;
                 end
 
                 if (mii_odd) begin

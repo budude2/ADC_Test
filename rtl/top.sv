@@ -235,69 +235,165 @@ module top
     logic tx_error_underflow, tx_fifo_overflow, tx_fifo_bad_frame, tx_fifo_good_frame;
     logic [15:0] m_udp_source_port, m_udp_dest_port, m_udp_length, m_udp_checksum;
     logic [7:0] m_udp_payload_axis_tdata;
+    logic [1:0] link_speed;
 
-    eth eth_i
-    (
-        .gtx_clk(clk_125m),
-        .gtx_clk90(clk_125m90),
-        .gtx_rst(rst_125m),
-        .logic_clk(clk_125m),
-        .logic_rst(rst_125m),
+    // Eth debug signals
+    logic eth_busy, eth_error_header_early_termination;
+    // IP debug signals
+    logic ip_busy, ip_error_header_early_termination, ip_error_payload_early_termination, ip_error_invalid_header, ip_error_invalid_checksum;
+    // UDP debug signals
+    logic udp_busy, udp_error_header_early_termination, udp_error_payload_early_termination;
 
-        /*
-         * RGMII interface
-         */
-        .rgmii_rx_clk(eth_rxck),                                // Input
-        .rgmii_rxd(eth_rxd),                                    // Input [3:0]
-        .rgmii_rx_ctl(eth_rxctl),                               // Input
+    // eth eth_i
+    // (
+    //     .gtx_clk(clk_125m),
+    //     .gtx_clk90(clk_125m90),
+    //     .gtx_rst(rst_125m),
+    //     .logic_clk(clk_125m),
+    //     .logic_rst(rst_125m),
 
-        .rgmii_tx_clk(eth_txck),                                // Output
-        .rgmii_txd(eth_txd),                                    // Output [3:0]
-        .rgmii_tx_ctl(ETH_TX_EN),                               // Output
+    //     /*
+    //      * RGMII interface
+    //      */
+    //     .rgmii_rx_clk(eth_rxck),                                          // Input
+    //     .rgmii_rxd(eth_rxd),                                              // Input [3:0]
+    //     .rgmii_rx_ctl(eth_rxctl),                                         // Input
 
-        .tx_udp_payload_axis_tdata(eth_data),                   // Input [7:0]
-        .tx_udp_payload_axis_tvalid(eth_valid),                 // Input
-        .tx_udp_payload_axis_tready(eth_tready),                          // Output
-        .tx_udp_payload_axis_tlast(eth_data_tlast),             // Input
-        .tx_udp_payload_axis_tuser(1'b0),                       // Input
-        .s_udp_hdr_valid(udp_hdr_valid),
+    //     .rgmii_tx_clk(eth_txck),                                          // Output
+    //     .rgmii_txd(eth_txd),                                              // Output [3:0]
+    //     .rgmii_tx_ctl(ETH_TX_EN),                                         // Output
 
-        /*
-         * UDP frame output
-         */
-        .udp_rx_ready(1'b1),                                    // Input
-        .udp_hdr_valid(m_udp_hdr_valid),                        // Output
-        .udp_source_port(m_udp_source_port),                    // Output [15:0]
-        .udp_dest_port(m_udp_dest_port),                        // Output [15:0]
-        .udp_length(m_udp_length),                              // Output [15:0]
-        .udp_checksum(m_udp_checksum),                          // Output [15:0]
-        .rx_udp_payload_axis_tdata(m_udp_payload_axis_tdata),   // Output [7:0]
-        .rx_udp_payload_axis_tvalid(m_udp_payload_axis_tvalid), // Output
-        .rx_udp_payload_axis_tlast(m_udp_payload_axis_tlast),   // Output
-        .rx_udp_payload_axis_tuser(m_udp_payload_axis_tuser),   // Output
+    //     /*
+    //      * TX Input
+    //      */
+    //     .tx_udp_payload_axis_tdata(eth_data),                             // Input [7:0]
+    //     .tx_udp_payload_axis_tvalid(eth_valid),                           // Input
+    //     .tx_udp_payload_axis_tready(eth_tready),                          // Output
+    //     .tx_udp_payload_axis_tlast(eth_data_tlast),                       // Input
+    //     .tx_udp_payload_axis_tuser(1'b0),                                 // Input
+    //     .s_udp_hdr_valid(udp_hdr_valid),                                  // Input
 
-        .tx_error_underflow(tx_error_underflow),
-        .tx_fifo_overflow(tx_fifo_overflow),
-        .tx_fifo_bad_frame(tx_fifo_bad_frame),
-        .tx_fifo_good_frame(tx_fifo_good_frame),
-        .tx_done(tx_done)
-    );
+    //     /*
+    //      * TX Status
+    //      */
+    //     .tx_error_underflow(tx_error_underflow),                          // Output
+    //     .tx_fifo_overflow(tx_fifo_overflow),                              // Output
+    //     .tx_fifo_bad_frame(tx_fifo_bad_frame),                            // Output
+    //     .tx_fifo_good_frame(tx_fifo_good_frame),                          // Output
+    //     .tx_done(tx_done),                                                // Output
 
-    assign ETH_PHYRST_N = 1'b1;
+    //     /*
+    //      * RX Output
+    //      */
+    //     .udp_rx_ready(1'b1),                                              // Input
+    //     .udp_hdr_valid(m_udp_hdr_valid),                                  // Output
+    //     .udp_source_port(m_udp_source_port),                              // Output [15:0]
+    //     .udp_dest_port(m_udp_dest_port),                                  // Output [15:0]
+    //     .udp_length(m_udp_length),                                        // Output [15:0]
+    //     .udp_checksum(m_udp_checksum),                                    // Output [15:0]
 
-    ila_0 ila
-    (
-        .clk(clk_125m),                     // input wire clk
+    //     .rx_udp_payload_axis_tdata(m_udp_payload_axis_tdata),             // Output [7:0]
+    //     .rx_udp_payload_axis_tvalid(m_udp_payload_axis_tvalid),           // Output
+    //     .rx_udp_payload_axis_tlast(m_udp_payload_axis_tlast),             // Output
+    //     .rx_udp_payload_axis_tuser(  ),             // Output
 
-        .probe0(eth_data),  // input wire [7:0]  probe5
-        .probe1(eth_valid), // input wire [0:0]  probe6
-        .probe2(eth_tready),  // input wire [0:0]  probe7
-        .probe3(eth_data_tlast),  // input wire [0:0]  probe8
-        .probe4(tx_error_underflow),
-        .probe5(tx_fifo_overflow),
-        .probe6(tx_fifo_bad_frame),
-        .probe7(tx_fifo_good_frame)
+    //     /*
+    //      * RX Status
+    //      */
+    //     .rx_error_bad_frame(rx_error_bad_frame),                          // Output
+    //     .rx_error_bad_fcs(rx_error_bad_fcs),                              // Output
+    //     .rx_fifo_overflow(rx_fifo_overflow),                              // Output
+    //     .rx_fifo_bad_frame(rx_fifo_bad_frame),                            // Output
+    //     .rx_fifo_good_frame(rx_fifo_good_frame),                          // Output
+    //     .link_speed(link_speed),                                               // Output [1:0]
+
+    //     /*
+    //      * Eth debug signals
+    //      */
+    //     .eth_busy(eth_busy),
+    //     .eth_error_header_early_termination(eth_error_header_early_termination),
+
+    //     /*
+    //      * IP debug signals
+    //      */
+    //     .ip_busy(ip_busy),
+    //     .ip_error_header_early_termination(ip_error_header_early_termination),
+    //     .ip_error_payload_early_termination(ip_error_payload_early_termination),
+    //     .ip_error_invalid_header(ip_error_invalid_header),
+    //     .ip_error_invalid_checksum(ip_error_invalid_checksum),
+
+    //     /*
+    //      * UDP debug signals
+    //      */
+    //     .udp_busy(udp_busy),
+    //     .udp_error_header_early_termination(udp_error_header_early_termination),
+    //     .udp_error_payload_early_termination(udp_error_payload_early_termination)
+    // );
+
+eth i_eth (
+    .gtx_clk                   (clk_125m                   ),
+    .gtx_clk90                 (clk_125m90                 ),
+    .gtx_rst                   (rst_125m                   ),
+    .logic_clk                 (clk_125m                 ),
+    .logic_rst                 (rst_125m                 ),
+
+    .rgmii_rx_clk              (eth_rxck              ),
+    .rgmii_rxd                 (eth_rxd                 ),
+    .rgmii_rx_ctl              (eth_rxctl              ),
+    .rgmii_tx_clk              (eth_txck              ),
+    .rgmii_txd                 (eth_txd                 ),
+    .rgmii_tx_ctl              (ETH_TX_EN              ),
+    .link_speed                (link_speed                ),
+
+    .local_mac                 (48'hde_ad_be_ef_01_23),
+    .local_ip                  ({8'd192, 8'd168, 8'd64,  8'd20}),
+    .gateway_ip                ({8'd192, 8'd168, 8'd64,  8'd1}),
+    .subnet_mask               ({8'd255, 8'd255, 8'd255, 8'd0}),
+    .clear_arp_cache           (1'b0),
+
+    .tx_udp_hdr_valid          (udp_hdr_valid),
+    .tx_udp_hdr_ready          (),
+    .tx_udp_ip_dscp            (6'b001110),
+    .tx_udp_ip_ecn             (2'b00),
+    .tx_udp_ip_ttl             (8'h40),
+    .tx_udp_ip_source_ip       ({8'd192, 8'd168, 8'd64,  8'd20}),
+    .tx_udp_ip_dest_ip         ({8'd192, 8'd168, 8'd64,  8'd2}),
+    .tx_udp_source_port        (16'h1000),
+    .tx_udp_dest_port          (16'h1000),
+    .tx_udp_length             (16'h0408),
+    .tx_udp_checksum           (16'h0000),
+    .tx_done                   (tx_done),
+
+    .tx_udp_payload_axis_tdata (eth_data),
+    .tx_udp_payload_axis_tvalid(eth_valid),
+    .tx_udp_payload_axis_tready(eth_tready),
+    .tx_udp_payload_axis_tlast (eth_data_tlast),
+    .tx_udp_payload_axis_tuser (1'b0),
+
+    .udp_rx_ready              (1'b1),
+    .udp_hdr_valid             (),
+    .udp_source_port           (m_udp_source_port),
+    .udp_dest_port             (m_udp_dest_port),
+    .udp_length                (m_udp_length),
+    .udp_checksum              (m_udp_checksum),
+
+    .rx_udp_payload_axis_tdata (m_udp_payload_axis_tdata ),
+    .rx_udp_payload_axis_tvalid(m_udp_payload_axis_tvalid),
+    .rx_udp_payload_axis_tlast (m_udp_payload_axis_tlast ),
+    .rx_udp_payload_axis_tuser (m_udp_payload_axis_tuser ),
+
+    .tx_error_underflow        (),
+    .tx_fifo_overflow          (),
+    .tx_fifo_bad_frame         (),
+    .tx_fifo_good_frame        (),
+    .rx_error_bad_frame        (),
+    .rx_error_bad_fcs          (),
+    .rx_fifo_overflow          (),
+    .rx_fifo_bad_frame         (),
+    .rx_fifo_good_frame        (),
+
+    .eth_busy                  ()
 );
 
-
+    assign ETH_PHYRST_N = 1'b1;
 endmodule
