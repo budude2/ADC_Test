@@ -88,7 +88,8 @@ module eth
         /*
          * Eth debug signals
          */
-        output logic eth_busy
+        output logic tx_eth_busy,
+        output logic rx_eth_busy
     );
 
     logic [7:0] rx_axis_tdata;
@@ -211,11 +212,6 @@ module eth
     logic udp_rx_error_header_early_termination;
     logic udp_rx_error_payload_early_termination;
     logic udp_tx_error_payload_early_termination;
-    logic [47:0] local_mac;
-    logic [31:0] local_ip;
-    logic [31:0] gateway_ip;
-    logic [31:0] subnet_mask;
-    logic clear_arp_cache;
 
     eth_mac_1g_rgmii_fifo #
     (
@@ -325,7 +321,7 @@ eth_axis_tx i_eth_axis_tx (
     .m_axis_tready            (tx_axis_tready            ),
     .m_axis_tlast             (tx_axis_tlast             ),
     .m_axis_tuser             (tx_axis_tuser             ),
-    .busy                     (eth_busy                 )
+    .busy                     (tx_eth_busy                 )
 );
 
 eth_axis_rx i_eth_axis_rx (
@@ -349,7 +345,7 @@ eth_axis_rx i_eth_axis_rx (
     .m_eth_payload_axis_tlast      (m_eth_payload_axis_tlast         ),
     .m_eth_payload_axis_tuser      (m_eth_payload_axis_tuser         ),
 
-    .busy                          (eth_busy                         ),
+    .busy                          (rx_eth_busy                         ),
     .error_header_early_termination(ip_error_header_early_termination)
 );
 
