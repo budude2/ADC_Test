@@ -67,6 +67,8 @@ module top
     logic [3:0] eth_rxd_delay;
     logic       eth_rxctl_delay;
 
+    logic sendAdcData;
+
     assign led0 = dcm_locked;
     assign led1 = 0;
     assign led2 = MB_O[0];
@@ -220,7 +222,8 @@ module top
     logic eth_tready, udp_hdr_valid, tx_done;
 
     adc_buffer adc_buffer (
-        .start_buff(aligned & tick),
+        .start_buff(aligned & sendAdcData),
+        //.start_buff(aligned & tick),
         //.start_buff(aligned),
 
         .din_clk(adc_clk),
@@ -413,7 +416,7 @@ module top
         .rx_eth_busy               ()
     );
 
-    logic data_ready, full, empty;
+    logic data_ready, full, empty, rd_en;
     logic [31:0] data;
 
     udpDetector udpDetector_i
@@ -425,12 +428,24 @@ module top
         .axis_tdata(m_udp_payload_axis_tdata),
         .axis_tvalid(m_udp_payload_axis_tvalid),
         .axis_tlast(m_udp_payload_axis_tlast),
-        .rd_en(1'b0),
+        .rd_en(rd_en),
 
         .data_ready(data_ready),
         .data(data),
         .full(full),
         .empty(empty)
+    );
+
+    udpCommandParser udpCommandParser_i
+    (
+        .clk(clk_125m),
+        .rst(rst_125m),
+
+        .data_ready(data_ready),
+        .data(data),
+
+        .rd_en(rd_en),
+        .sendAdcData(sendAdcData)
     );
 
     ila_0 ila_i
@@ -439,8 +454,8 @@ module top
 
         .probe0(data),       // input wire [31:0]  probe0
         .probe1(data_ready), // input wire [0:0]  probe1
-        .probe2(full),       // input wire [0:0]  probe2
-        .probe3(empty),      // input wire [0:0]  probe3
+        .probe2(sendAdcData),       // input wire [0:0]  probe2
+        .probe3(rd_en),      // input wire [0:0]  probe3
         .probe4(m_udp_payload_axis_tvalid), // input wire [0:0]  probe4
         .probe5(m_udp_dest_port), // input wire [15:0]  probe5
         .probe6(m_udp_payload_axis_tdata) // input wire [7:0]  probe6
