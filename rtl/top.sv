@@ -42,7 +42,7 @@ module top
 );
 
     // MMCM signals
-    logic clk_100m, clk_50m, clk_125m, clk_125m90;
+    logic clk_100m, clk_50m, clk_125m, clk_125m90, clk_200m;
     logic dcm_locked;
 
     // ADC Signals
@@ -63,10 +63,15 @@ module top
     // Reset Signals
     logic adc_rst_n, rst_125m_n, rst_125m;
 
+    // IODELAY elements for RGMII interface to PHY
+    logic [3:0] eth_rxd_delay;
+    logic       eth_rxctl_delay;
+
     assign led0 = dcm_locked;
     assign led1 = 0;
     assign led2 = MB_O[0];
     assign led3 = MB_O[1];
+    assign ETH_PHYRST_N = rst_125m_n;
 
     clk_wiz_0 MMCM
     (
@@ -75,6 +80,7 @@ module top
         .clk_50m(clk_50m),          // output clk_50m
         .clk_125m(clk_125m),        // output clk_125m
         .clk_125m90(clk_125m90),    // output clk_125m90
+        .clk_200m(clk_200m),        // output clk_200m
 
         // Status signal
         .locked(dcm_locked),        // output locked
@@ -120,6 +126,14 @@ module top
         .clk(clk_125m),
         .asyncrst_n(cpu_resetn),
         .rst_n(rst_125m_n)
+    );
+
+    IDELAYCTRL
+    idelayctrl_inst
+    (
+        .REFCLK(clk_200m),
+        .RST(rst_125m),
+        .RDY()
     );
 
     assign rst_125m = ~rst_125m_n;
@@ -231,91 +245,204 @@ module top
         .axis_tvalid_hdr(udp_hdr_valid)
     );
 
+    IDELAYE2 #(
+        .IDELAY_TYPE("FIXED")
+    )
+    phy_rxd_idelay_0
+    (
+        .IDATAIN(eth_rxd[0]),
+        .DATAOUT(eth_rxd_delay[0]),
+        .DATAIN(1'b0),
+        .C(1'b0),
+        .CE(1'b0),
+        .INC(1'b0),
+        .CINVCTRL(1'b0),
+        .CNTVALUEIN(5'd0),
+        .CNTVALUEOUT(),
+        .LD(1'b0),
+        .LDPIPEEN(1'b0),
+        .REGRST(1'b0)
+    );
+
+    IDELAYE2 #(
+        .IDELAY_TYPE("FIXED")
+    )
+    phy_rxd_idelay_1
+    (
+        .IDATAIN(eth_rxd[1]),
+        .DATAOUT(eth_rxd_delay[1]),
+        .DATAIN(1'b0),
+        .C(1'b0),
+        .CE(1'b0),
+        .INC(1'b0),
+        .CINVCTRL(1'b0),
+        .CNTVALUEIN(5'd0),
+        .CNTVALUEOUT(),
+        .LD(1'b0),
+        .LDPIPEEN(1'b0),
+        .REGRST(1'b0)
+    );
+
+    IDELAYE2 #(
+        .IDELAY_TYPE("FIXED")
+    )
+    phy_rxd_idelay_2
+    (
+        .IDATAIN(eth_rxd[2]),
+        .DATAOUT(eth_rxd_delay[2]),
+        .DATAIN(1'b0),
+        .C(1'b0),
+        .CE(1'b0),
+        .INC(1'b0),
+        .CINVCTRL(1'b0),
+        .CNTVALUEIN(5'd0),
+        .CNTVALUEOUT(),
+        .LD(1'b0),
+        .LDPIPEEN(1'b0),
+        .REGRST(1'b0)
+    );
+
+    IDELAYE2 #(
+        .IDELAY_TYPE("FIXED")
+    )
+    phy_rxd_idelay_3
+    (
+        .IDATAIN(eth_rxd[3]),
+        .DATAOUT(eth_rxd_delay[3]),
+        .DATAIN(1'b0),
+        .C(1'b0),
+        .CE(1'b0),
+        .INC(1'b0),
+        .CINVCTRL(1'b0),
+        .CNTVALUEIN(5'd0),
+        .CNTVALUEOUT(),
+        .LD(1'b0),
+        .LDPIPEEN(1'b0),
+        .REGRST(1'b0)
+    );
+
+    IDELAYE2 #(
+        .IDELAY_TYPE("FIXED")
+    )
+    phy_rx_ctl_idelay
+    (
+        .IDATAIN(eth_rxctl),
+        .DATAOUT(eth_rxctl_delay),
+        .DATAIN(1'b0),
+        .C(1'b0),
+        .CE(1'b0),
+        .INC(1'b0),
+        .CINVCTRL(1'b0),
+        .CNTVALUEIN(5'd0),
+        .CNTVALUEOUT(),
+        .LD(1'b0),
+        .LDPIPEEN(1'b0),
+        .REGRST(1'b0)
+    );
+
+
     logic m_udp_hdr_valid, m_udp_payload_axis_tvalid, m_udp_payload_axis_tlast, m_udp_payload_axis_tuser;
     logic [15:0] m_udp_source_port, m_udp_dest_port, m_udp_length, m_udp_checksum;
     logic [7:0] m_udp_payload_axis_tdata;
     logic [1:0] link_speed;
     logic rx_error_bad_frame;
 
-eth i_eth (
-    .gtx_clk                   (clk_125m),
-    .gtx_clk90                 (clk_125m90),
-    .gtx_rst                   (rst_125m),
-    .logic_clk                 (clk_125m),
-    .logic_rst                 (rst_125m),
+    eth i_eth (
+        .gtx_clk                   (clk_125m),
+        .gtx_clk90                 (clk_125m90),
+        .gtx_rst                   (rst_125m),
+        .logic_clk                 (clk_125m),
+        .logic_rst                 (rst_125m),
 
-    .rgmii_rx_clk              (eth_rxck),
-    .rgmii_rxd                 (eth_rxd),
-    .rgmii_rx_ctl              (eth_rxctl),
-    .rgmii_tx_clk              (eth_txck),
-    .rgmii_txd                 (eth_txd),
-    .rgmii_tx_ctl              (ETH_TX_EN),
-    .link_speed                (link_speed),
+        .rgmii_rx_clk              (eth_rxck),
+        .rgmii_rxd                 (eth_rxd_delay),
+        .rgmii_rx_ctl              (eth_rxctl_delay),
+        .rgmii_tx_clk              (eth_txck),
+        .rgmii_txd                 (eth_txd),
+        .rgmii_tx_ctl              (ETH_TX_EN),
+        .link_speed                (link_speed),
 
-    .local_mac                 (48'hde_ad_be_ef_01_23),
-    .local_ip                  ({8'd192, 8'd168, 8'd64,  8'd20}),
-    .gateway_ip                ({8'd192, 8'd168, 8'd64,  8'd1}),
-    .subnet_mask               ({8'd255, 8'd255, 8'd255, 8'd0}),
-    .clear_arp_cache           (1'b0),
+        .local_mac                 (48'hde_ad_be_ef_01_23),
+        .local_ip                  ({8'd192, 8'd168, 8'd1,  8'd128}),
+        .gateway_ip                ({8'd192, 8'd168, 8'd1,  8'd1}),
+        .subnet_mask               ({8'd255, 8'd255, 8'd255, 8'd0}),
+        .clear_arp_cache           (1'b0),
 
-    .tx_udp_hdr_valid          (udp_hdr_valid),
-    .tx_udp_hdr_ready          (),
-    .tx_udp_ip_dscp            (6'b001110),
-    .tx_udp_ip_ecn             (2'b00),
-    .tx_udp_ip_ttl             (8'h40),
-    .tx_udp_ip_source_ip       ({8'd192, 8'd168, 8'd64,  8'd20}),
-    .tx_udp_ip_dest_ip         ({8'd192, 8'd168, 8'd64,  8'd2}),
-    .tx_udp_source_port        (16'h1000),
-    .tx_udp_dest_port          (16'h1000),
-    .tx_udp_length             (16'h0408),
-    .tx_udp_checksum           (16'h0000),
-    .tx_done                   (tx_done),
+        .tx_udp_hdr_valid          (udp_hdr_valid),
+        .tx_udp_hdr_ready          (),
+        .tx_udp_ip_dscp            (6'b001110),
+        .tx_udp_ip_ecn             (2'b00),
+        .tx_udp_ip_ttl             (8'h40),
+        .tx_udp_ip_source_ip       ({8'd192, 8'd168, 8'd1,  8'd128}),
+        .tx_udp_ip_dest_ip         ({8'd192, 8'd168, 8'd1,  8'd100}),
+        .tx_udp_source_port        (16'h1000),
+        .tx_udp_dest_port          (16'h1000),
+        .tx_udp_length             (16'h0408),
+        .tx_udp_checksum           (16'h0000),
+        .tx_done                   (tx_done),
 
-    .tx_udp_payload_axis_tdata (eth_data),
-    .tx_udp_payload_axis_tvalid(eth_valid),
-    .tx_udp_payload_axis_tready(eth_tready),
-    .tx_udp_payload_axis_tlast (eth_data_tlast),
-    .tx_udp_payload_axis_tuser (1'b0),
+        .tx_udp_payload_axis_tdata (eth_data),
+        .tx_udp_payload_axis_tvalid(eth_valid),
+        .tx_udp_payload_axis_tready(eth_tready),
+        .tx_udp_payload_axis_tlast (eth_data_tlast),
+        .tx_udp_payload_axis_tuser (1'b0),
 
-    .udp_rx_ready              (1'b1),
-    .udp_hdr_valid             (),
-    .udp_source_port           (m_udp_source_port),
-    .udp_dest_port             (m_udp_dest_port),
-    .udp_length                (m_udp_length),
-    .udp_checksum              (m_udp_checksum),
+        .udp_rx_ready              (1'b1),
+        .udp_hdr_valid             (),
+        .udp_source_port           (m_udp_source_port),
+        .udp_dest_port             (m_udp_dest_port),
+        .udp_length                (m_udp_length),
+        .udp_checksum              (m_udp_checksum),
 
-    .rx_udp_payload_axis_tdata (m_udp_payload_axis_tdata ),
-    .rx_udp_payload_axis_tvalid(m_udp_payload_axis_tvalid),
-    .rx_udp_payload_axis_tlast (m_udp_payload_axis_tlast ),
-    .rx_udp_payload_axis_tuser (m_udp_payload_axis_tuser ),
+        .rx_udp_payload_axis_tdata (m_udp_payload_axis_tdata ),
+        .rx_udp_payload_axis_tvalid(m_udp_payload_axis_tvalid),
+        .rx_udp_payload_axis_tlast (m_udp_payload_axis_tlast ),
+        .rx_udp_payload_axis_tuser (m_udp_payload_axis_tuser ),
 
-    .tx_error_underflow        (),
-    .tx_fifo_overflow          (),
-    .tx_fifo_bad_frame         (),
-    .tx_fifo_good_frame        (),
-    .rx_error_bad_frame        (rx_error_bad_frame),
-    .rx_error_bad_fcs          (),
-    .rx_fifo_overflow          (),
-    .rx_fifo_bad_frame         (),
-    .rx_fifo_good_frame        (),
+        .tx_error_underflow        (),
+        .tx_fifo_overflow          (),
+        .tx_fifo_bad_frame         (),
+        .tx_fifo_good_frame        (),
+        .rx_error_bad_frame        (rx_error_bad_frame),
+        .rx_error_bad_fcs          (),
+        .rx_fifo_overflow          (),
+        .rx_fifo_bad_frame         (),
+        .rx_fifo_good_frame        (),
 
-    .tx_eth_busy                  (),
-    .rx_eth_busy()
-);
+        .tx_eth_busy               (),
+        .rx_eth_busy               ()
+    );
 
-    assign ETH_PHYRST_N = 1'b1;
+    logic data_ready, full, empty;
+    logic [31:0] data;
 
-    ila_0 ila_i (
-    .clk(clk_125m), // input wire clk
+    udpDetector udpDetector_i
+    (
+        .clk(clk_125m),
+        .rst(rst_125m),
 
-    .probe0(m_udp_payload_axis_tdata), // input wire [7:0]  probe0
-    .probe1(m_udp_source_port), // input wire [15:0]  probe1
-    .probe2(m_udp_dest_port), // input wire [15:0]  probe2
-    .probe3(m_udp_length), // input wire [15:0]  probe3
-    .probe4(m_udp_checksum), // input wire [15:0]  probe4
-    .probe5(m_udp_payload_axis_tvalid), // input wire [0:0]  probe5
-    .probe6(m_udp_payload_axis_tlast), // input wire [0:0]  probe6
-    .probe7(m_udp_payload_axis_tuser), // input wire [0:0]  probe7
-    .probe8(rx_error_bad_frame) // input wire [0:0]  probe8
-);
+        .dest_port(m_udp_dest_port),
+        .axis_tdata(m_udp_payload_axis_tdata),
+        .axis_tvalid(m_udp_payload_axis_tvalid),
+        .axis_tlast(m_udp_payload_axis_tlast),
+        .rd_en(1'b0),
+
+        .data_ready(data_ready),
+        .data(data),
+        .full(full),
+        .empty(empty)
+    );
+
+    ila_0 ila_i
+    (
+        .clk(clk_125m),      // input wire clk
+
+        .probe0(data),       // input wire [31:0]  probe0
+        .probe1(data_ready), // input wire [0:0]  probe1
+        .probe2(full),       // input wire [0:0]  probe2
+        .probe3(empty),      // input wire [0:0]  probe3
+        .probe4(m_udp_payload_axis_tvalid), // input wire [0:0]  probe4
+        .probe5(m_udp_dest_port), // input wire [15:0]  probe5
+        .probe6(m_udp_payload_axis_tdata) // input wire [7:0]  probe6
+    );
 endmodule

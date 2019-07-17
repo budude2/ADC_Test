@@ -63,26 +63,6 @@ set_property -dict {PACKAGE_PIN Y20 IOSTANDARD LVCMOS33} [get_ports usb_uart_rxd
 #set_property -dict { PACKAGE_PIN AE19  IOSTANDARD LVCMOS18 } [get_ports { aud_scl }]; #IO_L10N_T1_32 Sch=aud_scl
 #set_property -dict { PACKAGE_PIN AF18  IOSTANDARD LVCMOS18 } [get_ports { aud_sda }]; #IO_L11P_T1_SRCC_32 Sch=aud_sda
 
-## Ethernet
-#set_property -dict {PACKAGE_PIN AK16 IOSTANDARD LVCMOS18} [get_ports eth_int_b]
-#set_property -dict {PACKAGE_PIN AF12 IOSTANDARD LVCMOS15} [get_ports eth_mdc]
-#set_property -dict {PACKAGE_PIN AG12 IOSTANDARD LVCMOS15} [get_ports eth_mdio]
-set_property -dict {PACKAGE_PIN AH24 IOSTANDARD LVCMOS33} [get_ports ETH_PHYRST_N]
-#set_property -dict {PACKAGE_PIN AK15 IOSTANDARD LVCMOS18} [get_ports eth_pme_b]
-set_property -dict {PACKAGE_PIN AG10 IOSTANDARD LVCMOS15} [get_ports eth_rxck]
-set_property -dict {PACKAGE_PIN AH11 IOSTANDARD LVCMOS15} [get_ports eth_rxctl]
-set_property -dict {PACKAGE_PIN AJ14 IOSTANDARD LVCMOS15} [get_ports {eth_rxd[0]}]
-set_property -dict {PACKAGE_PIN AH14 IOSTANDARD LVCMOS15} [get_ports {eth_rxd[1]}]
-set_property -dict {PACKAGE_PIN AK13 IOSTANDARD LVCMOS15} [get_ports {eth_rxd[2]}]
-set_property -dict {PACKAGE_PIN AJ13 IOSTANDARD LVCMOS15} [get_ports {eth_rxd[3]}]
-set_property -dict {PACKAGE_PIN AE10 IOSTANDARD LVCMOS15} [get_ports eth_txck]
-set_property -dict {PACKAGE_PIN AJ12 IOSTANDARD LVCMOS15} [get_ports {eth_txd[0]}]
-set_property -dict {PACKAGE_PIN AK11 IOSTANDARD LVCMOS15} [get_ports {eth_txd[1]}]
-set_property -dict {PACKAGE_PIN AJ11 IOSTANDARD LVCMOS15} [get_ports {eth_txd[2]}]
-set_property -dict {PACKAGE_PIN AK10 IOSTANDARD LVCMOS15} [get_ports {eth_txd[3]}]
-set_property -dict {PACKAGE_PIN AK14 IOSTANDARD LVCMOS15} [get_ports ETH_TX_EN]
-create_clock -period 8.000 -name eth_rx_clk_pin -waveform {0.000 4.000} -add [get_ports eth_rxck]
-
 ## PMOD Header JA
 #set_property -dict { PACKAGE_PIN U28   IOSTANDARD LVCMOS33 } [get_ports { ja[0] }]; #IO_L13N_T2_MRCC_14 Sch=ja_n[1]
 #set_property -dict { PACKAGE_PIN U27   IOSTANDARD LVCMOS33 } [get_ports { ja[1] }]; #IO_L13P_T2_MRCC_14 Sch=ja_p[1]
